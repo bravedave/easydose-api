@@ -1,0 +1,30 @@
+{
+	"name": "bravedave/dvc-auth",
+	"description": "DVC-AUTH - PSR-4 Data-View-Controller with Authentication",
+	"version": "0.0.1",
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"homepage": "http://brayworth.com",
+	"type": "library",
+	"license": "MIT",
+	"authors": [{
+		"name": "Brave Dave",
+		"email": "davbray@gmail.com",
+		"homepage": "http://brayworth.com"
+	}],
+	"repositories": [
+		{
+		    "type": "git",
+		    "url": "https://github.com/bravedave/dvc"
+		}
+	],
+	"require": {
+		"php": ">=7.0",
+		"bravedave/dvc": "dev-master",
+		"ext-sqlite3": "*",
+		"ext-curl": "*",
+		"paypal/rest-api-sdk-php": "*"
+
+	}
+
+}
