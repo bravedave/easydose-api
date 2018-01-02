@@ -44,10 +44,21 @@
 		</div>
 
 		<div class="row form-group">
+			<div class="offset-3 col-8">
+				<label class="form-check-label">
+					<input type="checkbox" name="admin" class="form-check-input"
+					<?php if ( $this->data->dto->admin) print "checked" ?> value="1" required />
+					Administrator
+				</label>
+
+			</div>
+
+		</div>
+
+		<div class="row form-group">
 			<div class="col-3">Password</div>
 			<div class="col-8">
-				<input type="password" name="pass" class="form-control" placeholder="password - if you want to change it .."
-					required />
+				<input type="password" name="pass" class="form-control" placeholder="password - if you want to change it .." />
 
 			</div>
 

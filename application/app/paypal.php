@@ -12,7 +12,7 @@
 
 	description:
 		This file contains the interactions with the paypal api
-		
+
 	*/
 use PayPal\Api\Agreement;
 use PayPal\Api\Plan;
@@ -77,10 +77,6 @@ abstract class paypal {
 				}
 
 			}
-			//~ else {
-				//~ \sys::dump( $planList);
-
-			//~ }
 
 			return $planList;
 

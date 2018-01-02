@@ -5,7 +5,7 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"homepage": "http://easydose.net.au",
-	"type": "library",
+	"type": "project",
 	"license": "MIT",
 	"authors": [{
 		"name": "Brave Dave",

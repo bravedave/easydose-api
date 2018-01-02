@@ -15,6 +15,7 @@ $dbc->defineField( 'username', 'text');
 $dbc->defineField( 'name', 'text');
 $dbc->defineField( 'email', 'text');
 $dbc->defineField( 'pass', 'text');
+$dbc->defineField( 'admin', 'int');
 $dbc->defineField( 'created', 'text');
 $dbc->defineField( 'updated', 'text');
 $dbc->check();
@@ -26,6 +27,7 @@ if ( $res = $this->db->Result( 'SELECT count(*) count FROM users' )) {
 				'username' => 'admin',
 				'name' => 'Administrator',
 				'pass' => password_hash( 'admin', PASSWORD_DEFAULT),
+				'admin' => 1,
 				'created' => \db::dbTimeStamp(),
 				'updated' => \db::dbTimeStamp()
 				];

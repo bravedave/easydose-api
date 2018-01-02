@@ -20,7 +20,8 @@ class users extends Controller {
 			$a = [
 				'updated' => db::dbTimeStamp(),
 				'name' => $this->getPost('name'),
-				'email' => $this->getPost('email')];
+				'email' => $this->getPost('email'),
+				'admin' => (int)$this->getPost('admin')];
 
 			if ( $pass = $this->getPost('pass')) {
 				$a['pass'] = password_hash( $pass, PASSWORD_DEFAULT);

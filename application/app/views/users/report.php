@@ -14,6 +14,7 @@
 			<td>Name</td>
 			<td>UserName</td>
 			<td>Email</td>
+			<td class="text-center">Admin</td>
 		</tr>
 	</thead>
 
@@ -24,6 +25,7 @@
 			<td><?php print $dto->name ?></td>
 			<td><?php print $dto->username ?></td>
 			<td><?php print $dto->email ?></td>
+			<td class="text-center"><?php print ( $dto->admin ? 'yes' : 'no' ) ?></td>
 
 		</tr>
 

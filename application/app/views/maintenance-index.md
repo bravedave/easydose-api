@@ -1,7 +1,7 @@
 #### maintenance
 * [users](/users/)
 * [settings](/settings/)
-* [plans](/settings/plans/)
+* [plans](/plans/)
 * [dbinfo](/home/dbinfo/)
 
 ---
