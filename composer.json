@@ -1,10 +1,10 @@
 {
-	"name": "bravedave/dvc-auth",
-	"description": "DVC-AUTH - PSR-4 Data-View-Controller with Authentication",
+	"name": "bravedave/EasyDose-API",
+	"description": "DVC-AUTH - Framework for EasyDOSE subscription access",
 	"version": "0.0.1",
 	"minimum-stability": "dev",
 	"prefer-stable": true,
-	"homepage": "http://brayworth.com",
+	"homepage": "http://easydose.net.au",
 	"type": "library",
 	"license": "MIT",
 	"authors": [{
@@ -21,8 +21,6 @@
 	"require": {
 		"php": ">=7.0",
 		"bravedave/dvc": "dev-master",
-		"ext-sqlite3": "*",
-		"ext-curl": "*",
 		"paypal/rest-api-sdk-php": "*"
 
 	}
