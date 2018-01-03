@@ -31,6 +31,7 @@ class api extends Controller {
         if ( $debug) \sys::logger( "api $action : $site");
 
         /*
+         *  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 "http://localhost/api/"
          *  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 "https://my.easydose.net.au/api/"
          */
 
