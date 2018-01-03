@@ -1,4 +1,4 @@
 application/data/
+application/controller/.bak/user.php
 vendor/
 *.lock
-application/controller/.bak/user.php
