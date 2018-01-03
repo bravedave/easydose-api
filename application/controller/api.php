@@ -25,19 +25,8 @@ class api extends Controller {
       if ( $site != '' ) {
 
         /*
-        	/easydose/license/
-        		?site=Royal%20Street%20Chemmart
-        		&state=WA
-        		&tel=0893494011
-        		&workstation=WISPER
-        		&deployment=Build
-        		&version=RC2.1.10.0.9
-        		&productid=EasydoseLegacy
-        		&activated=yes
-        		&expires=2015-01-14
-        		&patients=24
-        		&patientsActive=15
-        */
+         *  curl -X POST --header "Accept: application/json" --data '{"action":"checkin","site":"Davido the Demo","state":"WA","tel":"0893494011","workstation":"WISPER","deployment":"Build","version":"RC2.1.10.0.9","productid":"EasydoseLegacy","activated":"yes","expires":"2018-01-14","patients":"24","patientsActive":"15"}' "https://my.easydose.net.au/api/"
+         */
 
         $a = [
           "site" => $site,
@@ -65,12 +54,19 @@ class api extends Controller {
             if ( $dto = $res->dto()) {
               $dao->UpdateByID( $a, $dto->id );
               \sys::logger( sprintf( 'site: updated => %s, %s', $a['site'], $a['workstation'] ));
+              \Json::ack($action);
 
             }
             else {
               $dao->Insert( $a);
               \sys::logger( sprintf( 'site: inserted => %s, %s', $a['site'], $a['workstation'] ));
+              \Json::ack($action);
+
             }
+
+          }
+          else {
+            \Json::nak($action);
 
           }
 
@@ -84,10 +80,15 @@ class api extends Controller {
             $a['productid'],
             $a['activated'],
             $a['expires']));
+          \Json::ack($action);
 
         }
 
       } // if ( $site != '' )
+      else {
+        \Json::nak($action);
+
+      }
 
     }
 
