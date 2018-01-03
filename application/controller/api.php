@@ -19,7 +19,7 @@ class api extends Controller {
 
     if ( $action == 'guid') {
       /*
-       *  curl -X POST --header "Accept: application/json" --data '{"action":"guid"}' "https://my.easydose.net.au/api/"
+       *  curl -X POST -H "Accept: application/json" -d action=guid "https://my.easydose.net.au/api/"
        */
       \Json::ack( $action)
         ->add('data', strings::getGUID());
@@ -31,7 +31,7 @@ class api extends Controller {
         if ( $debug) \sys::logger( "api $action : $site");
 
         /*
-         *  curl -X POST --header "Accept: application/json" --data '{"action":"checkin","site":"Davido the Demo","state":"WA","tel":"0893494011","workstation":"WISPER","deployment":"Build","version":"RC2.1.10.0.9","productid":"EasydoseLegacy","activated":"yes","expires":"2018-01-14","patients":"24","patientsActive":"15"}' "https://my.easydose.net.au/api/"
+         *  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 "https://my.easydose.net.au/api/"
          */
 
         $a = [
@@ -52,7 +52,7 @@ class api extends Controller {
 
         if ( $a['deployment'] != "" ) {
           $dao = new dao\sites;
-          $res = $this->Result( sprintf( "SELECT * FROM SITES WHERE site = '%s' AND workstation = '%s'",
+          $res = $this->dbResult( sprintf( "SELECT * FROM SITES WHERE site = '%s' AND workstation = '%s'",
             $this->escape( $a['site']),
             $this->escape( $a['workstation'])));
 
