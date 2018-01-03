@@ -53,8 +53,8 @@ class api extends Controller {
         if ( $a['deployment'] != "" ) {
           $dao = new dao\sites;
           $res = $this->dbResult( sprintf( "SELECT * FROM SITES WHERE site = '%s' AND workstation = '%s'",
-            $this->escape( $a['site']),
-            $this->escape( $a['workstation'])));
+            $this->db->escape( $a['site']),
+            $this->db->escape( $a['workstation'])));
 
           if ( $res) {
             if ( $dto = $res->dto()) {
