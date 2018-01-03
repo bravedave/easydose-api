@@ -12,7 +12,7 @@ class api extends Controller {
 
   protected function postHandler() {
 		$action = $this->getPost('action');
-    if ( $action = 'guid') {
+    if ( $action == 'guid') {
       /*
        *  curl -X POST --header "Accept: application/json" --data '{"action":"guid"}' "https://my.easydose.net.au/api/"
        */
@@ -20,7 +20,7 @@ class api extends Controller {
         ->add('data', strings::getGUID());
 
     }
-    elseif ( $action = 'checkin') {
+    elseif ( $action == 'checkin') {
       $site = $this->getPost('site');
       if ( $site != '' ) {
 
