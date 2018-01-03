@@ -53,23 +53,23 @@ class api extends Controller {
           "version" => $this->getPost('version'),
           "activated" => ( $this->getPost('activated') == "yes" ? 1 : 0 ),
           "expires" => $this->getPost('expires'),
-          "updated" => \db:dbTimeStamp()];
+          "updated" => \db::dbTimeStamp()];
 
-        if ( $a['deployment' != "" ) {
+        if ( $a['deployment'] != "" ) {
           $dao = new dao\sites;
           $res = $this->Result( sprintf( "SELECT * FROM SITES WHERE site = '%s' AND workstation = '%s'",
             $this->escape( $a['site']),
-            $this->escape( $a['workstation')));
+            $this->escape( $a['workstation'])));
 
           if ( $res) {
             if ( $dto = $res->dto()) {
               $dao->UpdateByID( $a, $dto->id );
-              \sys::logger( sprintf( 'site: updated => %s, %s', $a['site', $a['workstation'] ));
+              \sys::logger( sprintf( 'site: updated => %s, %s', $a['site'], $a['workstation'] ));
 
             }
             else {
               $dao->Insert( $a);
-              \sys::logger( sprintf( 'site: inserted => %s, %s', $a['site', $a['workstation'] ));
+              \sys::logger( sprintf( 'site: inserted => %s, %s', $a['site'], $a['workstation'] ));
             }
 
           }
@@ -94,8 +94,14 @@ class api extends Controller {
 	}
 
   public function index() {
-    if ( $this->isPost())
+    if ( $this->isPost()) {
       $this->postHandler();
+
+    }
+    else {
+      print 'EasyDose API handler';
+
+    }
 
   }
 
