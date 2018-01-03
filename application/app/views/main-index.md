@@ -1,5 +1,6 @@
 #### contents
 * [home](/)
+* [sites](/sites)
 * [my account](/account)
 
 #### maintenance

@@ -1,1 +1,2 @@
 [data-role="content-secondary"] { background-color: white; }
+table.table > thead > tr > td { vertical-align: bottom; }
