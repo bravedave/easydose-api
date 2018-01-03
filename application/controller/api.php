@@ -11,7 +11,12 @@ class api extends Controller {
   public $RequireValidation = FALSE;
 
   protected function postHandler() {
+    $debug = TRUE;
+    // $debug = FALSE;
+
 		$action = $this->getPost('action');
+    if ( $debug) \sys::logger( "api $action");
+
     if ( $action == 'guid') {
       /*
        *  curl -X POST --header "Accept: application/json" --data '{"action":"guid"}' "https://my.easydose.net.au/api/"
@@ -23,6 +28,7 @@ class api extends Controller {
     elseif ( $action == 'checkin') {
       $site = $this->getPost('site');
       if ( $site != '' ) {
+        if ( $debug) \sys::logger( "api $action : $site");
 
         /*
          *  curl -X POST --header "Accept: application/json" --data '{"action":"checkin","site":"Davido the Demo","state":"WA","tel":"0893494011","workstation":"WISPER","deployment":"Build","version":"RC2.1.10.0.9","productid":"EasydoseLegacy","activated":"yes","expires":"2018-01-14","patients":"24","patientsActive":"15"}' "https://my.easydose.net.au/api/"
