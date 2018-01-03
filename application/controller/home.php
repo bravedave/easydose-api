@@ -39,7 +39,10 @@ class home extends Controller {
 
 	}
 
-	protected function postHandler() {}
+	protected function postHandler() {
+		$action = $this->getPost('action');
+
+	}
 
 	function __construct( $rootPath) {
 		$this->firstRun = sys::firstRun();
@@ -53,29 +56,29 @@ class home extends Controller {
 
 	}
 
+	protected function _index() {
+		$p = new page( $this->title = sys::name());
+		$p
+			->header()
+			->title()
+			->primary();
+
+		$this->load( 'readme');
+
+		$p->secondary();
+			$this->load('main-index');
+
+	}
+
 	public function index( $data = '' ) {
-		if ( $this->isPost()) {
+		if ( $this->isPost())
 			$this->postHandler();
 
-		}
-		elseif ( $this->firstRun) {
+		elseif ( $this->firstRun)
 			$this->dbinfo();
 
-		}
-		else {
-			$p = new page( $this->title = sys::name());
-			$p
-				->header()
-				->title()
-				->primary();
-
-				$this->load( 'readme');
-
-			$p->secondary();
-
-				$this->load('main-index');
-
-		}
+		else
+			$this->_index();
 
 	}
 
