@@ -11,8 +11,8 @@ class api extends Controller {
   public $RequireValidation = FALSE;
 
   protected function postHandler() {
-    $debug = TRUE;
-    // $debug = FALSE;
+    // $debug = TRUE;
+    $debug = FALSE;
 
 		$action = $this->getPost('action');
     if ( $debug) \sys::logger( "api $action");
