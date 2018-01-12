@@ -53,31 +53,28 @@ class api extends Controller {
           "updated" => \db::dbTimeStamp()];
 
         if ( $a['deployment'] != "" ) {
-          $dao = new dao\sites;
           $res = $this->dbResult( sprintf( "SELECT * FROM SITES WHERE site = '%s' AND workstation = '%s'",
             $this->db->escape( $a['site']),
             $this->db->escape( $a['workstation'])));
 
           if ( $res) {
+
+            $sitesDAO = new dao\sites;
+
             if ( $dto = $res->dto()) {
-              $dao->UpdateByID( $a, $dto->id );
+              $sitesDAO->UpdateByID( $a, $dto->id );
               \sys::logger( sprintf( 'site: updated => %s, %s', $a['site'], $a['workstation'] ));
-              \Json::ack($action);
+              \Json::ack( $action);
 
             }
             else {
-              $dao->Insert( $a);
+              $sitesDAO->Insert( $a);
               \sys::logger( sprintf( 'site: inserted => %s, %s', $a['site'], $a['workstation'] ));
-              \Json::ack($action);
+              \Json::ack( $action);
 
             }
 
-          }
-          else {
-            \Json::nak($action);
-
-          }
-
+          } else { \Json::nak($action); }
 	      }	else {
           \sys::logger( sprintf( 'site: %s, %s, %s, %s @ (%s), %s (activated:%s - %s)',
             $a['site'],
@@ -93,86 +90,97 @@ class api extends Controller {
         }
 
       } // if ( $site != '' )
-      else {
-        \Json::nak($action);
-
-      }
-
+      else { \Json::nak($action); }
     }
     elseif ( $action == 'get-account') {
-      /*
-       *  return the email address associated with the account
-       *
-       *  curl -X POST -H "Accept: application/json" -d action="get-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "http://localhost/api/"
-       *  curl -X POST -H "Accept: application/json" -d action="get-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "https://my.easydose.net.au/api/"
-       */
-      if ( $guid = $this->getPost( 'guid')) {
-        $sitesDAO = new dao\sites;
-        if ( $sitesDTO = $sitesDAO->getByGUID( $guid)) {
-          $email = '';
-          if ( (int)$sitesDTO->user_id > 0) {
-            $usersDAO = new dao\users;
-            if ( $usersDTO = $usersDAO->getByID( $sitesDTO->user_id))
-              $email = $usersDTO->email;
-
-          }
-
-          \Json::ack( $action)
-            ->add( 'guid', $guid)
-            ->add( 'email', $email);
-
-        } else { \Json::nak( $action); }
-      } else { \Json::nak( $action); }
+      $this->getAccount( $action);
 
     }
     elseif ( $action == 'set-account') {
-      /*
-       *  associated an email address associated with a guid
-       *  this can only be done if the email is blank
-       *
-       *  curl -X POST -H "Accept: application/json" -d action="set-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" -d email="david@brayworth.com.au" "http://localhost/api/"
-       */
-      if ( $guid = $this->getPost( 'guid')) {
-
-        $sitesDAO = new dao\sites;
-        if ( $sitesDTO = $sitesDAO->getByGUID( $guid)) {
-
-          if ( (int)$sitesDTO->user_id < 1) {
-
-            $email = $this->getPost( 'email');
-
-            if ( strings::IsEmailAddress( $email)) {
-
-              $usersDAO = new dao\users;
-              if ( $usersDTO = $usersDAO->getUserByEmail( $email)) {
-                $sitesDAO->UpdateByID(['user_id' => $usersDTO->id], $sitesDTO->id);
-                \Json::ack( sprintf( '%s :: found account', $action))
-                  ->add( 'email', $email);
-
-              }
-              else {
-                $a = [
-                  'username' => $email,
-                  'email' => $email,
-                  'created' => \db::dbTimeStamp(),
-                  'updated' => \db::dbTimeStamp()
-
-                ];
-                $id = $usersDAO->Insert( $a);
-                $sitesDAO->UpdateByID( ['user_id' => $id], $sitesDTO->id);
-
-                \Json::ack( sprintf( '%s :: added account', $action))
-                  ->add( 'email', $email);
-
-              }
-            }
-          } else { \Json::nak( sprintf( '%s : account already assigned', $action)); }
-        } else { \Json::nak( $action); }
-      } else { \Json::nak( $action); }
+      $this->setAccount( $action);
 
     }
 
 	}
+
+  protected function getAccount( $action) {
+    /*
+     *  return the email address associated with the account
+     *
+     *  curl -X POST -H "Accept: application/json" -d action="get-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "http://localhost/api/"
+     *
+     */
+    if ( $guid = $this->getPost( 'guid')) {
+      $guidDAO = new dao\guid;
+      if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
+        $email = '';
+        if ( (int)$guidDTO->user_id > 0) {
+          $usersDAO = new dao\users;
+          if ( $usersDTO = $usersDAO->getByID( $guidDTO->user_id))
+            $email = $usersDTO->email;
+
+        }
+
+        \Json::ack( $action)
+          ->add( 'guid', $guid)
+          ->add( 'email', $email);
+
+      } else { \Json::nak( sprintf( '%s :: new', $action)); }
+    } else { \Json::nak( $action); }
+
+  }
+
+  protected function setAccount( $action) {
+    /*
+    *  associated an email address associated with a guid
+    *  this can only be done if the email is blank
+    *
+    *  curl -X POST -H "Accept: application/json" -d action="set-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" -d email="david@brayworth.com.au" "http://localhost/api/"
+    */
+    if ( $guid = $this->getPost( 'guid')) {
+
+      $guidDAO = new dao\guid;
+      if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
+
+        if ( (int)$guidDTO->user_id < 1) {
+
+          $email = $this->getPost( 'email');
+
+          if ( strings::IsEmailAddress( $email)) {
+
+            $usersDAO = new dao\users;
+            if ( $usersDTO = $usersDAO->getUserByEmail( $email)) {
+              $guidDAO->UpdateByID([
+                'user_id' => $usersDTO->id,
+                'updated' => \db::dbTimeStamp()
+              ], $guidDTO->id);
+              \Json::ack( sprintf( '%s :: found account', $action))
+                ->add( 'email', $email);
+
+            }
+            else {
+              $a = [
+                'username' => $email,
+                'email' => $email,
+                'created' => \db::dbTimeStamp(),
+                'updated' => \db::dbTimeStamp()
+
+              ];
+              $id = $usersDAO->Insert( $a);
+              $guidDAO->UpdateByID( ['user_id' => $id], $guidDTO->id);
+
+              \Json::ack( sprintf( '%s :: added account', $action))
+              ->add( 'email', $email);
+
+            }
+
+          }
+
+        } else { \Json::nak( sprintf( '%s : account already assigned', $action)); }
+      } else { \Json::nak( $action); }
+    } else { \Json::nak( $action); }
+
+  }
 
   public function index() {
     if ( $this->isPost()) {
