@@ -99,6 +99,32 @@ class api extends Controller {
       }
 
     }
+    elseif ( $action == 'get-account') {
+      /*
+       *  return the email address associated with the account
+       *
+       *  curl -X POST -H "Accept: application/json" -d action=get-account -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "http://localhost/api/"
+       *  curl -X POST -H "Accept: application/json" -d action=get-account -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "https://my.easydose.net.au/api/"
+       */
+      if ( $guid = $this->getPost( 'guid')) {
+        $sitesDAO = new dao\sites;
+        if ( $sitesDTO = $sitesDAO->getByGUID( $guid)) {
+          $email = '';
+          if ( (int)$sitesDTO->user_id > 0) {
+            $usersDAO = new dao\users;
+            if ( $usersDTO = $usersDAO->getByID( $sitesDTO->user_id))
+              $email = $usersDTO->email;
+
+          }
+
+          \Json::ack( $action)
+            ->add( 'guid', $guid)
+            ->add( 'email', $email);
+
+        } else { \Json::nak( $action); }
+      } else { \Json::nak( $action); }
+
+    }
 
 	}
 
