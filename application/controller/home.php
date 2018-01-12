@@ -11,6 +11,9 @@ class home extends Controller {
 	protected $firstRun = FALSE;
 
 	protected function _authorize() {
+		/*
+		 * curl -X POST -H "Accept: application/json" -d action="-system-logon-" -d u="john" -d p="" "http://localhost/"
+		 */
 		$action = $this->getPost( 'action');
 		if ( $action == '-system-logon-') {
 			if ( $u = $this->getPost( 'u')) {
