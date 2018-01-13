@@ -48,4 +48,16 @@ class guid extends _dao {
 
 	}
 
+	public function getAll( $fields = 'guid.*, u.name', $order = '' ) {
+		if ( is_null( $this->_db_name))
+			throw new Exceptions\DBNameIsNull;
+
+		$this->db->log = $this->log;
+		$sql = sprintf( 'SELECT %s FROM guid LEFT JOIN users u on user_id = u.id %s', $fields, $order);
+
+		return ( $this->Result( $sql));
+
+	}
+
+
 }

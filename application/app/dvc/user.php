@@ -22,6 +22,7 @@ class user extends _user {
 				$this->name = $this->dto->name;
 				$this->username = $this->dto->username;
 				$this->email = $this->dto->email;
+				$this->admin = $this->dto->admin;
 
 			}
 

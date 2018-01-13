@@ -30,4 +30,10 @@ abstract class currentUser extends dvc\currentUser {
 
 	}
 
+	static function isAdmin() {
+		// \sys::dump( self::user());
+		return ( (int)self::user()->admin == 1);
+
+	}
+
 }
