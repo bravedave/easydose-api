@@ -1,5 +1,5 @@
 <?php
-/**
+/*
 	David Bray
 	BrayWorth Pty Ltd
 	e. david@brayworth.com.au
@@ -16,34 +16,34 @@
 	*/	?>
 <form class="form" method="post" action="<?php url::write( 'account') ?>">
 	<div class="row py-1">
-		<div class="col-2">Username</div>
-		<div class="col-4">
-			<input type="text" class="form-control" value="<?php print currentUser::username() ?>" readonly />
+		<div class="col-sm-2 d-none d-sm-block">Username</div>
+		<div class="col-10 col-sm-4">
+			<input type="text" class="form-control" placeholder="user name" value="<?php print currentUser::username() ?>" readonly />
 
 		</div>
 
 	</div>
 
 	<div class="row py-1">
-		<div class="col-2">Name</div>
-		<div class="col-8">
-			<input type="text" name="name" class="form-control" value="<?php print currentUser::name() ?>" autofocus />
+		<div class="col-sm-2 d-none d-sm-block">Name</div>
+		<div class="col-12 col-sm-8">
+			<input type="text" name="name" class="form-control" placeholder="name" value="<?php print currentUser::name() ?>" autofocus />
 
 		</div>
 
 	</div>
 
 	<div class="row py-1">
-		<div class="col-2">Email</div>
-		<div class="col-8">
-			<input type="text" name="email" class="form-control" value="<?php print currentUser::email() ?>" <?php if ( !currentUser::isAdmin()) print 'readonly' ?> />
+		<div class="col-sm-2 d-none d-sm-block">Email</div>
+		<div class="col-12 col-sm-8">
+			<input type="text" name="email" class="form-control" placeholder="email" value="<?php print currentUser::email() ?>" <?php if ( !currentUser::isAdmin()) print 'readonly' ?> />
 
 		</div>
 
 	</div>
 
 	<div class="row py-1">
-		<div class="offset-2 col-10">
+		<div class="offset-sm-2 col col-sm-10">
 			<input type="submit" name="action" class="btn btn-primary" value="update" />
 
 		</div>
@@ -52,119 +52,119 @@
 
 </form>
 
-	<div class="row py-1">
-		<div class="col-2">Agreements</div>
-		<div class="col-10">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<td>agreement_id</td>
-						<td>state</td>
-						<td>refreshed</td>
+<div class="row py-1">
+	<div class="col-12 col-sm-2">Agreements</div>
+	<div class="col-12 col-sm-10">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<td>agreement_id</td>
+					<td>state</td>
+					<td>refreshed</td>
 
-					</tr>
+				</tr>
 
-				</thead>
+			</thead>
 
-				<tbody>
+			<tbody>
 <?php	foreach ( $this->data->agreements as $agreement) {	?>
-					<tr>
-						<td><?php print $agreement->agreement_id ?></td>
-						<td><?php print $agreement->state ?></td>
-						<td><?php print date( \config::$DATE_FORMAT, strtotime( $agreement->refreshed)) ?></td>
+				<tr>
+					<td><?php print $agreement->agreement_id ?></td>
+					<td><?php print $agreement->state ?></td>
+					<td><?php print date( \config::$DATE_FORMAT, strtotime( $agreement->refreshed)) ?></td>
 
-					</tr>
+				</tr>
 <?php	}	// foreach ( $this->data->plans as $plan)	?>
 
-				</tbody>
+			</tbody>
 
-			</table>
-
-		</div>
+		</table>
 
 	</div>
+
+</div>
 
 <?php	if ( $ag = $this->data->agreement) {
-	// sys::dump( $ag);
-		?>
-	<div class="row py-1">
-		<div class="col-2">Agreement</div>
-		<div class="col-10">
-			<table class="table table-striped">
-				<tbody>
-					<tr>
-						<td>ID</td>
-						<td><?php print $ag->agreement_id ?></td>
+// sys::dump( $ag);
+	?>
+<div class="row py-1">
+	<div class="col-12 col-sm-2">Agreement</div>
+	<div class="col-12 col-sm-10">
+		<table class="table table-striped">
+			<tbody>
+				<tr>
+					<td>ID</td>
+					<td><?php print $ag->agreement_id ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>Description</td>
-						<td><?php print $ag->description ?></td>
+				<tr>
+					<td>Description</td>
+					<td><?php print $ag->description ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>State</td>
-						<td><?php print $ag->state ?></td>
+				<tr>
+					<td>State</td>
+					<td><?php print $ag->state ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>payment_method</td>
-						<td><?php print $ag->payment_method ?></td>
+				<tr>
+					<td>payment_method</td>
+					<td><?php print $ag->payment_method ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>name</td>
-						<td><?php print $ag->name ?></td>
+				<tr>
+					<td>name</td>
+					<td><?php print $ag->name ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>start_date</td>
-						<td><?php print date( \config::$DATE_FORMAT, strtotime( $ag->start_date)) ?></td>
+				<tr>
+					<td>start_date</td>
+					<td><?php print date( \config::$DATE_FORMAT, strtotime( $ag->start_date)) ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>next_billing_date</td>
-						<td><?php print date( \config::$DATE_FORMAT, strtotime( $ag->next_billing_date)) ?></td>
+				<tr>
+					<td>next_billing_date</td>
+					<td><?php print date( \config::$DATE_FORMAT, strtotime( $ag->next_billing_date)) ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>cycles_completed</td>
-						<td><?php print $ag->cycles_completed ?></td>
+				<tr>
+					<td>cycles_completed</td>
+					<td><?php print $ag->cycles_completed ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>frequency</td>
-						<td><?php print $ag->frequency ?></td>
+				<tr>
+					<td>frequency</td>
+					<td><?php print $ag->frequency ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>amount</td>
-						<td><?php print $ag->value ?></td>
+				<tr>
+					<td>amount</td>
+					<td><?php print $ag->value ?></td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>refreshed</td>
-						<td><?php print date( \config::$DATE_FORMAT, strtotime( $ag->refreshed)) ?></td>
+				<tr>
+					<td>refreshed</td>
+					<td><?php print date( \config::$DATE_FORMAT, strtotime( $ag->refreshed)) ?></td>
 
-					</tr>
+				</tr>
 
-				</tbody>
+			</tbody>
 
-			</table>
-
-		</div>
+		</table>
 
 	</div>
+
+</div>
 <?php
 			//~ sys::dump( $ag, NULL, FALSE);
 
@@ -172,39 +172,39 @@
 		else {
 			// there is no active agreement	?>
 
-			<form class="form" method="post" action="<?php url::write( 'account') ?>">
-				<div class="row py-1">
-					<div class="col-2">Plans</div>
-					<div class="col-10">
-						<table class="table table-striped">
-							<tbody>
+<form class="form" method="post" action="<?php url::write( 'account') ?>">
+	<div class="row py-1">
+		<div class="col col-12 col-sm-2">Plans</div>
+		<div class="col col-12 col-sm-10">
+			<table class="table table-striped">
+				<tbody>
 <?php			foreach ( $this->data->plans as $plan) {	?>
-								<tr>
-									<td><input type="radio" name="plan_id" value="<?php print $plan->paypal_id ?>" /></td>
-									<td><?php printf( '%s<br />%s', $plan->name, $plan->description ) ?></td>
-									<td><?php print $plan->rate ?></td>
-									<td><?php print $plan->frequency ?></td>
+					<tr>
+						<td><input type="radio" name="plan_id" value="<?php print $plan->paypal_id ?>" /></td>
+						<td><?php printf( '%s<br />%s', $plan->name, $plan->description ) ?></td>
+						<td><?php print $plan->rate ?></td>
+						<td><?php print $plan->frequency ?></td>
 
-								</tr>
+					</tr>
 <?php			}	// foreach ( $this->data->plans as $plan)	?>
 
-							</tbody>
+				</tbody>
 
-						</table>
+			</table>
 
-					</div>
+		</div>
 
-				</div>
+	</div>
 
-				<div class="row py-1">
-					<div class="offset-2 col-10">
-						<input type="submit" name="action" class="btn btn-primary" value="subscribe" />
+	<div class="row py-1">
+		<div class="offset-sm-2 col-12 col-sm-10">
+			<input type="submit" name="action" class="btn btn-primary" value="subscribe" />
 
-					</div>
+		</div>
 
-				</div>
+	</div>
 
-			</form>
+</form>
 
 <?php
 		}	?>
