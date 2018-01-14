@@ -11,8 +11,8 @@ class api extends Controller {
   public $RequireValidation = FALSE;
 
   protected function postHandler() {
-    // $debug = TRUE;
-    $debug = FALSE;
+    // $this->debug = TRUE;
+    $debug = $this->debug;
 
 		$action = $this->getPost('action');
     if ( $debug) \sys::logger( "api $action");
@@ -26,71 +26,8 @@ class api extends Controller {
 
     }
     elseif ( $action == 'checkin') {
-      $site = $this->getPost('site');
-      if ( $site != '' ) {
-        if ( $debug) \sys::logger( "api $action : $site");
+      $this->checkin( $action);
 
-        /*
-         *  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 "http://localhost/api/"
-         *  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 "https://my.easydose.net.au/api/"
-         */
-
-        $a = [
-          "site" => $site,
-          "state" => $this->getPost('state'),
-          "tel" => $this->getPost('tel'),
-          "ip" => $this->Request->getRemoteIP(),
-          "workstation" => $this->getPost('workstation'),
-          "productid" => $this->getPost('productid'),
-          "patients" => $this->getPost('patients'),
-          "patientsActive" => $this->getPost('patientsActive'),
-          "os" => $this->getPost('OS'),
-          "deployment" => $this->getPost('deployment'),
-          "version" => $this->getPost('version'),
-          "activated" => ( $this->getPost('activated') == "yes" ? 1 : 0 ),
-          "expires" => $this->getPost('expires'),
-          "guid" => $this->getPost('guid'),
-          "updated" => \db::dbTimeStamp()];
-
-        if ( $a['deployment'] != "" ) {
-          $res = $this->dbResult( sprintf( "SELECT * FROM SITES WHERE site = '%s' AND workstation = '%s'",
-            $this->db->escape( $a['site']),
-            $this->db->escape( $a['workstation'])));
-
-          if ( $res) {
-
-            $sitesDAO = new dao\sites;
-
-            if ( $dto = $res->dto()) {
-              $sitesDAO->UpdateByID( $a, $dto->id );
-              \sys::logger( sprintf( 'site: updated => %s, %s', $a['site'], $a['workstation'] ));
-              \Json::ack( $action);
-
-            }
-            else {
-              $sitesDAO->Insert( $a);
-              \sys::logger( sprintf( 'site: inserted => %s, %s', $a['site'], $a['workstation'] ));
-              \Json::ack( $action);
-
-            }
-
-          } else { \Json::nak($action); }
-	      }	else {
-          \sys::logger( sprintf( 'site: %s, %s, %s, %s @ (%s), %s (activated:%s - %s)',
-            $a['site'],
-            $a['workstation'],
-            $a['version'],
-            $a['deployment'],
-            $a['ip'],
-            $a['productid'],
-            $a['activated'],
-            $a['expires']));
-          \Json::ack($action);
-
-        }
-
-      } // if ( $site != '' )
-      else { \Json::nak($action); }
     }
     elseif ( $action == 'get-account') {
       $this->getAccount( $action);
@@ -102,6 +39,86 @@ class api extends Controller {
     }
 
 	}
+
+  protected function checkin( $action) {
+
+    $site = $this->getPost('site');
+    if ( $site != '' ) {
+      /*
+       *  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "http://localhost/api/"
+       *  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}"  "https://my.easydose.net.au/api/"
+       */
+
+      $a = [
+        "site" => $site,
+        "state" => $this->getPost('state'),
+        "tel" => $this->getPost('tel'),
+        "ip" => $this->Request->getRemoteIP(),
+        "workstation" => $this->getPost('workstation'),
+        "productid" => $this->getPost('productid'),
+        "patients" => $this->getPost('patients'),
+        "patientsActive" => $this->getPost('patientsActive'),
+        "os" => $this->getPost('OS'),
+        "deployment" => $this->getPost('deployment'),
+        "version" => $this->getPost('version'),
+        "activated" => ( $this->getPost('activated') == "yes" ? 1 : 0 ),
+        "expires" => $this->getPost('expires'),
+        "guid" => $this->getPost('guid'),
+        "updated" => \db::dbTimeStamp()];
+
+      if ( $a['deployment'] != "" ) {
+        $res = $this->dbResult( sprintf( "SELECT * FROM SITES WHERE site = '%s' AND workstation = '%s'",
+          $this->db->escape( $a['site']),
+          $this->db->escape( $a['workstation'])));
+
+        if ( $res) {
+
+          $guidDAO = new dao\guid;
+          $sitesDAO = new dao\sites;
+
+          if ( $dto = $res->dto()) {
+            $sitesDAO->UpdateByID( $a, $dto->id );
+            \sys::logger( sprintf( 'site: updated => %s, %s', $a['site'], $a['workstation'] ));
+            \Json::ack( $action);
+
+
+          }
+          else {
+            $sitesDAO->Insert( $a);
+            \sys::logger( sprintf( 'site: inserted => %s, %s', $a['site'], $a['workstation'] ));
+            \Json::ack( $action);
+
+          }
+          $guidDAO->getByGUID( $a['guid']);  // will add guid if it doesn't exist
+
+        }
+        else {
+          \Json::nak($action);
+
+        }
+
+      }
+      else {
+        \sys::logger( sprintf( 'site: %s, %s, %s, %s @ (%s), %s (activated:%s - %s)',
+          $a['site'],
+          $a['workstation'],
+          $a['version'],
+          $a['deployment'],
+          $a['ip'],
+          $a['productid'],
+          $a['activated'],
+          $a['expires']));
+        \Json::ack($action);
+
+      }
+
+    } // if ( $site != '' )
+    else {
+      \Json::nak($action);
+
+    }
+
+  }
 
   protected function getAccount( $action) {
     /*
