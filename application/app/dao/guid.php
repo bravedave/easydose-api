@@ -14,7 +14,7 @@ Namespace dao;
 class guid extends _dao {
 	protected $_db_name = 'guid';
 
-	public function addGUID( $guid) {
+	protected function addGUID( $guid) {
 		if ( strlen( trim( $guid)) == 38) {
 			// \sys::logger( strlen( trim( $guid)));
 
@@ -58,6 +58,5 @@ class guid extends _dao {
 		return ( $this->Result( $sql));
 
 	}
-
 
 }

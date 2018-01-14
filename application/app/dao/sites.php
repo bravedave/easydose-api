@@ -23,11 +23,8 @@ class sites extends _dao {
 
 	}
 
-	public function getByGUID( $guid) {
-		if ( $res = $this->Result( sprintf( 'SELECT * FROM %s WHERE guid = "%s"', $this->db_name(), $guid )))
-			return ( $res->dto());
-
-		return ( FALSE);
+	public function getForGUID( $guid) {
+		return ( $res = $this->Result( sprintf( 'SELECT * FROM %s WHERE guid = "%s"', $this->db_name(), $guid )));
 
 	}
 

@@ -25,7 +25,6 @@ $dbc->defineField( 'version', 'text');
 $dbc->defineField( 'activated', 'int');
 $dbc->defineField( 'expires', 'text');
 $dbc->defineField( 'guid', 'text');
-$dbc->defineField( 'user_id', 'int');
 $dbc->defineField( 'updated', 'text');
 
 $dbc->check();
