@@ -2,3 +2,5 @@ application/data/
 application/controller/.bak/user.php
 vendor/
 *.lock
+application/app/public/css/dvc-4.min.css
+application/app/public/js/brayworthlib.js
