@@ -41,6 +41,8 @@ class api extends Controller {
 	}
 
   protected function checkin( $action) {
+    $debug = FALSE;
+    // $debug = TRUE;
 
     $site = $this->getPost('site');
     if ( $site != '' ) {
@@ -78,22 +80,28 @@ class api extends Controller {
 
           if ( $dto = $res->dto()) {
             $sitesDAO->UpdateByID( $a, $dto->id );
-            \sys::logger( sprintf( 'site: updated => %s, %s', $a['site'], $a['workstation'] ));
-            \Json::ack( $action);
+            if ( $debug) \sys::logger( sprintf( 'site: updated => %s, %s', $a['site'], $a['workstation'] ));
+            $j = \Json::ack( $action);
 
 
           }
           else {
             $sitesDAO->Insert( $a);
-            \sys::logger( sprintf( 'site: inserted => %s, %s', $a['site'], $a['workstation'] ));
-            \Json::ack( $action);
+            if ( $debug) \sys::logger( sprintf( 'site: inserted => %s, %s', $a['site'], $a['workstation'] ));
+            $j = \Json::ack( $action);
 
           }
           $guidDAO->getByGUID( $a['guid']);  // will add guid if it doesn't exist
 
+          $j
+            ->add('License', 'none')
+            ->add('NextPaymentDue', date('Y-m-d', 0))
+            ->add('Subscription_Status', 'inactive')
+            ;
+
         }
         else {
-          \Json::nak($action);
+          \Json::nak( $action);
 
         }
 
