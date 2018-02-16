@@ -42,18 +42,19 @@ class home extends Controller {
 					 * this will only work for email addresses
 					 */
 				 	if ( $dao->sendResetLink( $dto)) {
-						\Json::ack( 'sent reset link');
-						\sys::logger('-sent-password-link-');
+						\Json::ack( 'sent reset link')
+							->add('message', 'sent link, check your email and your junk mail');
+						// \sys::logger('-sent-password-link-');
 
 					}	else {
 						\Json::nak( $action);
-						\sys::logger('-did-not-sent-password-link-');
+						// \sys::logger('-did-not-sent-password-link-');
 
 					}
 
 				}	else {
 					\Json::nak( $action);
-					\sys::logger('-did-not-sent-password-link-email-not-found');
+					// \sys::logger('-did-not-sent-password-link-email-not-found');
 
 				}
 
