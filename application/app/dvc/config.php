@@ -18,9 +18,12 @@
 NameSpace dvc;
 
 abstract class config extends _config {
-	static $WEBNAME = 'A PSR style PHP Framework';
+	static $WEBNAME = 'My.EasyDose';
 	static $DB_TYPE = 'sqlite';
 	static $DATE_FORMAT = 'd-M-Y';
+
+	static $SUPPORT_NAME = 'My.EasyDose Webmaster';
+	static $SUPPORT_EMAIL = 'help@easydose.net.au';
 
 	const use_inline_logon = TRUE;
 
