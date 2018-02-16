@@ -51,11 +51,11 @@ class sites extends Controller {
       }
 
       if ( (int)$guid) {
-        Response::Redirect( url::tostring( 'guid/' . $guid), 'deleted site');
+        Response::Redirect( url::tostring( 'guid/' . $guid), 'removed site');
 
       }
       else {
-        Response::Redirect( url::tostring(), 'deleted site');
+        Response::Redirect( url::tostring(), 'removed site');
 
       }
 

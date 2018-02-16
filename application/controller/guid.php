@@ -74,4 +74,22 @@ class guid extends Controller {
 
   }
 
+  public function remove( $id = 0) {
+    if ( currentUser::isAdmin()) {
+      if ( (int) $id) {
+        $dao = new dao\guid;
+        $dao->delete( $id);
+
+      }
+
+      Response::Redirect( url::tostring( 'guid/'), 'removed guid');
+
+    }
+    else {
+      Response::Redirect();
+
+    }
+
+  }
+
 }

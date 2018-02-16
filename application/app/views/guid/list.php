@@ -13,7 +13,8 @@
     <col />
     <col />
     <col span="2" style="width: 150px;" />
-    <col style="width: 40px;" />
+    <col style="width: 2em;" />
+    <col style="width: 2em;" />
 
   </colgroup>
 
@@ -24,6 +25,7 @@
       <td>name</td>
       <td>created</td>
       <td>updated</td>
+      <td>&nbsp;</td>
       <td>&nbsp;</td>
 
     </tr>
@@ -40,6 +42,10 @@
       <td><?php print date( \config::$DATE_FORMAT, strtotime( $dto->updated)) ?></td>
       <td>
         <a href="<?php url::write( sprintf( 'guid/view/%s', $dto->id)) ?>"><i class="fa fa-eye" title="view"></i></a>
+
+      </td>
+      <td>
+        <a href="<?php url::write( sprintf( 'guid/remove/%s', $dto->id)) ?>" are-you-sure><i class="fa fa-times text-danger" title="delete"></i></a>
 
       </td>
 
@@ -59,7 +65,27 @@ $(document).ready( function() {
     var _tr = $(tr);
     var guid = _tr.data('guid');
 
-  })
+  });
+
+  $('a[are-you-sure]').on( 'click', function(e) {
+    var href = $(this).attr('href');
+    e.stopPropagation(); e.preventDefault();
+
+    _brayworth_.modal({
+      title: 'confirm',
+      text: 'Are you sure ?',
+      buttons : {
+        yes : function( e) {
+          hourglass.on();
+          window.location.href = href;
+
+        }
+
+      }
+
+    });
+
+  });
 
 })
 </script>
