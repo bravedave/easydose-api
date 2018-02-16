@@ -36,6 +36,31 @@ class users extends _dao {
 
 	}
 
+	function getByResetKey( $key) {
+		if ( substr( $key, 0, 1) == '{' && substr( $key, -1) == '}') {
+			if ( $res = $this->Result( sprintf( "SELECT * FROM users WHERE `reset_guid` = '%s'", $this->escape( $key)))) {
+				if ( $dto = $res->dto()) {
+					// \sys::logger( time() - strtotime($dto->reset_guid_date));
+					if ( time() - strtotime($dto->reset_guid_date) < 3600) {
+						// it's good for 1 hour
+						return ( $dto);
+
+					}
+					// else {
+					// 	$this->UpdateByID( ['reset_guid_date' => \db::dbTimeStamp()], $dto->id);
+					//
+					// }
+
+				}
+
+			}
+
+		}
+
+		return ( FALSE);
+
+	}
+
 	function validate( $u, $p ) {
 
 		if ( $u && $p) {
@@ -74,7 +99,7 @@ class users extends _dao {
 If you requested a password reset click the link below.<br />
 If you didn\'t make this request, ignore this email.<br />
 <br />
-<a href="%s%s">Reset Password</a>', \url::$PROTOCOL, \url::tostring('recover/&k=' . $guid));
+<a href="%s%s">Reset Password</a>', \url::$PROTOCOL, \url::tostring('recover/?k=' . $guid));
 
 		$mail = \sys::mailer();
 
