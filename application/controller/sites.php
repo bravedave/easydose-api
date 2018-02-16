@@ -16,7 +16,7 @@
 	*/
 class sites extends Controller {
 
-  public function _index() {
+  protected function _index() {
     $dao = new dao\sites;
     $this->data = (object)[
       'sites' => $dao->getAll()
@@ -39,6 +39,31 @@ class sites extends Controller {
 
   public function index() {
     $this->_index();
+
+  }
+
+  public function remove( $id = 0, $guid = 0) {
+    if ( currentUser::isAdmin()) {
+      if ( (int) $id) {
+        $dao = new dao\sites;
+        $dao->delete( $id);
+
+      }
+
+      if ( (int)$guid) {
+        response::Redirect( url::tostring( 'guid/' . $guid), 'deleted site');
+
+      }
+      else {
+        response::Redirect( url::tostring(), 'deleted site');
+
+      }
+
+    }
+    else {
+      response::Redirect();
+
+    }
 
   }
 
