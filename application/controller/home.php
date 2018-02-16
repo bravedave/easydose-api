@@ -30,6 +30,37 @@ class home extends Controller {
 			}
 
 		}
+		elseif ( $action == '-send-password-') {
+			/*
+			 * send a link to reset the password
+			 */
+		 	\sys::logger('-send-password-link-');
+		 	if ( $u = $this->getPost( 'u')) {
+				$dao = new \dao\users;
+				if ( $dto = $dao->getUserByEmail( $u)) {
+					/*
+					 * this will only work for email addresses
+					 */
+				 	if ( $dao->sendResetLink( $dto)) {
+						\Json::ack( 'sent reset link');
+						\sys::logger('-sent-password-link-');
+
+					}	else {
+						\Json::nak( $action);
+						\sys::logger('-did-not-sent-password-link-');
+
+					}
+
+				}	else {
+					\Json::nak( $action);
+					\sys::logger('-did-not-sent-password-link-email-not-found');
+
+				}
+
+			}	else { \Json::nak( $action); }
+			die;
+
+		}
 		throw new dvc\Exceptions\InvalidPostAction;
 
 	}
@@ -97,6 +128,10 @@ class home extends Controller {
 
 		$p->secondary();
 			$this->load('main-index');
+
+	}
+
+	public function primo() {
 
 	}
 

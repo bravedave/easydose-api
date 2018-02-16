@@ -16,6 +16,8 @@ $dbc->defineField( 'name', 'text');
 $dbc->defineField( 'email', 'text');
 $dbc->defineField( 'pass', 'text');
 $dbc->defineField( 'admin', 'int');
+$dbc->defineField( 'reset_guid', 'text');
+$dbc->defineField( 'reset_guid_date', 'text');
 $dbc->defineField( 'created', 'text');
 $dbc->defineField( 'updated', 'text');
 $dbc->check();

@@ -1,5 +1,5 @@
 <?php
-/**
+/*
 	David Bray
 	BrayWorth Pty Ltd
 	e. david@brayworth.com.au
@@ -26,6 +26,8 @@ abstract class config extends _config {
 
 	//~ static $paypalSandbox = TRUE;
 	static $paypalSandbox = FALSE;
+
+	const allow_password_recovery = TRUE;
 
 	/*
 	 *	Caching using APCu, Interfaced through https://www.scrapbook.cash/

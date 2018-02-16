@@ -62,4 +62,44 @@ class users extends _dao {
 
 	}
 
+	function sendResetLink( $dto) {
+		$guid = \strings::getGUID();
+		$this->UpdateByID([
+				'reset_guid' => $guid,
+				'reset_guid_date' => \db::dbTimeStamp()
+			], $dto->id);
+
+		$mailMessage = sprintf( 'Reset your password?
+
+If you requested a password reset click the link below. If you didn\'t make this request, ignore this email.
+
+%s%s', \url::$PROTOCOL, \url::write('recover/&k=' . $guid));
+
+		// $mail->AddReplyTo( $user->email, $user->name);
+		$mail->Subject  = \config::$WEBNAME . " Password Recovery";
+		$mail->AddAddress( $dto->email, $dto->name );
+
+		$mail->MsgHTML( $mailMessage);
+
+		try {
+			if ( $mail->send()) {
+				return ( true);
+
+			}
+			else {
+				\sys::logger( 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo);
+				return ( FALSE);
+
+			}
+
+
+		}
+		catch( \Exception $e) {
+			\sys::logger( 'dao\users->sendResetLink :: Could not send error email');
+			return ( false);
+
+		}
+
+	}
+
 }
