@@ -69,11 +69,12 @@ class users extends _dao {
 				'reset_guid_date' => \db::dbTimeStamp()
 			], $dto->id);
 
-		$mailMessage = sprintf( 'Reset your password?
-
-If you requested a password reset click the link below. If you didn\'t make this request, ignore this email.
-
-%s%s', \url::$PROTOCOL, \url::tostring('recover/&k=' . $guid));
+		$mailMessage = sprintf( 'Reset your password?<br />
+<br />
+If you requested a password reset click the link below.<br />
+If you didn\'t make this request, ignore this email.<br />
+<br />
+<a href="%s%s">Reset Password</a>', \url::$PROTOCOL, \url::tostring('recover/&k=' . $guid));
 
 		$mail = \sys::mailer();
 
