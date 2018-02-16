@@ -73,7 +73,7 @@ class users extends _dao {
 
 If you requested a password reset click the link below. If you didn\'t make this request, ignore this email.
 
-%s%s', \url::$PROTOCOL, \url::write('recover/&k=' . $guid));
+%s%s', \url::$PROTOCOL, \url::tostring('recover/&k=' . $guid));
 
 		$mail = \sys::mailer();
 
