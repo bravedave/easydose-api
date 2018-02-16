@@ -75,6 +75,8 @@ If you requested a password reset click the link below. If you didn\'t make this
 
 %s%s', \url::$PROTOCOL, \url::write('recover/&k=' . $guid));
 
+		$mail = \sys::mailer();
+
 		// $mail->AddReplyTo( $user->email, $user->name);
 		$mail->Subject  = \config::$WEBNAME . " Password Recovery";
 		$mail->AddAddress( $dto->email, $dto->name );
