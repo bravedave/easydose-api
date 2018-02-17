@@ -75,6 +75,8 @@ class api extends Controller {
 
         if ( $res) {
 
+          $agreementsDAO = new dao\agreements;
+          $plansDAO = new dao\plans;
           $guidDAO = new dao\guid;
           $sitesDAO = new dao\sites;
 
@@ -91,12 +93,36 @@ class api extends Controller {
             $j = \Json::ack( $action);
 
           }
-          $guidDAO->getByGUID( $a['guid']);  // will add guid if it doesn't exist
 
+          $agreementsID = 0;
+          $license = 'none';
+          $status = 'inactive';
+          $next_billing_date = date('Y-m-d', 0);
+
+          if ( $dto = $guidDAO->getByGUID( $a['guid'])) { // will add guid if it doesn't exist
+            if ( $agreementsID = $dto->agreements_id) {
+              if ( $agreementsDTO = $agreementsDAO->getByID( $agreementsID)) {
+                if ( $agreementsDTO->plan_id) {
+                  $status = strtolower( $agreementsDTO->state);
+                  $next_billing_date = date( 'Y-m-d', strtotime( $agreementsDTO->next_billing_date));
+                  if ( $plansDTO = $plansDAO->getByPayPalID( $agreementsDTO->plan_id)) {
+                    $license = $plansDTO->name;
+
+                  }
+
+                }
+
+              }
+
+            }
+
+          }
+
+          // ->add('agreementsID', $agreementsID)
           $j
-            ->add('License', 'none')
-            ->add('NextPaymentDue', date('Y-m-d', 0))
-            ->add('Subscription_Status', 'inactive')
+            ->add('License', $license)
+            ->add('NextPaymentDue', $next_billing_date)
+            ->add('Subscription_Status', $status)
             ;
 
         }

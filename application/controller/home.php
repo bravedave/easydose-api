@@ -46,23 +46,18 @@ class home extends Controller {
 							->add('message', 'sent link, check your email and your junk mail');
 						// \sys::logger('-sent-password-link-');
 
-					}	else {
-						\Json::nak( $action);
-						// \sys::logger('-did-not-sent-password-link-');
+					}	else { \Json::nak( $action); }
 
-					}
-
-				}	else {
-					\Json::nak( $action);
-					// \sys::logger('-did-not-sent-password-link-email-not-found');
-
-				}
+				}	else { \Json::nak( $action); }
 
 			}	else { \Json::nak( $action); }
-			die;
+			exit;
 
 		}
-		throw new dvc\Exceptions\InvalidPostAction;
+		else {
+			throw new dvc\Exceptions\InvalidPostAction;
+
+		}
 
 	}
 
@@ -106,33 +101,40 @@ class home extends Controller {
 	}
 
 	public function index( $data = '' ) {
-		if ( $this->isPost())
+		if ( $this->isPost()) {
 			$this->postHandler();
 
-		elseif ( $this->firstRun)
+		}
+		elseif ( $this->firstRun) {
 			$this->dbinfo();
 
-		else
+		}
+		else {
 			$this->_index();
+
+		}
 
 	}
 
 	public function dbinfo() {
-		$p = new dvc\pages\bootstrap('dbinfo');
+		if ( $this->firstRun || currentUser::isAdmin()) {
+			$p = new dvc\pages\bootstrap('dbinfo');
 			$p
-			->header()
-			->title()
-			->primary();
+				->header()
+				->title()
+				->primary();
 
 			$dbinfo = new dao\dbinfo;
 			$dbinfo->dump();
 
-		$p->secondary();
+			$p->secondary();
 			$this->load('main-index');
 
-	}
+		}
+		else {
+			$this->_index();
 
-	public function primo() {
+		}
 
 	}
 

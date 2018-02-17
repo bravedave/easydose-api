@@ -29,8 +29,28 @@ class account extends Controller {
 				Response::redirect( url::tostring('account'), 'updated');
 
 			}
-			elseif ( $action == 'update-plan-assignment') {
-				throw new \Exception( $action . ' not written');
+			elseif ( $action == 'update-agreement-assignment') {
+				if ( $id = (int)$this->getPost('id')) {
+					if ( $agreements_id = (int)$this->getPost('agreements_id')) {
+						$dao = new dao\guid;
+						$dao->UpdateByID([
+							'agreements_id' => $agreements_id,
+							'updated' => \db::dbTimeStamp()
+						], $id);
+
+						Response::Redirect( url::tostring('account'), 'assigned agreement');
+
+					}
+					else {
+						throw new \Exception( $action . ': invalid plan id');
+
+					}
+
+				}
+				else {
+					throw new \Exception( $action . ': invalid guid id');
+
+				}
 
 			}
 			elseif ( $action == 'subscribe') {
