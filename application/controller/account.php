@@ -29,6 +29,10 @@ class account extends Controller {
 				Response::redirect( url::tostring('account'), 'updated');
 
 			}
+			elseif ( $action == 'update-plan-assignment') {
+				throw new \Exception( $action . ' not written');
+
+			}
 			elseif ( $action == 'subscribe') {
 				$agreement = new PayPal\Api\Agreement;
 
@@ -151,8 +155,10 @@ class account extends Controller {
 	protected function _index() {
 		$daoPlans = new dao\plans;
 		$daoAgreements = new dao\agreements;
+		$daoGuid = new dao\guid;
 		$this->data = (object)[
 			'plans' => $daoPlans->getActivePlans(),
+			'guids' => $daoGuid->getForUser(),
 			'agreements' => $daoAgreements->getAgreementsForUser(),
 			'agreement' => FALSE
 			];

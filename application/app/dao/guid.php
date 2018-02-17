@@ -48,6 +48,29 @@ class guid extends _dao {
 
 	}
 
+	public function getForUser( $userID = 0) {
+		if ( is_null( $this->_db_name)) {
+			throw new Exceptions\DBNameIsNull;
+
+		}
+
+		if ( !(int)$userID) {
+			$userID = \currentUser::id();
+
+		}
+
+		$this->db->log = $this->log;
+		$sql = sprintf( 'SELECT * FROM guid WHERE user_id = %s', $userID);
+
+		if ( $res = $this->Result( $sql)) {
+			return ( $res->dtoSet());
+
+		}
+
+		return ( FALSE);
+
+	}
+
 	public function getAll( $fields = 'guid.*, u.name', $order = '' ) {
 		if ( is_null( $this->_db_name))
 			throw new Exceptions\DBNameIsNull;
