@@ -162,10 +162,10 @@ class account extends Controller {
 				$a = ['agreement_id' => $agreement->getId()];
 				$dao->UpdateByID( $a, $dto->id);
 
-				sys::dump( $a, NULL, FALSE);
+				// sys::dump( $a, NULL, FALSE);
 
 			}
-			sys::dump( $agreement);
+			// sys::dump( $agreement);
 			/*-- [end: execute agreement] --*/
 
 			Response::redirect( url::tostring('account'), $success);
