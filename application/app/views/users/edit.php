@@ -47,7 +47,7 @@
 			<div class="offset-3 col-8">
 				<label class="form-check-label">
 					<input type="checkbox" name="admin" class="form-check-input"
-					<?php if ( $this->data->dto->admin) print "checked" ?> value="1" required />
+					<?php if ( $this->data->dto->admin) print "checked" ?> value="1" />
 					Administrator
 				</label>
 
