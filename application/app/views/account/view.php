@@ -110,7 +110,6 @@
 </div>
 
 <div class="row py-1 mt-4">
-<<<<<<< HEAD
 	<div class="col-12 col-sm-2">Agreements</div>
 	<div class="col-12 col-sm-10">
 		<table class="table table-striped">
@@ -122,11 +121,6 @@
 
 			</colgroup>
 
-=======
-	<div class="col-12 col-lg-2">Agreements</div>
-	<div class="col-12 col-lg-10">
-		<table class="table table-striped table-sm small">
->>>>>>> ae150a1ab8194a59c79463e892ca65e28559630d
 			<thead>
 				<tr>
 					<td>agreement_id</td>
