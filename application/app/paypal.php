@@ -1,5 +1,5 @@
 <?php
-/**
+/*
 	David Bray
 	BrayWorth Pty Ltd
 	e. david@brayworth.com.au
@@ -15,6 +15,7 @@
 
 	*/
 use PayPal\Api\Agreement;
+use PayPal\Api\AgreementStateDescriptor;
 use PayPal\Api\Plan;
 use PayPal\Api\Patch;
 use PayPal\Api\PatchRequest;
@@ -236,7 +237,7 @@ abstract class paypal {
 		catch ( Exception $ex) {
 			//~ sys::dump( $ex);
 			sys::logger( $ex->getMessage());
-			throw new \Exceptions\Paypal( 'could not create aggreement');
+			throw new \Exceptions\Paypal( 'could not get aggreement');
 
 		}
 
@@ -252,6 +253,25 @@ abstract class paypal {
 			//~ sys::dump( $ex);
 			sys::logger( $ex->getMessage());
 			throw new \Exceptions\Paypal( 'could not create aggreement');
+
+		}
+
+	}
+
+	static function cancelAgreement( Agreement $agreement) {
+		try {
+			$agreementStateDescriptor = new AgreementStateDescriptor;
+			$agreementStateDescriptor->setNote("Cancel the agreement");
+
+	    $agreement->cancel( $agreementStateDescriptor, self::apiContext());
+			$output = self::agreement( $agreement->getId());
+			return ( $output);
+
+		}
+		catch ( Exception $ex) {
+			//~ sys::dump( $ex);
+			sys::logger( $ex->getMessage());
+			throw new \Exceptions\Paypal( 'could not cancel aggreement');
 
 		}
 

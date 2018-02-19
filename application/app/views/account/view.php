@@ -101,11 +101,19 @@
 	<div class="col-12 col-sm-2">Agreements</div>
 	<div class="col-12 col-sm-10">
 		<table class="table table-striped">
+			<colgroup>
+				<col />
+				<col />
+				<col />
+				<col style="width: 2em;"/>
+
+			</colgroup>
+
 			<thead>
 				<tr>
 					<td>agreement_id</td>
 					<td>state</td>
-					<td>refreshed</td>
+					<td colspan="2">refreshed</td>
 
 				</tr>
 
@@ -117,6 +125,17 @@
 					<td><?php print $agreement->agreement_id ?></td>
 					<td><?php print $agreement->state ?></td>
 					<td><?php print date( \config::$DATE_FORMAT, strtotime( $agreement->refreshed)) ?></td>
+					<td><?php
+						if ( $agreement->state == 'active') {
+							printf( '<i class="fa fa-fw fa-times text-danger" data-agreement_id="%s" cancel-agreement></i>', $agreement->agreement_id);
+
+						}
+						else {
+							print '&bull;';
+							
+						}
+
+						?></td>
 
 				</tr>
 <?php	}	// foreach ( $this->data->plans as $plan)	?>
@@ -310,7 +329,51 @@ $(document).ready( function() {
 			}
 		});
 
-	})
+	});
+
+	$('i[cancel-agreement]').each( function( i, el) {
+		var _el = $(el);
+		_el.css('cursor','pointer').on( 'click', function( e) {
+			e.stopPropagation(); e.preventDefault();
+
+			_brayworth_.modal({
+				title : 'Confirm Delete',
+				text : 'This will cancel your Subscription',
+				buttons : {
+					confirm : function( e) {
+						var data = {
+							action : 'unsubscribe',
+							agreement_id : _el.data('agreement_id'),
+
+						}
+
+						_brayworth_.post({
+							url: _brayworth_.url('account/'),
+							data : data
+
+						})
+						.then( function( d) {
+							_brayworth_.growl( d);
+							if ( 'ack' == d.response) {
+								hourglass.on();
+								window.location.reload();
+
+							}
+
+						});
+
+						// alert( 'right o');
+						$(this).modal('close');
+
+					}
+
+				}
+
+			});
+
+		});
+
+	});
 
 });
 </script>

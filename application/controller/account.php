@@ -84,16 +84,36 @@ class account extends Controller {
 				return $agreement;
 
 			}
-			else {
-				throw new \Exception( $action);
+			elseif ( $action == 'unsubscribe') {
+				$agreementId = $this->getPost( 'agreement_id');
+				$agreement = new PayPal\Api\Agreement;
+
+        $agreement->setId( $agreementId);
+
+        try {
+					$j = \Json::ack( $action);
+					$dao = new dao\agreements;
+					if ( $dto = $dao->getAgreementByAgreementID( $agreementId)) {
+						$agreement = paypal::cancelAgreement( $agreement);
+
+						$dao->UpdateByID(['refreshed' => ''], $dto->id);	// refresh is required
+						$j->add( 'agreement_id', $dto->agreement_id);
+						$j->add( 'state', 'cancelled');
+
+					}
+
+        }
+				catch (Exception $ex) {
+					\Json::nak( $action);
+
+        }
+
 
 			}
+			else { new \Exception( $action); }
 
 		}
-		else {
-			throw new \Exception( 'invalid current user');
-
-		}
+		else { throw new \Exceptions\InvalidUser;	}
 
 	}
 

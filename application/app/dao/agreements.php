@@ -1,5 +1,5 @@
 <?php
-/**
+/*
 	David Bray
 	BrayWorth Pty Ltd
 	e. david@brayworth.com.au
@@ -43,6 +43,15 @@ class agreements extends _dao {
 
 	public function getAgreementByToken( $token) {
 		$_sql = sprintf( "SELECT * FROM agreements WHERE `token` = '%s'", $token);
+		if ( $res = $this->Result( $_sql))
+			return ( $res->dto());
+
+		return ( FALSE);
+
+	}
+
+	public function getAgreementByAgreementID( $agreementId) {
+		$_sql = sprintf( "SELECT * FROM agreements WHERE `agreement_id` = '%s'", $agreementId);
 		if ( $res = $this->Result( $_sql))
 			return ( $res->dto());
 
