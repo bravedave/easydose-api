@@ -21,8 +21,7 @@
 	"require": {
 		"php": ">=7.0",
 		"bravedave/dvc": "dev-master",
-		"paypal/rest-api-sdk-php": "*",
-		"matthiasmullie/scrapbook": "^1.4"
+		"paypal/rest-api-sdk-php": "*"
 
 	}
 

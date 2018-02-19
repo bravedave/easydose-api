@@ -13,6 +13,7 @@ Namespace dvc\sqlite;
 $dbc = new dbCheck( $this->db, 'guid' );
 $dbc->defineField( 'guid', 'text');
 $dbc->defineField( 'user_id', 'int');
+$dbc->defineField( 'agreements_id', 'int');
 $dbc->defineField( 'created', 'text');
 $dbc->defineField( 'updated', 'text');
 
