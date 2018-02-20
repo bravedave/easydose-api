@@ -28,9 +28,21 @@ class plans extends _dao {
 
 	}
 
-	public function getActivePlans() {
-		if ( $res = $this->Result( 'SELECT * FROM plans WHERE `state` = "ACTIVE"'))
-			return ( $res->dtoSet());
+	public function getActivePlans( $type = '') {
+		if ( 'WKS' == $type) {
+			if ( $res = $this->Result( 'SELECT * FROM plans WHERE `name` like "WKS%" AND `state` = "ACTIVE" ORDER BY `name` ASC')) {
+				return ( $res->dtoSet());
+
+			}
+
+		}
+		else {
+			if ( $res = $this->Result( 'SELECT * FROM plans WHERE `name` NOT like "WKS%" AND `state` = "ACTIVE" ORDER BY `name` ASC')) {
+				return ( $res->dtoSet());
+
+			}
+
+		}
 
 		return ( FALSE);
 

@@ -198,9 +198,11 @@ class account extends Controller {
 		$daoGuid = new dao\guid;
 		$this->data = (object)[
 			'plans' => $daoPlans->getActivePlans(),
+			'plansWKS' => $daoPlans->getActivePlans( $type = "WKS"),
 			'guids' => $daoGuid->getForUser(),
-			'agreements' => $daoAgreements->getAgreementsForUser(),
-			'agreement' => FALSE
+			'agreements' => $daoAgreements->getAgreementsForUser( 0, $active = TRUE),
+			'agreement' => FALSE,
+			'agreementWKS' => FALSE
 			];
 
 

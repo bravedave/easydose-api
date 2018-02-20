@@ -17,11 +17,48 @@ Namespace dao;
 class agreements extends _dao {
 	protected $_db_name = 'agreements';
 
-	public function getAgreementsForUser( $userID = 0) {
+	public function getAgreementsForUser( $userID = 0, $active = TRUE) {
 		if ( !(int)$userID)
 			$userID = \currentUser::id();
 
-		$_sql = sprintf( 'SELECT * FROM agreements WHERE agreement_id != "" AND user_id = %d', $userID);
+		if ( $active) {
+			/*
+
+			 token,
+			 result,
+			 user_id,id,paypal_id,
+			 state,frequency,rate
+
+			 */
+
+			$_sql = sprintf( 'SELECT
+				a.id,
+				a.agreement_id,
+				a.plan_id,
+				a.description,
+				a.payment_method,
+				a.name,
+				a.start_date,
+				a.next_billing_date,
+				a.cycles_completed,
+				a.frequency,
+				a.value,
+				a.refreshed,
+				a.state,
+				p.name `product`,
+				p.description `productDescription`
+				 	FROM agreements a
+						LEFT JOIN plans p on a.plan_id = p.paypal_id
+					WHERE a.agreement_id != "" AND a.state = "Active" AND a.user_id = %d', $userID);
+
+		}
+		else {
+			$_sql = sprintf( 'SELECT * FROM agreements WHERE agreement_id != "" AND user_id = %d', $userID);
+
+		}
+
+		\sys::logSQL( $_sql);
+
 		if ( $res = $this->Result( $_sql))
 			return ( $res->dtoSet());
 
@@ -33,7 +70,25 @@ class agreements extends _dao {
 		if ( !(int)$userID)
 			$userID = \currentUser::id();
 
-		$_sql = sprintf( 'SELECT * FROM agreements WHERE agreement_id != "" AND state = "Active" AND user_id = %d', $userID);
+		$_sql = sprintf( 'SELECT
+			a.id,
+			a.agreement_id,
+			a.plan_id,
+			a.description,
+			a.payment_method,
+			a.name,
+			a.start_date,
+			a.next_billing_date,
+			a.cycles_completed,
+			a.frequency,
+			a.value,
+			a.refreshed,
+			a.state,
+			p.name `product`,
+			p.description `productDescription`
+				FROM agreements a
+					LEFT JOIN plans p on a.plan_id = p.paypal_id
+				WHERE a.agreement_id != "" AND a.state = "Active" AND a.user_id = %d', $userID);
 		if ( $res = $this->Result( $_sql))
 			return ( $res->dto());
 

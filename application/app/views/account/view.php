@@ -53,8 +53,10 @@
 </form>
 
 <div class="row py-1 mt-4">
-	<div class="col-12 col-lg-2">Guids</div>
-	<div class="col-12 col-lg-10">
+	<div class="col col-12 col-lg-2">
+		<h3 class="m-0">Guids</h3>
+	</div>
+	<div class="col col-12 col-lg-10">
 <?php	if ( $this->data->guids) {	?>
 		<table class="table table-striped table-sm small">
 			<thead>
@@ -110,10 +112,15 @@
 </div>
 
 <div class="row py-1 mt-4">
-	<div class="col-12 col-sm-2">Agreements</div>
-	<div class="col-12 col-sm-10">
+	<div class="col col-12 col-lg-2">
+		<h3 class="m-0">Agreements</h3>
+
+	</div>
+
+	<div class="col col-12 col-lg-10">
 		<table class="table table-striped">
 			<colgroup>
+				<col />
 				<col />
 				<col />
 				<col />
@@ -124,6 +131,7 @@
 			<thead>
 				<tr>
 					<td>agreement_id</td>
+					<td>product</td>
 					<td>state</td>
 					<td colspan="2">refreshed</td>
 
@@ -132,25 +140,31 @@
 			</thead>
 
 			<tbody>
-<?php	foreach ( $this->data->agreements as $agreement) {	?>
+<?php
+	/*
+		both wokstation and active licenses will be shown here
+	*/
+	foreach ( $this->data->agreements as $agreement) {	?>
 				<tr>
 					<td><?php print $agreement->agreement_id ?></td>
+					<td><?php print $agreement->product ?></td>
 					<td><?php print $agreement->state ?></td>
 					<td><?php print date( \config::$DATE_FORMAT, strtotime( $agreement->refreshed)) ?></td>
 					<td><?php
-						if ( $agreement->state == 'active') {
+						if ( strtolower( $agreement->state) == 'active') {
 							printf( '<i class="fa fa-fw fa-times text-danger" data-agreement_id="%s" cancel-agreement></i>', $agreement->agreement_id);
 
 						}
 						else {
 							print '&bull;';
-							
+
 						}
 
 						?></td>
 
 				</tr>
-<?php	}	// foreach ( $this->data->plans as $plan)	?>
+<?php
+	}	// foreach ( $this->data->plans as $plan)	?>
 
 			</tbody>
 
@@ -160,11 +174,66 @@
 
 </div>
 
-<?php	if ( $ag = $this->data->agreement) {
-// sys::dump( $ag);
-	?>
-<div class="row py-1">
-	<div class="col-12 col-lg-2">Agreement</div>
+<?php
+	if ( $ag = $this->data->agreement) {
+		// sys::dump( $ag);
+
+		// here there is an agreement, but not necessarily a worksation agreement
+		if ( !$this->data->agreementWKS) {
+			// offering opportunity to subscribe
+
+			?>
+
+	<form class="form" method="post" action="<?php url::write( 'account') ?>">
+		<div class="row py-1">
+			<div class="col col-12 col-lg-2">
+				<h3 class="m-0">
+					Workstation Plans
+				</h3>
+				<div>
+					calculated yearly, paid monthly
+				</div>
+			</div>
+
+			<div class="col col-12 col-lg-10">
+				<table class="table table-striped">
+					<tbody>
+	<?php			foreach ( $this->data->plansWKS as $plan) {	?>
+						<tr>
+							<td><input type="radio" name="plan_id" value="<?php print $plan->paypal_id ?>" /></td>
+							<td><?php printf( '%s<br />%s', $plan->name, $plan->description ) ?></td>
+							<td><?php print $plan->rate ?></td>
+							<td><?php print $plan->frequency ?></td>
+
+						</tr>
+	<?php			}	// foreach ( $this->data->plans as $plan)	?>
+
+					</tbody>
+
+				</table>
+
+			</div>
+
+		</div>
+
+		<div class="row py-1">
+			<div class="offset-lg-2 col-12 col-lg-10">
+				<input type="submit" name="action" class="btn btn-primary" value="subscribe" />
+
+			</div>
+
+		</div>
+
+	</form>
+
+<?php
+		}	// if ( $ag = $this->data->agreementWKS)
+		?>
+
+<div class="row py-1 mt-2">
+	<div class="col-12 col-lg-2">
+		<h3 class="m-0">Active Agreement(s)</h3>
+	</div>
 	<div class="col-12 col-lg-10">
 		<table class="table table-striped table-sm small">
 			<tbody>
@@ -177,6 +246,18 @@
 				<tr>
 					<td>Description</td>
 					<td><?php print $ag->description ?></td>
+
+				</tr>
+
+				<tr>
+					<td>Product Name</td>
+					<td><?php print $ag->product ?></td>
+
+				</tr>
+
+				<tr>
+					<td>Product Description</td>
+					<td><?php print $ag->productDescription ?></td>
 
 				</tr>
 
@@ -242,11 +323,11 @@
 
 </div>
 <?php
-			//~ sys::dump( $ag, NULL, FALSE);
+		//~ sys::dump( $ag, NULL, FALSE);
 
-		}	// if ( $this->data->agreement)
-		else {
-			// there is no active agreement	?>
+	}	// if ( $this->data->agreement)
+
+	if ( !$this->data->agreement) {	// there is no active agreement	?>
 
 <form class="form" method="post" action="<?php url::write( 'account') ?>">
 	<div class="row py-1">
@@ -283,7 +364,13 @@
 </form>
 
 <?php
-		}	?>
+	} //if ( !$this->data->agreement) {	// there is no active agreement
+
+	if ( $ag = $this->data->agreementWKS) {	?>
+	workstation agreement
+
+<?php
+	}	// if ( $ag = $this->data->agreementWKS)	?>
 
 <div class="d-none">
 	<div title="Update Easydose Plan" guid-plan-modal>
