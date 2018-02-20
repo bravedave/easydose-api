@@ -66,9 +66,24 @@ class agreements extends _dao {
 
 	}
 
-	public function getActiveAgreementForUser( $userID = 0) {
+	public function getActiveAgreementForUser( $userID = 0, $type = '') {
 		if ( !(int)$userID)
 			$userID = \currentUser::id();
+
+		$_where = [
+			'a.agreement_id != ""',
+			'a.state = "Active"',
+			sprintf( 'a.user_id = %d', $userID)
+		];
+
+		if ( $type == 'WKS') {
+			$_where[] = 'p.`name` LIKE "WKS%"';
+
+		}
+		else {
+			$_where[] = 'p.`name` NOT LIKE "WKS%"';
+
+		}
 
 		$_sql = sprintf( 'SELECT
 			a.id,
@@ -88,7 +103,10 @@ class agreements extends _dao {
 			p.description `productDescription`
 				FROM agreements a
 					LEFT JOIN plans p on a.plan_id = p.paypal_id
-				WHERE a.agreement_id != "" AND a.state = "Active" AND a.user_id = %d', $userID);
+				WHERE %s', implode( ' AND ', $_where));
+
+		// \sys::logSQL( $_sql);
+
 		if ( $res = $this->Result( $_sql))
 			return ( $res->dto());
 

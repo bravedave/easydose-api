@@ -54,7 +54,7 @@
 
 <div class="row py-1 mt-4">
 	<div class="col col-12 col-lg-2">
-		<h3 class="m-0">Guids</h3>
+		<strong>Guids</strong>
 	</div>
 	<div class="col col-12 col-lg-10">
 <?php	if ( $this->data->guids) {	?>
@@ -113,7 +113,7 @@
 
 <div class="row py-1 mt-4">
 	<div class="col col-12 col-lg-2">
-		<h3 class="m-0">Agreements</h3>
+		<strong>Agreements</strong>
 
 	</div>
 
@@ -175,7 +175,7 @@
 </div>
 
 <?php
-	if ( $ag = $this->data->agreement) {
+	if ( $this->data->agreement) {
 		// sys::dump( $ag);
 
 		// here there is an agreement, but not necessarily a worksation agreement
@@ -190,7 +190,7 @@
 				<h3 class="m-0">
 					Workstation Plans
 				</h3>
-				<div>
+				<div class="small">
 					calculated yearly, paid monthly
 				</div>
 			</div>
@@ -232,11 +232,25 @@
 
 <div class="row py-1 mt-2">
 	<div class="col-12 col-lg-2">
-		<h3 class="m-0">Active Agreement(s)</h3>
+		<strong>Active Agreement(s)</strong>
 	</div>
 	<div class="col-12 col-lg-10">
 		<table class="table table-striped table-sm small">
 			<tbody>
+<?php
+		foreach ( [$this->data->agreement, $this->data->agreementWKS] as $ag) {
+			if ( $ag) {	?>
+				<tr>
+					<td>Product</td>
+					<td>
+						<strong>
+							<?php printf( '%s : %s', $ag->product, $ag->productDescription) ?>
+						</strong>
+
+					</td>
+
+				</tr>
+
 				<tr>
 					<td>ID</td>
 					<td><?php print $ag->agreement_id ?></td>
@@ -246,18 +260,6 @@
 				<tr>
 					<td>Description</td>
 					<td><?php print $ag->description ?></td>
-
-				</tr>
-
-				<tr>
-					<td>Product Name</td>
-					<td><?php print $ag->product ?></td>
-
-				</tr>
-
-				<tr>
-					<td>Product Description</td>
-					<td><?php print $ag->productDescription ?></td>
 
 				</tr>
 
@@ -315,6 +317,11 @@
 
 				</tr>
 
+<?php
+			}
+
+		}	?>
+
 			</tbody>
 
 		</table>
@@ -331,7 +338,17 @@
 
 <form class="form" method="post" action="<?php url::write( 'account') ?>">
 	<div class="row py-1">
-		<div class="col col-12 col-lg-2">Plans</div>
+		<div class="col col-12 col-lg-2">
+			<h3 class="m-0">
+				Plans
+			</h3>
+			<div class="small">
+				calculated yearly, paid monthly
+
+			</div>
+
+		</div>
+
 		<div class="col col-12 col-lg-10">
 			<table class="table table-striped">
 				<tbody>
@@ -364,13 +381,7 @@
 </form>
 
 <?php
-	} //if ( !$this->data->agreement) {	// there is no active agreement
-
-	if ( $ag = $this->data->agreementWKS) {	?>
-	workstation agreement
-
-<?php
-	}	// if ( $ag = $this->data->agreementWKS)	?>
+	} //if ( !$this->data->agreement) {	// there is no active agreement	?>
 
 <div class="d-none">
 	<div title="Update Easydose Plan" guid-plan-modal>
