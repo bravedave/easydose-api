@@ -57,7 +57,7 @@ class agreements extends _dao {
 
 		}
 
-		\sys::logSQL( $_sql);
+		// \sys::logSQL( $_sql);
 
 		if ( $res = $this->Result( $_sql))
 			return ( $res->dtoSet());

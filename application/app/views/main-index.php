@@ -25,6 +25,7 @@
   <li><h3>maintenance</h3></li>
   <li><a href="<?php url::write('users'); ?>">users</a></li>
   <li><a href="<?php url::write('settings'); ?>">settings</a></li>
+  <li><a href="<?php url::write('products'); ?>">products</a></li>
   <li><a href="<?php url::write('plans'); ?>">plans</a></li>
   <li><a href="<?php url::write('home/dbinfo'); ?>">dbinfo</a></li>
   <li><hr /></li>

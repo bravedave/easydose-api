@@ -37,7 +37,10 @@ class plans extends Controller {
   }
 
   public function index() {
-    $this->_index();
+    if ( currentUser::isAdmin()) {
+      $this->_index();
+
+    }
 
   }
 
