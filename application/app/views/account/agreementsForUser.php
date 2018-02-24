@@ -47,7 +47,7 @@
 	/*
 		both wokstation and active licenses will be shown here
 	*/
-	foreach ( $this->data->agreements as $agreement) {	?>
+	foreach ( $this->data->agreementsForUser as $agreement) {	?>
 				<tr>
 					<td><?php print $agreement->agreement_id ?></td>
 					<td><?php print $agreement->product ?></td>

@@ -197,19 +197,21 @@ class account extends Controller {
 		// $debug = TRUE;
 
 		$daoPlans = new dao\plans;
+		$daoProducts = new dao\products;
 		$daoAgreements = new dao\agreements;
 		$daoGuid = new dao\guid;
 		$this->data = (object)[
 			'plans' => $daoPlans->getActivePlans(),
 			'plansWKS' => $daoPlans->getActivePlans( $type = "WKS"),
+			'products' => $daoProducts->getDtoSet(),
 			'guids' => $daoGuid->getForUser(),
-			'agreements' => $daoAgreements->getAgreementsForUser( 0, $active = FALSE),
+			'agreementsForUser' => $daoAgreements->getAgreementsForUser( 0, $active = FALSE),
 			'agreement' => FALSE,
 			'agreementWKS' => FALSE
 			];
 
 
-		foreach ( $this->data->agreements as $dto) {
+		foreach ( $this->data->agreementsForUser as $dto) {
 			if ( date( 'Y-m-d', strtotime( $dto->refreshed)) < date( 'Y-m-d')) {
 				if ( $debug) \sys::logger( sprintf('account/_index :: refreshFrom Paypal :: %s : %s', $dto->agreement_id, $dto->plan_id));
 				$daoAgreements->RefreshFromPayPal( $dto);
@@ -222,7 +224,7 @@ class account extends Controller {
 
 		}
 
-		$this->data->agreements = $daoAgreements->getAgreementsForUser();
+		$this->data->agreementsForUser = $daoAgreements->getAgreementsForUser();
 
 		$this->data->agreement = $daoAgreements->getActiveAgreementForUser();
 		$this->data->agreementWKS = $daoAgreements->getActiveAgreementForUser(0, $type = 'WKS');
