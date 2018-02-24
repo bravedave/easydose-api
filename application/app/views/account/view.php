@@ -43,6 +43,7 @@
 	else {
 		// there is no active agreement
 		$this->load('plans');
+		
 		$this->load('products');
 
 	}
