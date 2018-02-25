@@ -54,6 +54,29 @@
 
 </div>
 <script>
+function requiredParam (param) {
+  const requiredParamError = new Error(
+   `Required parameter, "${param}" is missing.`
+  )
+  // preserve original stack trace
+  if (typeof Error.captureStackTrace === 'function') {
+    Error.captureStackTrace(
+      requiredParamError,
+      requiredParam
+    )
+  }
+  throw requiredParamError
+}
+
+window.blah = function({
+  hurt = requiredParam('hurt'),
+  container = 'bus'
+}) {
+
+  console.log( hurt, container);
+
+}
+
 $(document).ready( function() {
   $('tr[product]').addClass('pointer').on('click', function( e) {
     var id = $('td[id]', this).text();
