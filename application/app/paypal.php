@@ -19,6 +19,7 @@ use PayPal\Api\AgreementStateDescriptor;
 use PayPal\Api\Plan;
 use PayPal\Api\Patch;
 use PayPal\Api\PatchRequest;
+use PayPal\Api\Payment;
 use PayPal\Common\PayPalModel;
 use PayPal\Rest\ApiContext;
 
@@ -293,6 +294,25 @@ abstract class paypal {
 			//~ sys::dump( $ex);
 			sys::logger( $ex->getMessage());
 			throw new \Exceptions\Paypal( 'could not execute aggreement');
+
+		}
+
+	}
+
+	static function createPayment( Payment $payment) {
+		try {
+			$output = $payment->create( self::apiContext());
+			return ( $output);
+
+		}
+		catch ( Exception $ex) {
+			//~ sys::dump( $ex);
+			sys::logger( $ex->getMessage());
+
+			echo $ex->getCode();
+			echo $ex->getData();
+
+			throw new \Exceptions\Paypal( 'could not create payment');
 
 		}
 

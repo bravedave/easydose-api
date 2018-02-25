@@ -33,7 +33,7 @@
 <?php			foreach ( $this->data->products as $dto) {
 						// sys::dump( $product);	?>
 					<tr>
-						<td><input type="radio" name="plan_id" value="<?php print $dto->id ?>" /></td>
+						<td><input type="radio" name="product_id" value="<?php print $dto->id ?>" /></td>
 						<td><?php printf( '%s<br />%s', $dto->name, $dto->description); ?></td>
 						<td><?php print $dto->rate ?></td>
 						<td><?php print $dto->term ?></td>

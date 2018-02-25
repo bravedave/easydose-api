@@ -130,6 +130,69 @@ class account extends Controller {
 
 
 			}
+			elseif( $action == 'buy product') {
+				if ( $product = (int)$this->getPost('product_id')) {
+					$dao = new dao\products;
+					if ( $dto = $dao->getByID( $product)) {
+
+						$tax = round( $dto->rate / 11, 2 );
+						$rate = $dto->rate - $tax;
+
+						$payer = new PayPal\Api\Payer;
+						$payer->setPaymentMethod("paypal");
+						// ### Itemized information
+						// (Optional) Lets you specify item wise
+						// information
+						$item1 = new PayPal\Api\Item;
+						$item1->setName( $dto->description)
+						    ->setCurrency('AUD')
+						    ->setQuantity(1)
+						    ->setSku( $dto->name) // Similar to `item_number` in Classic API
+						    ->setPrice( $rate);
+
+						$itemList = new PayPal\Api\ItemList;
+						$itemList->setItems( [$item1]);
+
+						$details = new PayPal\Api\Details;
+						$details
+						    ->setTax( $tax)
+						    ->setSubtotal( $rate);
+
+						$amount = new PayPal\Api\Amount;
+						$amount->setCurrency("AUD")
+						    ->setTotal( $dto->rate)
+						    ->setDetails( $details);
+
+						$transaction = new PayPal\Api\Transaction;
+						$transaction->setAmount( $dto->rate)
+						    ->setItemList( $itemList)
+						    ->setDescription( "EasyDose License Purchase")
+						    ->setInvoiceNumber( uniqid());
+
+						$redirectUrls = new PayPal\Api\RedirectUrls;
+						$redirectUrls->setReturnUrl( url::$PROTOCOL . url::tostring( 'account/paypalSuccess'))
+						    ->setCancelUrl( url::$PROTOCOL . url::tostring( 'account/paypalCancel'));
+						// $redirectUrls->setReturnUrl( 'https://my.easydose.net.au/account/paypalSuccess')
+						//     ->setCancelUrl( 'https://my.easydose.net.au/account/paypalCancel');
+
+						$payment = new PayPal\Api\Payment;
+						$payment->setIntent("sale")
+								    ->setPayer( $payer)
+								    ->setRedirectUrls($redirectUrls)
+								    ->setTransactions( [$transaction]);
+
+						$output = paypal::createPayment( $payment);
+
+						\sys::dump( $dto, NULL, FALSE);
+						\sys::dump( $output);
+
+					}
+					else { throw new \Exception('Invalid Product - cannot find product'); }
+
+				}
+				else { throw new \Exception('Invalid Product'); }
+
+			}
 			else { new \Exception( $action); }
 
 		}
