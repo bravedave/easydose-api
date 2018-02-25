@@ -135,11 +135,10 @@ class account extends Controller {
 					$dao = new dao\products;
 					if ( $dto = $dao->getByID( $product)) {
 
-						$tax = round( $dto->rate / 11, 2 );
-						$rate = $dto->rate - $tax;
+						$total = $dto->rate;
+						$tax = round( $total / 11, 2 );
+						$rate = $total - $tax;
 
-						$payer = new PayPal\Api\Payer;
-						$payer->setPaymentMethod("paypal");
 						// ### Itemized information
 						// (Optional) Lets you specify item wise
 						// information
@@ -160,31 +159,53 @@ class account extends Controller {
 
 						$amount = new PayPal\Api\Amount;
 						$amount->setCurrency("AUD")
-						    ->setTotal( $dto->rate)
+						    ->setTotal( $total)
 						    ->setDetails( $details);
 
 						$transaction = new PayPal\Api\Transaction;
-						$transaction->setAmount( $dto->rate)
+						$transaction->setAmount( $amount)
 						    ->setItemList( $itemList)
 						    ->setDescription( "EasyDose License Purchase")
 						    ->setInvoiceNumber( uniqid());
 
-						$redirectUrls = new PayPal\Api\RedirectUrls;
-						$redirectUrls->setReturnUrl( url::$PROTOCOL . url::tostring( 'account/paypalSuccess'))
-						    ->setCancelUrl( url::$PROTOCOL . url::tostring( 'account/paypalCancel'));
-						// $redirectUrls->setReturnUrl( 'https://my.easydose.net.au/account/paypalSuccess')
-						//     ->setCancelUrl( 'https://my.easydose.net.au/account/paypalCancel');
 
-						$payment = new PayPal\Api\Payment;
-						$payment->setIntent("sale")
+						/*--- ---[ final build of paypal payment object ]--- ---*/
+						$payer = new PayPal\Api\Payer;
+						$payer->setPaymentMethod("paypal");
+
+						$redirectUrls = new PayPal\Api\RedirectUrls;
+						$redirectUrls->setReturnUrl( url::$PROTOCOL . url::tostring( 'account/ExecutePayment?success=true'))
+						    ->setCancelUrl( url::$PROTOCOL . url::tostring( 'account/ExecutePayment?success=false'));
+
+						$_payment = new PayPal\Api\Payment;
+						$_payment->setIntent("sale")
 								    ->setPayer( $payer)
 								    ->setRedirectUrls($redirectUrls)
 								    ->setTransactions( [$transaction]);
 
-						$output = paypal::createPayment( $payment);
+						$payment = paypal::createPayment( $_payment);
 
-						\sys::dump( $dto, NULL, FALSE);
-						\sys::dump( $output);
+						$a = [
+							'payment_id' => $payment->id,
+							'state' => $payment->state,
+							'product_id' => $dto->id,
+							'name' => $dto->name,
+							'description' => $dto->description,
+							'tax' => $tax,
+							'value' => $total,
+							'user_id' => currentUser::id(),
+							'created' => \db::dbTimeStamp(),
+							'updated' => \db::dbTimeStamp()
+						];
+						$dao = new dao\payments;
+						$dao->Insert( $a);
+
+						Response::redirect( $payment->getApprovalLink());
+
+						// print ('<b>need to store the payment details here</b>');
+						// \sys::dump( $a, NULL, FALSE);
+						// \sys::dump( $dto, NULL, FALSE);
+						// \sys::dump( $payment);
 
 					}
 					else { throw new \Exception('Invalid Product - cannot find product'); }
@@ -239,19 +260,76 @@ class account extends Controller {
 
 		}
 
-		sys::dump( $this->getParam('token'));
+		// sys::dump( $this->getParam('token'));
+
+	}
+
+	public function ExecutePayment() {
+		// This is the second step required to complete
+		// PayPal checkout. Once user completes the payment, paypal
+		// redirects the browser to "redirectUrl" provided in the request.
+		// This execute the payment that has been approved by
+		// the buyer by logging into paypal site.
+
+    // Get the payment Object by passing paymentId
+    // payment id was previously stored in session in
+    // CreatePaymentUsingPayPal.php
+		$paymentId = $this->getParam('paymentId');
+		$success = $this->getParam( 'success');
+		if ( $success == 'true') {
+			if ( $paymentId) {
+				if ( $payment = paypal::executePayment( $paymentId, $this->getParam( 'PayerID'))) {
+				// if ( $payment = paypal::payment( $paymentId)) {
+					$dao = new dao\payments;
+					if ( $dto = $dao->getByPaymentID( $payment->id)) {
+						$a = [
+							'state' => $payment->state,
+							'cart' => $payment->cart,
+							'updated' => \db::dbTimeStamp()
+
+						];
+						$dao->UpdateByID( $a, $dto->id);
+						Response::redirect( url::tostring('account'), sprintf( 'payment %s', $payment->state));
+						// \sys::dump( $a, NULL, FALSE);
+						// \sys::dump( $dto, NULL, FALSE);
+
+					}
+					else {
+						throw new \Exception( 'could not retrieve payment to update');
+
+					}
+
+					// \sys::dump( $payment);
+
+				}
+				else {
+					Response::redirect( url::tostring('account'), 'could not retrieve payment');
+
+				}
+
+			}
+			else {
+				throw new \Exception( 'invalid payment id');
+
+			}
+
+		}
+		else {
+			Response::redirect( url::tostring('account'), 'user cancelled payment');
+
+		}
 
 	}
 
 	public function paypalSuccess() {
 		$token = $this->getParam('token');
-		sys::dump( $this->getParam('token'));
+		// sys::dump( $this->getParam('token'));
 
 	}
 
 	public function paypalCancel() {
 		$token = $this->getParam('token');
-		sys::dump( $this->getParam('token'));
+		// sys::dump( $this->getParam('token'));
 
 	}
 

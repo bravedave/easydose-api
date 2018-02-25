@@ -20,6 +20,7 @@ use PayPal\Api\Plan;
 use PayPal\Api\Patch;
 use PayPal\Api\PatchRequest;
 use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
 use PayPal\Common\PayPalModel;
 use PayPal\Rest\ApiContext;
 
@@ -284,8 +285,7 @@ abstract class paypal {
 			/**
 			 * Execute the agreement by passing in the token
 			 */
-			$apiContext =  self::apiContext();
-			$agreement->execute( $token, $apiContext);
+			$agreement->execute( $token, self::apiContext());
 
 			return ( $agreement);
 
@@ -299,10 +299,24 @@ abstract class paypal {
 
 	}
 
-	static function createPayment( Payment $payment) {
+	static function payment( $id) {
 		try {
-			$output = $payment->create( self::apiContext());
-			return ( $output);
+			return Payment::get( $id, self::apiContext());
+
+		}
+		catch ( Exception $ex) {
+			//~ sys::dump( $ex);
+			sys::logger( $ex->getMessage());
+			throw new \Exceptions\Paypal( 'could not get payment');
+
+		}
+
+	}
+
+	static function createPayment( Payment $_payment) {
+		try {
+			$payment = $_payment->create( self::apiContext());
+			return ( $payment);
 
 		}
 		catch ( Exception $ex) {
@@ -315,6 +329,39 @@ abstract class paypal {
 			throw new \Exceptions\Paypal( 'could not create payment');
 
 		}
+
+	}
+
+	static function executePayment( $paymentId, $PayerID) {
+		if ( $payment = self::payment($paymentId)) {
+
+			// ### Payment Execute
+			// PaymentExecution object includes information necessary
+			// to execute a PayPal account payment.
+			// The payer_id is added to the request query parameters
+			// when the user is redirected from paypal back to your site
+			$execution = new PaymentExecution;
+			$execution->setPayerId( $PayerID);
+
+			// Execute the payment
+			// (See bootstrap.php for more on `ApiContext`)
+			try {
+				$result = $payment->execute( $execution, self::apiContext());
+
+				$payment = self::payment($paymentId);
+		    return $payment;
+
+			}
+			catch ( Exception $ex) {
+				//~ sys::dump( $ex);
+				sys::logger( $ex->getMessage());
+				throw new \Exceptions\Paypal( 'could not execute payment');
+
+			}
+
+		}
+
+		return ( FALSE);
 
 	}
 
