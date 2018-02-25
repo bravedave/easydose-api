@@ -53,8 +53,7 @@ $amount = new Amount();
 $amount->setCurrency("USD")
     ->setTotal(20)
     ->setDetails($details);
-    
-/*--- ---[ down to here ]--- ---*/
+
 
 // ### Transaction
 // A transaction defines the contract of a
@@ -65,6 +64,9 @@ $transaction->setAmount($amount)
     ->setItemList($itemList)
     ->setDescription("Payment description")
     ->setInvoiceNumber(uniqid());
+
+/*--- ---[ down to here ]--- ---*/
+
 // ### Redirect urls
 // Set the urls that the buyer must be redirected to after
 // payment approval/ cancellation.
