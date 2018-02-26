@@ -66,7 +66,18 @@ class agreements extends _dao {
 
 	}
 
-	public function getActiveAgreementForUser( $userID = 0, $type = '') {
+	public function getActiveAgreementForUser( $userID = 0) {
+		$ret = (object)[
+			'license' => FALSE,
+			'workstation' => FALSE,
+			'description' => '',
+			'product' => '',
+			'state' => '',
+			'workstations' => 0,
+			'expires' => '1970-01-01'
+
+		];
+
 		if ( !(int)$userID)
 			$userID = \currentUser::id();
 
@@ -76,16 +87,8 @@ class agreements extends _dao {
 			sprintf( 'a.user_id = %d', $userID)
 		];
 
-		if ( $type == 'WKS') {
-			$_where[] = 'p.`name` LIKE "WKS%"';
-
-		}
-		else {
-			$_where[] = 'p.`name` NOT LIKE "WKS%"';
-
-		}
-
-		$_sql = sprintf( 'SELECT
+		$_sql =
+			'SELECT
 			a.id,
 			a.agreement_id,
 			a.plan_id,
@@ -102,15 +105,43 @@ class agreements extends _dao {
 			p.name `product`,
 			p.description `productDescription`
 				FROM agreements a
-					LEFT JOIN plans p on a.plan_id = p.paypal_id
-				WHERE %s', implode( ' AND ', $_where));
+					LEFT JOIN plans p on a.plan_id = p.paypal_id';
 
+		$sql = sprintf( '%s WHERE %s', $_sql, implode( ' AND ', $_where));
 		// \sys::logSQL( $_sql);
 
-		if ( $res = $this->Result( $_sql))
-			return ( $res->dto());
+		if ( $res = $this->Result( $sql)) {
+			if ( $ret->license = $res->dto()) {
+				$ret->product = $ret->license->product;
+				$ret->description = $ret->license->description;
+				$ret->workstations = 1;
+				$ret->expires = $ret->license->next_billing_date;
+				$ret->state = $ret->license->state;
 
-		return ( FALSE);
+			}
+
+		}
+
+		$_where[] = 'p.`name` LIKE "WKS%"';
+		$sql = sprintf( '%s WHERE %s', $_sql, implode( ' AND ', $_where));
+		if ( $res = $this->Result( $sql)) {
+			if ( $ret->workstation = $res->dto()) {
+				if ( 'WKSSTATION1' == $ret->workstation->name) {
+					$ret->workstations = 2;
+
+				}
+				elseif ( 'WKSSTATION2' == $ret->workstation->name) {
+					$ret->workstations = 3;
+
+				}
+
+			}
+
+		}
+
+		// \sys::dump( $ret);
+
+		return ( $ret);
 
 	}
 

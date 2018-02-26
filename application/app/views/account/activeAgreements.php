@@ -22,7 +22,9 @@
 		<table class="table table-striped table-sm small">
 			<tbody>
 <?php
-		foreach ( [$this->data->agreement, $this->data->agreementWKS] as $ag) {
+		// sys::dump( $this->data->agreement);
+
+		foreach ( [$this->data->license->license, $this->data->license->workstation] as $ag) {
 			if ( $ag) {	?>
 				<tr>
 					<td>Product</td>

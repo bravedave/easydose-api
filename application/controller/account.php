@@ -347,8 +347,7 @@ class account extends Controller {
 			'products' => $daoProducts->getDtoSet(),
 			'guids' => $daoGuid->getForUser(),
 			'agreementsForUser' => $daoAgreements->getAgreementsForUser( 0, $active = FALSE),
-			'agreement' => FALSE,
-			'agreementWKS' => FALSE
+			'license' => FALSE
 			];
 
 
@@ -367,8 +366,7 @@ class account extends Controller {
 
 		$this->data->agreementsForUser = $daoAgreements->getAgreementsForUser();
 
-		$this->data->agreement = $daoAgreements->getActiveAgreementForUser();
-		$this->data->agreementWKS = $daoAgreements->getActiveAgreementForUser(0, $type = 'WKS');
+		$this->data->license = $daoAgreements->getActiveAgreementForUser();
 
 		// sys::dump( $this->data);
 

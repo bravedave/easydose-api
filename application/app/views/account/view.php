@@ -16,6 +16,7 @@
 	*/
 
 	$this->load('account');
+ 	$this->load('license');
  	$this->load('guids');
 	if ( count( $this->data->agreementsForUser)) {
 		/*
@@ -27,13 +28,13 @@
 
 	}
 
-	if ( $this->data->agreement) {
-		/* here there is an agreement,
+	if ( $this->data->license->license) {
+		/*
+		* here there is an agreement,
 		* but not necessarily a worksation agreement
 		*/
-		if ( !$this->data->agreementWKS) {
-			// offering opportunity to subscribe
-			$this->load('agreementWKS');
+		if ( !$this->data->license->workstation) {
+			$this->load('agreementWKS');	// offering opportunity to subscribe
 
 		}
 
@@ -43,7 +44,6 @@
 	else {
 		// there is no active agreement
 		$this->load('plans');
-		
 		$this->load('products');
 
 	}
