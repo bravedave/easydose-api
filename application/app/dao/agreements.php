@@ -91,6 +91,9 @@ class agreements extends _dao {
 	}
 
 	public function getActiveAgreementForUser( $userID = 0) {
+		// $debug = TRUE;
+		$debug = FALSE;
+
 		$ret = new dto\license;
 
 		if ( !(int)$userID)
@@ -144,16 +147,25 @@ class agreements extends _dao {
 		$sql = sprintf( '%s WHERE %s', $_sql, implode( ' AND ', $_w));
 		if ( $res = $this->Result( $sql)) {
 			if ( $ret->workstation = $res->dto()) {
-				if ( 'WKSSTATION1' == $ret->workstation->name) {
+				if ( 'WKSSTATION1' == $ret->workstation->product) {
 					$ret->workstations = 2;
 
 				}
-				elseif ( 'WKSSTATION2' == $ret->workstation->name) {
+				elseif ( 'WKSSTATION2' == $ret->workstation->product) {
 					$ret->workstations = 3;
+
+				}
+				else {
+					if ( $debug) \sys::logger( 'dao\agreements->getActiveAgreementForUser :: workstation license = ' . $ret->workstation->product );
+					if ( $debug) \sys::dump( $ret->workstation);
 
 				}
 
 			}
+
+		}
+		else {
+			if ( $debug) \sys::logger( 'dao\agreements->getActiveAgreementForUser :: no workstation license' );
 
 		}
 
