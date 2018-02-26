@@ -22,12 +22,19 @@
 
   <div class="col col-12 col-lg-10">
     <table class="table table-striped table-sm">
+      <colgroup>
+					<col />
+					<col />
+					<col style="width: 7em"/>
+					<col style="width: 7em"/>
+			</colgroup>
+
       <thead>
         <tr>
           <td>License</td>
           <td>Wks</td>
-          <td>Expires</td>
-          <td>State</td>
+          <td class="text-center">Expires</td>
+          <td class="text-center">State</td>
 
         </tr>
 
@@ -41,8 +48,8 @@
         <tr>
           <td><?php printf( '%s : %s', $ag->product, $ag->description) ?></td>
           <td class="text-center"><?php print $ag->workstations ?></td>
-          <td><?php print strings::asShortDate( $ag->expires) ?></td>
-          <td><?php print $ag->state ?></td>
+          <td class="text-center"><?php print strings::asShortDate( $ag->expires) ?></td>
+          <td class="text-center"><?php print $ag->state ?></td>
 
         </tr>
 

@@ -29,6 +29,7 @@ abstract class config extends _config {
 
 	//~ static $paypalSandbox = TRUE;
 	static $paypalSandbox = FALSE;
+	static $TIMEZONE = 'Australia/Perth';
 
 	const allow_password_recovery = TRUE;
 

@@ -1,2 +1,4 @@
-[data-role="content-secondary"] { background-color: white; }
+body { background-color: var(--light); }
 table.table > thead > tr > td { vertical-align: bottom; }
+ul.menu { background-color: inherit; }
+ul.menu > li > a { display: block; }

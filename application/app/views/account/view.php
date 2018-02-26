@@ -34,11 +34,26 @@
 		* but not necessarily a worksation agreement
 		*/
 		if ( !$this->data->license->workstation) {
-			$this->load('agreementWKS');	// offering opportunity to subscribe
+			if ( !$this->data->license->type == 'SUBSCRIPTION') {
+				$this->load('agreementWKS');	// offering opportunity to subscribe
+
+			}
+			else {
+				$this->load('productsWKS');	// offering opportunity to purchase
+
+			}
 
 		}
 
-		$this->load('activeAgreements');
+		// \sys::dump($this->data->license);
+		if ( $this->data->license->type == 'SUBSCRIPTION') {
+			$this->load('activeAgreements');
+
+		}
+		else {
+			$this->load('activeLicense');
+
+		}
 
 	}
 	else {

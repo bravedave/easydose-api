@@ -345,28 +345,14 @@ class account extends Controller {
 			'plans' => $daoPlans->getActivePlans(),
 			'plansWKS' => $daoPlans->getActivePlans( $type = "WKS"),
 			'products' => $daoProducts->getDtoSet(),
+			'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),
 			'guids' => $daoGuid->getForUser(),
-			'agreementsForUser' => $daoAgreements->getAgreementsForUser( 0, $active = FALSE),
+			'agreementsForUser' => $daoAgreements->getAgreementsForUser( 0, $active = TRUE, $refresh = TRUE),
 			'license' => FALSE
 			];
 
-
-		foreach ( $this->data->agreementsForUser as $dto) {
-			if ( date( 'Y-m-d', strtotime( $dto->refreshed)) < date( 'Y-m-d')) {
-				if ( $debug) \sys::logger( sprintf('account/_index :: refreshFrom Paypal :: %s : %s', $dto->agreement_id, $dto->plan_id));
-				$daoAgreements->RefreshFromPayPal( $dto);
-
-			}
-			else {
-				if ( $debug) \sys::logger( sprintf('account/_index :: Up to Date Paypal :: %s : %s', $dto->agreement_id, $dto->plan_id));
-
-			}
-
-		}
-
-		$this->data->agreementsForUser = $daoAgreements->getAgreementsForUser();
-
-		$this->data->license = $daoAgreements->getActiveAgreementForUser();
+		$daoLicense = new dao\license;
+		$this->data->license = $daoLicense->getLicense();
 
 		// sys::dump( $this->data);
 

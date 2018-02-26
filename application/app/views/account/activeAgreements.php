@@ -19,7 +19,7 @@
 		<strong>Active Agreement(s)</strong>
 	</div>
 	<div class="col-12 col-lg-10">
-		<table class="table table-striped table-sm small">
+		<table class="table table-striped table-sm">
 			<tbody>
 <?php
 		// sys::dump( $this->data->agreement);

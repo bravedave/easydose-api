@@ -17,21 +17,16 @@ Namespace dao;
 class agreements extends _dao {
 	protected $_db_name = 'agreements';
 
-	public function getAgreementsForUser( $userID = 0, $active = TRUE) {
-		if ( !(int)$userID)
+	public function getAgreementsForUser( $userID = 0, $active = TRUE, $refresh = TRUE) {
+		$debug = FALSE;
+		// $debug = TRUE;
+
+		if ( !(int)$userID) {
 			$userID = \currentUser::id();
 
-		if ( $active) {
-			/*
+		}
 
-			 token,
-			 result,
-			 user_id,id,paypal_id,
-			 state,frequency,rate
-
-			 */
-
-			$_sql = sprintf( 'SELECT
+		$_sql = 'SELECT
 				a.id,
 				a.agreement_id,
 				a.plan_id,
@@ -47,36 +42,56 @@ class agreements extends _dao {
 				a.state,
 				p.name `product`,
 				p.description `productDescription`
-				 	FROM agreements a
-						LEFT JOIN plans p on a.plan_id = p.paypal_id
-					WHERE a.agreement_id != "" AND a.state = "Active" AND a.user_id = %d', $userID);
+			FROM agreements a
+				LEFT JOIN plans p on a.plan_id = p.paypal_id';
+
+		$_w = [
+			'a.agreement_id != ""',
+			sprintf( 'a.user_id = %d', $userID)
+		];
+
+		if ( $active) {
+			$_w[] = 'a.state = "Active"';
 
 		}
-		else {
-			$_sql = sprintf( 'SELECT * FROM agreements WHERE agreement_id != "" AND user_id = %d', $userID);
+
+		$sql = sprintf( '%s WHERE %s', $_sql, implode( ' AND ', $_w));
+		// \sys::logSQL( $sql);
+
+		if ( $res = $this->Result( $sql)) {
+			if ( $refresh) {
+				while ( $dto = $res->dto()) {
+					if ( date( 'Y-m-d', strtotime( $dto->refreshed)) < date( 'Y-m-d')) {
+						if ( $debug) \sys::logger( sprintf('account/_index :: refreshFrom Paypal :: %s : %s', $dto->agreement_id, $dto->plan_id));
+						$this->RefreshFromPayPal( $dto);
+
+					}
+					else {
+						if ( $debug) \sys::logger( sprintf('account/_index :: Up to Date Paypal :: %s : %s', $dto->agreement_id, $dto->plan_id));
+
+					}
+
+				}
+
+				if ( $res = $this->Result( $sql)) {
+					return ( $res->dtoSet());
+
+				}
+
+			}
+			else {
+				return ( $res->dtoSet());
+
+			}
 
 		}
-
-		// \sys::logSQL( $_sql);
-
-		if ( $res = $this->Result( $_sql))
-			return ( $res->dtoSet());
 
 		return ( FALSE);
 
 	}
 
 	public function getActiveAgreementForUser( $userID = 0) {
-		$ret = (object)[
-			'license' => FALSE,
-			'workstation' => FALSE,
-			'description' => '',
-			'product' => '',
-			'state' => '',
-			'workstations' => 0,
-			'expires' => '1970-01-01'
-
-		];
+		$ret = new dto\license;
 
 		if ( !(int)$userID)
 			$userID = \currentUser::id();
@@ -107,7 +122,9 @@ class agreements extends _dao {
 				FROM agreements a
 					LEFT JOIN plans p on a.plan_id = p.paypal_id';
 
-		$sql = sprintf( '%s WHERE %s', $_sql, implode( ' AND ', $_where));
+		$_w = $_where;
+		$_w[] = 'p.`name` NOT LIKE "WKS%"';
+		$sql = sprintf( '%s WHERE %s', $_sql, implode( ' AND ', $_w));
 		// \sys::logSQL( $_sql);
 
 		if ( $res = $this->Result( $sql)) {
@@ -122,8 +139,9 @@ class agreements extends _dao {
 
 		}
 
-		$_where[] = 'p.`name` LIKE "WKS%"';
-		$sql = sprintf( '%s WHERE %s', $_sql, implode( ' AND ', $_where));
+		$_w = $_where;
+		$_w[] = 'p.`name` LIKE "WKS%"';
+		$sql = sprintf( '%s WHERE %s', $_sql, implode( ' AND ', $_w));
 		if ( $res = $this->Result( $sql)) {
 			if ( $ret->workstation = $res->dto()) {
 				if ( 'WKSSTATION1' == $ret->workstation->name) {

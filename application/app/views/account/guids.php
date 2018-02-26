@@ -20,13 +20,20 @@
 	</div>
 	<div class="col col-12 col-lg-10">
 <?php	if ( $this->data->guids) {	?>
-		<table class="table table-striped table-sm small">
+		<table class="table table-striped table-sm">
+			<colgroup>
+					<col />
+					<col />
+					<col style="width: 7em"/>
+					<col style="width: 7em"/>
+			</colgroup>
+
 			<thead>
 				<tr>
 					<td class="d-none d-lg-table-cell">#</td>
 					<td>GUID</td>
-					<td>Created</td>
-					<td>Updated</td>
+					<td class="text-center">Created</td>
+					<td class="text-center">Updated</td>
 				</tr>
 
 			</thead>
@@ -35,8 +42,8 @@
 				<tr>
 					<td guid-id class="d-none d-lg-table-cell"><?php print $guid->id ?></td>
 					<td guid-guid><?php print $guid->guid ?></td>
-					<td><?php print date(\config::$DATE_FORMAT, strtotime( $guid->created)) ?></td>
-					<td><?php print date(\config::$DATE_FORMAT, strtotime( $guid->updated)) ?></td>
+					<td class="text-center"><?php print strings::asShortDate( $guid->created) ?></td>
+					<td class="text-center"><?php print strings::asShortDate( $guid->updated) ?></td>
 
 				</tr>
 <?php	}	// foreach ( $this->data->guids as $guid)	?>
