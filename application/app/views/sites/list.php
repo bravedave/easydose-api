@@ -93,4 +93,12 @@
 
   </tbody>
 
+  <tfoot>
+    <tr>
+      <td colspan="13"><em><?php
+        print date( 'c');
+      ?></em></td>
+    </tr>
+  </tfoot>
+
 </table>
