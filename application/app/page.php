@@ -12,6 +12,7 @@ class page extends dvc\pages\bootstrap {
   function __construct( $title = '' ) {
     parent::__construct( $title);
 
+    $this->latescripts[] = sprintf( '<script type="text/javascript" src="%s"></script>', \url::tostring( 'edjs'));
     $this->css[] = sprintf( '<link type="text/css" rel="stylesheet" media="all" href="%s" />', \url::tostring( 'css/easydose.css'));
 
   }

@@ -138,4 +138,16 @@ class home extends Controller {
 
 	}
 
+	public function edjs() {
+				//~ 'debug' => TRUE,
+			jslib::viewjs([
+				'libName' => 'easydosejs',
+				'leadKey' => '_ed_.js',
+				'jsFiles' => sprintf( '%s/app/js/_ed_.*.js', $this->rootPath ),
+				'libFile' => config::tempdir()  . 'easydose.js'
+
+			]);
+
+	}
+
 }
