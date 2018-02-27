@@ -20,7 +20,7 @@ NameSpace dvc;
 abstract class config extends _config {
 	static $WEBNAME = 'My.EasyDose';
 	static $DB_TYPE = 'sqlite';
-	static $DATE_FORMAT = 'd-M-Y';
+	static $DATE_FORMAT = 'd/m/Y';
 
 	static $SUPPORT_NAME = 'My.EasyDose Webmaster';
 	static $SUPPORT_EMAIL = 'help@easydose.net.au';
