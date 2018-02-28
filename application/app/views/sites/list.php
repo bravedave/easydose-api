@@ -32,7 +32,9 @@
       </thead>
 
       <tbody>
-<?php while ( $dto = $this->data->sites->dto()) { ?>
+<?php $isites = 0;
+      while ( $dto = $this->data->sites->dto()) {
+        $isites++; ?>
           <tr
             data-site="<?php print $dto->site ?>"
             data-version="<?php print $dto->version ?>"
@@ -64,7 +66,7 @@
             <div class="container-fluid">
               <div class="row">
                 <div class="col">
-                  <em><?php printf( 'count: %s', count( $this->data->sites)); ?></em>
+                  <em><?php printf( 'count: %s', $isites); ?></em>
 
                 </div>
 
