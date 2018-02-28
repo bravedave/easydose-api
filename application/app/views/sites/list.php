@@ -9,7 +9,7 @@
 
 	*/ ?>
 <div class="row">
-  <div class="col p-0">
+  <div class="col">
     <table class="table table-striped table-sm small">
       <thead>
         <tr>
