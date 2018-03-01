@@ -107,7 +107,8 @@ class users extends Controller {
 				'id' => 0,
 				'username' => '',
 				'name' => '',
-				'email' => '']];
+				'email' => '',
+				'admin' => 0]];
 
 		if ( $id) {
 			$dao = new dao\users;
