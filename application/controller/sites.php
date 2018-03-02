@@ -16,6 +16,41 @@
 	*/
 class sites extends Controller {
 
+  function view( $id = 0) {
+    if ( currentUser::isAdmin()) {
+      if ( (int)$id) {
+        $dao = new dao\sites;
+        if ( $site = $dao->getByID( $id)) {
+          $this->data = (object)[ 'site' => $site ];
+          $p = new page( $this->title = 'Site');
+      			$p
+      				->header()
+      				->title();
+
+      			$p->primary();
+      				$this->load('view');
+
+      			$p->secondary();
+      				//~ $this->load('index');
+      				$this->load('main-index');
+
+
+        }
+        else {
+          Respose::redirect( url::toString( 'sites', 'not found'));
+
+        }
+
+      }
+      else {
+        $this->index();
+
+      }
+
+    }
+
+  }
+
   protected function _index() {
     if ( currentUser::isAdmin()) {
       $dao = new dao\sites;

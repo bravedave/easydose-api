@@ -29,6 +29,15 @@ abstract class strings extends dvc\strings {
     if ( 'easydoseOPEN' == $license)
       return 'OPEN';
 
+    if ( 'easydose10' == $license)
+      return 'E-10';
+
+    if ( 'easydose2' == $license)
+      return 'E-5';
+
+    if ( 'easydoseFREE' == $license)
+      return 'FREE';
+
     return ( $license);
 
   }
