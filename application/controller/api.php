@@ -57,7 +57,7 @@ class api extends Controller {
         json::ack( $action)
           ->add( 'type', $license->type)
           ->add( 'description', $license->description)
-          ->add( 'product', $license->product)
+          ->add( 'License', $license->product)
           ->add( 'state', $license->state)
           ->add( 'workstations', $license->workstations)
           ->add( 'expires', $license->expires);
@@ -133,6 +133,7 @@ class api extends Controller {
                 $status = $licenseDTO->state;
                 $workstations = $licenseDTO->workstations;
                 $NextPaymentDue = date( 'Y-m-d', strtotime($licenseDTO->expires));
+
               }
 
             }
@@ -236,7 +237,7 @@ class api extends Controller {
             $j
             ->add( 'type', $license->type)
             ->add( 'description', $license->description)
-            ->add( 'product', $license->product)
+            ->add( 'License', $license->product)
             ->add( 'state', $license->state)
             ->add( 'workstations', $license->workstations)
             ->add( 'expires', $license->expires);
@@ -244,7 +245,7 @@ class api extends Controller {
           }
 
         }
-        
+
       } else { \Json::nak( sprintf( '%s :: new', $action)); }
     } else { \Json::nak( $action); }
 
