@@ -78,18 +78,18 @@
         <col />
         <col />
         <col />
-        <col style="width: 2em;" />
       </colgroup>
       <tbody>
 <?php while ($dto = $this->data->sites->dto()) {  ?>
-        <tr>
+        <tr data-id="<?php print $dto->id ?>" site>
           <td><?php print $dto->site ?></td>
           <td><?php print $dto->state ?></td>
           <td><?php print $dto->patientsActive ?>/<?php print $dto->patients ?></td>
-          <td><a href="<?php url::write('sites/remove/' . $dto->id ) ?>" are-you-sure><i class="fa fa-fw fa-times text-danger"></i></a></td>
 
         </tr>
+
 <?php } // while ($dto = $this->data->sites->dto())  ?>
+
       </tbody>
 
     </table>
@@ -100,25 +100,51 @@
 
 <script>
 $(document).ready( function() {
-  $('a[are-you-sure]').on( 'click', function(e) {
-    var href = $(this).attr('href');
-    e.stopPropagation(); e.preventDefault();
+  $('tr[site]').each( function( i, tr) {
+    var _tr = $(tr);
+    var id = _tr.data( 'id');
 
-    _brayworth_.modal({
-      title: 'confirm',
-      text: 'Are you sure ?',
-      buttons : {
-          yes : function( e) {
+    _tr
+    .addClass('pointer')
+    .on( 'click', function( e) {
+      window.location.href = _brayworth_.url('sites/view/'+id);
+
+    })
+    .on( 'contextmenu', function( e) {
+      if (e.shiftKey)
+        return;
+
+      e.stopPropagation(); e.preventDefault();
+
+      var _context = _brayworth_.context();
+      _context.append($('<a><i class="fa fa-link"></i>view</a>').attr('href',_brayworth_.url('sites/view/'+id)))
+      _context.append($('<a href="#"><i class="fa fa-trash"></i>delete</a>').on('click', function(e) {
+        var href = $(this).attr('href');
+        e.stopPropagation(); e.preventDefault();
+
+        _brayworth_.modal({
+          title: 'confirm',
+          text: 'Are you sure ?',
+          buttons : {
+            yes : function( e) {
               hourglass.on();
-              window.location.href = href;
+              window.location.href = _brayworth_.url( 'sites/remove/' + id + '/<?php print $this->data->dto->id ?>');
+
+            }
 
           }
 
-      }
+        });
+
+        _context.close();
+
+      }));
+
+      _context.open( e);
 
     })
 
-  })
+  });
 
 })
 </script>

@@ -97,7 +97,7 @@ class sites extends Controller {
       }
 
       if ( (int)$guid) {
-        Response::Redirect( url::tostring( 'guid/' . $guid), 'removed site');
+        Response::Redirect( url::tostring( 'guid/view/' . $guid), 'removed site');
 
       }
       else {
