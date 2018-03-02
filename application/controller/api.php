@@ -53,26 +53,14 @@ class api extends Controller {
     // if ( $guid = '{D226CA40-CA53-94C2-2DC1-F86851D79F20}') {
 
       $guidDAO = new dao\guid;
-      $licenseDAO = new dao\license;
-
-      if ( $guidDTO = $guidDAO->getByGUID( $guid)) { // will add guid if it doesn't exist
-        if ( (int)$guidDTO->user_id) {
-          if ( $licenseDTO = $licenseDAO->getLicense( $guidDTO->user_id)) {
-            // \sys::dump( $licenseDTO, NULL, FALSE);
-            json::ack( $action)
-              ->add( 'type', $licenseDTO->type)
-              ->add( 'description', $licenseDTO->description)
-              ->add( 'product', $licenseDTO->product)
-              ->add( 'state', $licenseDTO->state)
-              ->add( 'workstations', $licenseDTO->workstations)
-              ->add( 'expires', $licenseDTO->expires);
-
-          }
-          else { json::nak( $action); }
-
-        }
-        else { json::nak( $action); }
-        // \sys::dump( $guidDTO);
+      if ( $license = $guidDAO->getLicense( $guid)) { // will add guid if it doesn't exist
+        json::ack( $action)
+          ->add( 'type', $license->type)
+          ->add( 'description', $license->description)
+          ->add( 'product', $license->product)
+          ->add( 'state', $license->state)
+          ->add( 'workstations', $license->workstations)
+          ->add( 'expires', $license->expires);
 
       }
       else { json::nak( $action); }
@@ -239,10 +227,24 @@ class api extends Controller {
 
         }
 
-        \Json::ack( $action)
+        $j = \Json::ack( $action)
           ->add( 'guid', $guid)
           ->add( 'email', $email);
 
+        if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
+          if ( $license = $guidDAO->getLicenseOf( $guidDTO)) { // will add guid if it doesn't exist
+            $j
+            ->add( 'type', $license->type)
+            ->add( 'description', $license->description)
+            ->add( 'product', $license->product)
+            ->add( 'state', $license->state)
+            ->add( 'workstations', $license->workstations)
+            ->add( 'expires', $license->expires);
+
+          }
+
+        }
+        
       } else { \Json::nak( sprintf( '%s :: new', $action)); }
     } else { \Json::nak( $action); }
 
@@ -268,12 +270,32 @@ class api extends Controller {
 
             $usersDAO = new dao\users;
             if ( $usersDTO = $usersDAO->getUserByEmail( $email)) {
-              $guidDAO->UpdateByID([
-                'user_id' => $usersDTO->id,
-                'updated' => \db::dbTimeStamp()
-              ], $guidDTO->id);
-              \Json::ack( sprintf( '%s :: found account', $action))
-                ->add( 'email', $email);
+              /*
+              * Only allow one guid per account
+              */
+              $guidDTOs = $guidDAO->getForUser( $usersDTO->id);
+              if ( count( $guidDTOs)) {
+                /*
+                * to test this using a guid that is already in the database
+                * try to assign it using a duplicate email
+                *
+                * sql to get info:
+                *   select g.id, g.guid, u.name, u.email from guid g left join users u on g.user_id = u.id;
+                *
+                * curl -X POST -H "Accept: application/json" -d action="set-account" -d guid="{a guid id}" -d email="john@citizen.com" "http://localhost/api/"
+                */
+                Json::nak( sprintf( '%s : email already used', $action));
+
+              }
+              else {
+                $guidDAO->UpdateByID([
+                  'user_id' => $usersDTO->id,
+                  'updated' => \db::dbTimeStamp()
+                ], $guidDTO->id);
+                \Json::ack( sprintf( '%s :: found account', $action))
+                  ->add( 'email', $email);
+
+              }
 
             }
             else {
@@ -288,7 +310,7 @@ class api extends Controller {
               $guidDAO->UpdateByID( ['user_id' => $id], $guidDTO->id);
 
               \Json::ack( sprintf( '%s :: added account', $action))
-              ->add( 'email', $email);
+                ->add( 'email', $email);
 
             }
 

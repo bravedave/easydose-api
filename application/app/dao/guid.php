@@ -13,6 +13,7 @@ Namespace dao;
 
 class guid extends _dao {
 	protected $_db_name = 'guid';
+	protected $template = '\dao\dto\guid';
 
 	protected function addGUID( $guid) {
 		if ( strlen( trim( $guid)) == 38) {
@@ -36,7 +37,7 @@ class guid extends _dao {
 
 	public function getByGUID( $guid) {
 		if ( $res = $this->Result( sprintf( 'SELECT * FROM %s WHERE guid = "%s"', $this->db_name(), $guid ))) {
-			if ( $dto = $res->dto())
+			if ( $dto = $res->dto( $this->template))
 				return $dto;
 
 		}
@@ -79,6 +80,48 @@ class guid extends _dao {
 		$sql = sprintf( 'SELECT %s FROM guid LEFT JOIN users u on user_id = u.id %s', $fields, $order);
 
 		return ( $this->Result( $sql));
+
+	}
+
+	public function getLicenseOf( \dao\dto\guid $dto) {
+		if ( (int)$dto->user_id) {
+			$licenseDAO = new license;	// dao\license;
+			if ( $license = $licenseDAO->getLicense( $dto->user_id)) {
+				if ( $license->state == 'active') {
+					// \sys::logger('dao\guid->getLicense :: return active license');
+					return ( $license);
+
+				}
+
+				$dOrigin = strtotime( $dto->created);
+				$dFreeExpires = date( 'Y-m-d', strtotime( '+3 months', $dOrigin));
+				// \sys::logger( sprintf( '%s : %s', date( 'Y-m-d', $dOrigin), $dFreeExpires));
+
+				if ( date( 'Y-m-d') <= $dFreeExpires) {
+					$license->type = 'GRATIS';
+					$license->product = 'easydoseFREE';
+					$license->state = 'active';
+					$license->workstations = 1;
+					$license->expires = $dFreeExpires;
+					return ( $license);
+
+				}
+
+			}
+
+		}
+
+		return ( FALSE);
+
+	}
+
+	public function getLicense( $guid) {
+		if ( $dto = $this->getByGUID( $guid)) { // will add guid if it doesn't exist
+			return ( $this->getLicenseOf( $dto));
+
+		}
+
+		return ( FALSE);
 
 	}
 
