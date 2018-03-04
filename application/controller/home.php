@@ -143,7 +143,7 @@ class home extends Controller {
 			jslib::viewjs([
 				'libName' => 'easydosejs',
 				'leadKey' => '_ed_.js',
-				'jsFiles' => sprintf( '%s/app/js/_ed_.*.js', $this->rootPath ),
+				'jsFiles' => sprintf( '%s/app/js/_ed_*.js', $this->rootPath ),
 				'libFile' => config::tempdir()  . 'easydose.js'
 
 			]);

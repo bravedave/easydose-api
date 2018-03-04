@@ -34,6 +34,7 @@ abstract class config extends _config {
 	const allow_password_recovery = TRUE;
 
 	const products = [ 'easydose5', 'easydose10', 'easydoseOPEN'];
+	const country_code = 'AU';
 
 	/*
 	 *	Caching using APCu, Interfaced through https://www.scrapbook.cash/

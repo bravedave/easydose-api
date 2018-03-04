@@ -48,7 +48,7 @@ abstract class strings extends dvc\strings {
 
     }
     elseif ( preg_match( '@^Microsoft Windows \[Version 6.1.7601\]@', $osIn )) {
-      return 'Win7/2008 SP1';
+      return 'Win7/2008';
 
     }
     elseif ( preg_match( '@^Microsoft Windows \[Version 6.2.9200\]@', $osIn )) {
@@ -73,5 +73,23 @@ abstract class strings extends dvc\strings {
     }
 
   }
+
+  static function asShortDateTime( $date) {
+		if ( (string)$date == '0000-00-00')
+			return ( FALSE);
+
+		if ( ( $t = strtotime( $date)) !== FALSE) {
+			if ( date( 'Y-m-d', $t) == date( 'Y-m-d'))
+				return ( date( 'h:m', $t));
+			elseif ( date( 'Y', $t) == date( 'Y'))
+				return ( date( 'd-M', $t));
+			else
+				return ( date( config::$DATE_FORMAT, $t));
+
+		}
+
+		return FALSE;
+
+	}
 
 }

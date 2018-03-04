@@ -21,7 +21,8 @@
 	"require": {
 		"php": ">=7.0",
 		"bravedave/dvc": "dev-master",
-		"paypal/rest-api-sdk-php": "*"
+		"paypal/rest-api-sdk-php": "*",
+		"giggsey/libphonenumber-for-php": "^8.9"
 
 	}
 

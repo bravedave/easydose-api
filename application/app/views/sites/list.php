@@ -10,18 +10,19 @@
 	*/ ?>
 <div class="row">
   <div class="col p-0">
-    <table class="table table-striped table-sm small">
+    <table class="table table-striped table-sm small" sites-list>
       <thead>
         <tr>
           <td>State</td>
           <td role="sort-header" data-key="site">Site</td>
           <td class="d-none d-lg-table-cell">Tel.</td>
-          <td class="d-none d-lg-table-cell">IP</td>
-          <td class="d-none d-lg-table-cell">Workstation</td>
+          <td class="d-none d-lg-table-cell">ABN</td>
+          <td class="d-none d-xl-table-cell">IP</td>
           <td>Product</td>
           <td class="d-none d-md-table-cell">Active/<br />Patients</td>
-          <td class="d-none d-lg-table-cell">OS</td>
-          <td class="d-none d-lg-table-cell">Deploy</td>
+          <td class="d-none d-xl-table-cell">OS</td>
+          <td class="d-none d-xl-table-cell">Workstation</td>
+          <td class="d-none d-xl-table-cell">Deploy</td>
           <td class="d-none d-lg-table-cell" role="sort-header" data-key="version">Version</td>
           <td>Act</td>
           <td class="d-none d-md-table-cell" role="sort-header" data-key="expires">Expires</td>
@@ -32,9 +33,17 @@
       </thead>
 
       <tbody>
-<?php $isites = 0;
-      while ( $dto = $this->data->sites->dto()) {
-        $isites++; ?>
+<?php
+$isites = 0;
+$phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+while ( $dto = $this->data->sites->dto()) {
+  $isites++;
+  $tel = '';
+  $number = $phoneUtil->parse( $dto->tel, config::country_code);
+  if ( $phoneUtil->isValidNumber( $number)) {
+    $tel = $phoneUtil->format( $number, \libphonenumber\PhoneNumberFormat::NATIONAL);
+  }
+  ?>
         <tr
           data-id="<?php print $dto->id ?>"
           data-site="<?php print $dto->site ?>"
@@ -46,21 +55,23 @@
           <td>
             <?php print $dto->site ?>
           </td>
-          <td class="d-none d-lg-table-cell"><?php print $dto->tel ?></td>
-          <td class="d-none d-lg-table-cell"><?php print $dto->ip ?></td>
-          <td class="d-none d-lg-table-cell"><?php print $dto->workstation ?></td>
+          <td class="d-none d-lg-table-cell text-nowrap"><?php print $tel ?></td>
+          <td class="d-none d-lg-table-cell"><?php print $dto->abn ?></td>
+          <td class="d-none d-xl-table-cell"><?php print $dto->ip ?></td>
           <td><?php print strings::ShortLicense( $dto->productid); ?></td>
           <td class="d-none d-md-table-cell"><?php print sprintf( '%s/%s', $dto->patients, $dto->patientsActive) ?></td>
-          <td class="d-none d-lg-table-cell"><?php print strings::StringToOS($dto->os) ?></td>
-          <td class="d-none d-lg-table-cell"><?php print $dto->deployment ?></td>
+          <td class="d-none d-xl-table-cell"><?php print strings::StringToOS($dto->os) ?></td>
+          <td class="d-none d-xl-table-cell"><?php print $dto->workstation ?></td>
+          <td class="d-none d-xl-table-cell"><?php print $dto->deployment ?></td>
           <td class="d-none d-lg-table-cell"><?php print $dto->version ?></td>
-          <td><?php print ( $dto->activated ? 'yes' : 'no') ?></td>
+          <td class="text-center"><i class="fa fa-fw <?php print ( $dto->activated ? 'fa-circle text-info' : 'fa-times text-danger') ?>"></i></td>
           <td class="d-none d-md-table-cell"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->expires )) ?></td>
-          <td class="d-none d-lg-table-cell"><?php print date( "d/m h:m", strtotime( $dto->updated)) ?></td>
+          <td class="d-none d-lg-table-cell"><?php print strings::asShortDateTime( $dto->updated) ?></td>
 
         </tr>
 
-<?php } // while ( $dto = $this->data->sites->dto()) ?>
+<?php
+} // while ( $dto = $this->data->sites->dto()) ?>
 
       </tbody>
 
@@ -98,6 +109,17 @@ $(document).ready( function() {
     });
 
   });
+
+  /*--[ a CSV download icon ]--*/
+  var sitesTable = $('table[sites-list]');
+  if ( sitesTable.length == 1) {
+    $('<i class="fa fa-fw fa-table noprint pointer pull-right" title="download as CSV" />')
+    .on( 'click', function( e) {
+      _ed_.csv.call( sitesTable, 'sites-list.csv');
+    })
+    .insertBefore( sitesTable);
+
+  }
 
 })
 </script>
