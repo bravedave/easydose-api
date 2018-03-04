@@ -87,7 +87,7 @@ while ( $dto = $this->data->sites->dto()) {
 
   </div>
 
-  <div class="col">
+  <div class="col text-right">
     <em><?php print date( 'c'); ?></em>
 
   </div>
