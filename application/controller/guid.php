@@ -10,6 +10,34 @@
 
 class guid extends Controller {
 
+  public function postHandler() {
+    $action = $this->getPost('action');
+
+    if ( 'apply license override' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $a = [
+          'grace_product' => $this->getPost('grace_product'),
+          'grace_workstations' => $this->getPost('grace_workstations'),
+          'grace_expires' => $this->getPost('grace_expires')
+        ];
+        $dao = new dao\guid;
+        $dao->UpdateByID( $a, $id);
+        Response::redirect( url::toString('guid/' . $id), 'invalid id');
+
+      }
+      else {
+        Response::redirect( url::toString('guid'), 'invalid id');
+
+      }
+
+    }
+    else {
+      Response::redirect( url::toString('guid'));
+
+    }
+
+  }
+
   public function view( $id) {
     if ( !currentUser::isAdmin())
       response::Redirect();
@@ -24,7 +52,8 @@ class guid extends Controller {
     $this->data = (object)[
       'dto' => $dto,
       'account' => FALSE,
-      'sites' => FALSE];
+      'sites' => FALSE,
+      'license' => $guidDAO->getLicenseOf( $dto)];
 
     if ( $dto->user_id) {
       $usersDAO = new dao\users;
@@ -70,7 +99,14 @@ class guid extends Controller {
   }
 
   function index() {
-    $this->_index();
+    if ( $this->isPost()) {
+      $this->postHandler();
+
+    }
+    else {
+      $this->_index();
+
+    }
 
   }
 

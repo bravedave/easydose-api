@@ -15,8 +15,6 @@
         <col />
         <col />
         <col class="d-none d-lg-table-cell" span="2" style="width: 150px;" />
-        <col style="width: 2em;" />
-        <col class="d-none d-lg-table-cell" style="width: 2em;" />
 
       </colgroup>
 
@@ -27,8 +25,6 @@
           <td class="d-none d-lg-table-cell">name</td>
           <td>created</td>
           <td class="d-none d-lg-table-cell">updated</td>
-          <td>&nbsp;</td>
-          <td class="d-none d-lg-table-cell">&nbsp;</td>
 
         </tr>
 
@@ -36,7 +32,8 @@
 
       <tbody>
         <?php while ( $dto = $this->data->res->dto()) {  ?>
-          <tr row-guid data-guid="<?php print $dto->guid ?>">
+          <tr
+            data-id="<?php print $dto->id ?>" row-guid>
             <td class="d-none d-lg-table-cell"><?php print $dto->id ?></td>
             <td><?php print $dto->guid ?>
               <div class="d-block d-lg-none">
@@ -48,14 +45,6 @@
             <td class="d-none d-lg-table-cell"><?php print $dto->name ?></td>
             <td><?php print date( \config::$DATE_FORMAT, strtotime( $dto->created)) ?></td>
             <td class="d-none d-lg-table-cell"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->updated)) ?></td>
-            <td>
-              <a href="<?php url::write( sprintf( 'guid/view/%s', $dto->id)) ?>"><i class="fa fa-eye" title="view"></i></a>
-
-            </td>
-            <td class="d-none d-lg-table-cell">
-              <a href="<?php url::write( sprintf( 'guid/remove/%s', $dto->id)) ?>" are-you-sure><i class="fa fa-times text-danger" title="delete"></i></a>
-
-            </td>
 
           </tr>
 
@@ -75,27 +64,46 @@
 $(document).ready( function() {
   $('tr[row-guid]').each( function( i, tr) {
     var _tr = $(tr);
-    var guid = _tr.data('guid');
+    var id = _tr.data('id');
 
-  });
+    _tr
+    .addClass('pointer')
+    .on( 'click', function( e) {
+      window.location.href = _brayworth_.url('guid/view/'+id);
 
-  $('a[are-you-sure]').on( 'click', function(e) {
-    var href = $(this).attr('href');
-    e.stopPropagation(); e.preventDefault();
+    })
+    .on( 'contextmenu', function( e) {
+      if (e.shiftKey)
+        return;
 
-    _brayworth_.modal({
-      title: 'confirm',
-      text: 'Are you sure ?',
-      buttons : {
-        yes : function( e) {
-          hourglass.on();
-          window.location.href = href;
+      e.stopPropagation(); e.preventDefault();
 
-        }
+      var _context = _brayworth_.context();
+      _context.append($('<a><i class="fa fa-link"></i>view</a>').attr('href',_brayworth_.url('guid/view/'+id)))
+      _context.append($('<a href="#"><i class="fa fa-trash"></i>delete</a>').on('click', function(e) {
+        e.stopPropagation(); e.preventDefault();
 
-      }
+        _brayworth_.modal({
+          title: 'confirm',
+          text: 'Are you sure ?',
+          buttons : {
+            yes : function( e) {
+              hourglass.on();
+              window.location.href = _brayworth_.url( 'guid/remove/' + id);
 
-    });
+            }
+
+          }
+
+        });
+
+        _context.close();
+
+      }));
+
+      _context.open( e);
+
+    })
 
   });
 

@@ -8,7 +8,7 @@
 		http://creativecommons.org/licenses/by/4.0/
 	*/ ?>
 <div class="row pb-1">
-  <div class="col col-2">
+  <div class="col col-2 small">
     id
   </div>
 
@@ -20,7 +20,7 @@
 </div>
 
 <div class="row pb-1">
-  <div class="col col-2">
+  <div class="col col-2 small">
     guid
   </div>
 
@@ -32,19 +32,28 @@
 </div>
 
 <div class="row pb-1">
-  <div class="col col-2">
-    Account
+  <div class="col col-2 small">
+    account
   </div>
 
   <div class="col col-10">
-    <?php if ( $this->data->account) printf('%s (%s)', $this->data->account->name, $this->data->account->id) ?>
+    <?php
+    if ( $this->data->account) {
+      printf('%s (%s)', $this->data->account->name, $this->data->account->id);
 
+    }
+    else {
+      printf( '<button class="btn btn-sm btn-outline-primary" id="assign-account">assign account</button>');
+
+    }
+
+    ?>
   </div>
 
 </div>
 
 <div class="row pb-1">
-  <div class="col col-2">
+  <div class="col col-2 small">
     created
   </div>
 
@@ -56,8 +65,8 @@
 </div>
 
 <div class="row pb-1">
-  <div class="col col-2">
-    Updated
+  <div class="col col-2 small">
+    updated
   </div>
 
   <div class="col col-10">
@@ -68,8 +77,8 @@
 </div>
 
 <div class="row pb-1">
-  <div class="col col-2">
-    Sites
+  <div class="col col-2 small">
+    sites
   </div>
 
   <div class="col col-10">
@@ -98,6 +107,129 @@
 
 </div>
 
+<?php
+  if ( $this->data->license) {  ?>
+
+<div class="row pb-1">
+  <div class="col col-2 small">
+    license
+  </div>
+
+  <div class="col col-10">
+    <table class="table table-striped table-sm">
+      <colgroup>
+          <col style="width: 5em" />
+          <col />
+          <col style="width: 4em" />
+          <col style="width: 12em" />
+
+      </colgroup>
+
+      <thead>
+        <tr>
+          <td>type</td>
+          <td>product</td>
+          <td>wks</td>
+          <td>expires</td>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+        <tr>
+          <td><?php print $this->data->license->type; ?></td>
+          <td><?php print $this->data->license->product; ?></td>
+          <td><?php print $this->data->license->workstations; ?></td>
+          <td><?php print strings::asShortDate( $this->data->license->expires); ?></td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+<?php
+    sys::dump( $this->data->dto, NULL, FALSE);
+    ?>
+
+  </div>
+
+</div>
+
+<?php
+  } ?>
+
+<div class="row pb-1">
+  <div class="col col-2 small">
+    license override
+  </div>
+
+  <div class="col col-10">
+    <form class="form" method="post" action="<?php url::write('guid') ?>">
+      <table class="table table-striped table-sm">
+        <colgroup>
+          <col style="width: 5em" />
+          <col />
+          <col style="width: 4em" />
+          <col style="width: 12em" />
+
+        </colgroup>
+
+        <thead>
+          <tr>
+            <td>&nbsp;</td>
+            <td>product</td>
+            <td>wks</td>
+            <td>expires</td>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>&nbsp;</td>
+            <td>
+              <select class="form-control" name="grace_product">
+                <option></option>
+                <option value="easydose5" <?php if ( 'easydose5' == $this->data->dto->grace_product) print "selected"; ?>>easydose5</option>
+                <option value="easydose10" <?php if ( 'easydose10' == $this->data->dto->grace_product) print "selected"; ?>>easydose10</option>
+                <option value="easydoseOPEN" <?php if ( 'easydoseOPEN' == $this->data->dto->grace_product) print "selected"; ?>>easydoseOPEN</option>
+
+              </select>
+
+            </td>
+            <td>
+              <input type="number" name="grace_workstations" class="form-control" value="<?php print $this->data->dto->grace_workstations ?>" />
+
+            </td>
+            <td>
+              <input type="date" name="grace_expires" class="form-control" value="<?php print $this->data->dto->grace_expires ?>" />
+
+            </td>
+
+          </tr>
+
+          <tr>
+            <td>&nbsp;</td>
+            <td colspan="3">
+              <input type="submit" class='btn btn-primary' value="apply license override" />
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </form>
+
+  </div>
+
+</div>
+
 <script>
 $(document).ready( function() {
   $('tr[site]').each( function( i, tr) {
@@ -119,7 +251,6 @@ $(document).ready( function() {
       var _context = _brayworth_.context();
       _context.append($('<a><i class="fa fa-link"></i>view</a>').attr('href',_brayworth_.url('sites/view/'+id)))
       _context.append($('<a href="#"><i class="fa fa-trash"></i>delete</a>').on('click', function(e) {
-        var href = $(this).attr('href');
         e.stopPropagation(); e.preventDefault();
 
         _brayworth_.modal({
@@ -145,6 +276,55 @@ $(document).ready( function() {
     })
 
   });
+
+  $('#assign-account').on('click', function(e) {
+    e.stopPropagation();
+
+    var fld = $('<input type="text" class="form-control" autocomplete="email" placeholder="@" />');
+
+		var d = $('<div />');
+		d.append( fld);
+
+		var modal = _brayworth_.modal({
+			title : 'email address',
+			text : d,
+			width : 400,
+			onOpen : function() {
+				fld.on('keypress', function( e) {
+          if ( e.keyCode == 13) {
+            var _fld = $(this);
+            var email = _fld.val();
+            if ( email.isEmail()) {
+
+              modal.modal('close');
+
+              _brayworth_.post({
+                url : _brayworth_.url('api'),
+                data : {
+                  action : 'set-account',
+                  email : email,
+                  guid : '<?php print $this->data->dto->guid ?>',
+                }
+
+              })
+              .then( function(d) {
+                _brayworth_.growl(d);
+                if ( 'ack' == d.response)
+                  setTimeout( function() { window.location.reload()}, 500);
+
+              })
+
+            }
+
+          }
+
+				});
+
+			},
+
+		});
+
+  })
 
 })
 </script>

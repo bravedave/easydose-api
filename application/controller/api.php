@@ -300,8 +300,11 @@ class api extends Controller {
 
             }
             else {
+              $a = explode( '@', $email);
+              $name = (string)$a[0];
               $a = [
                 'username' => $email,
+                'name' => $name,
                 'email' => $email,
                 'created' => \db::dbTimeStamp(),
                 'updated' => \db::dbTimeStamp()
