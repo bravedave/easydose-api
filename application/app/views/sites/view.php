@@ -51,6 +51,19 @@
 
 <div class="row py-1">
   <div class="col col-3 pt-1 small">
+    ABN.
+
+  </div>
+
+  <div class="col col-9">
+    <?php print $dto->abn ?>
+
+  </div>
+
+</div>
+
+<div class="row py-1">
+  <div class="col col-3 pt-1 small">
     IP
 
   </div>
@@ -178,6 +191,22 @@
   </div>
 
 </div>
+
+<?php if ( $this->data->guid) { ?>
+<div class="row py-1">
+  <div class="col col-3 pt-1 small">
+    GUID
+
+  </div>
+
+  <div class="col col-9">
+    <?php printf( '<a href="%s">%s<i class="fa fa-fw fa-link"></i></a>', url::tostring('guid/view/' . $this->data->guid->id), $dto->guid ) ?>
+
+  </div>
+
+</div>
+
+<?php } // if ( $this->data->guid) ?>
 
 <div class="row py-1">
   <div class="col pt-1 small">

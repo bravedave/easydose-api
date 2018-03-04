@@ -21,7 +21,17 @@ class sites extends Controller {
       if ( (int)$id) {
         $dao = new dao\sites;
         if ( $site = $dao->getByID( $id)) {
-          $this->data = (object)[ 'site' => $site ];
+          $this->data = (object)[
+            'site' => $site,
+            'guid' => FALSE
+          ];
+
+          if ( $this->data->site->guid) {
+            $dao = new dao\guid;
+            $this->data->guid = $dao->getByGUID( $this->data->site->guid);
+
+          }
+
           $p = new page( $this->title = 'Site');
       			$p
       				->header()

@@ -97,6 +97,7 @@ class api extends Controller {
         "activated" => ( $this->getPost('activated') == "yes" ? 1 : 0 ),
         "expires" => $this->getPost('expires'),
         "guid" => $this->getPost('guid'),
+        "abn" => $this->getPost('abn'),
         "updated" => \db::dbTimeStamp()];
 
       if ( $a['deployment'] != "" ) {
