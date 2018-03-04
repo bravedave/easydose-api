@@ -35,19 +35,24 @@ $dbc->defineField( 'grace_product', 'text');
 $dbc->defineField( 'grace_workstations', 'int');
 $dbc->defineField( 'grace_expires', 'text');
 
-// $dbc->check();
-$this->db->Q('PRAGMA foreign_keys=off');
-
-$this->db->Q('BEGIN TRANSACTION');
-
-$this->db->Q('ALTER TABLE guid RENAME TO _guid_old');
-
 $dbc->check();
 
-$this->db->Q('INSERT INTO guid ( id, guid, user_id, agreements_id, created, updated )
-  SELECT id, guid, user_id, agreements_id, created, updated
-  FROM _guid_old');
-
-$this->db->Q('COMMIT');
-
-$this->db->Q('PRAGMA foreign_keys=on');
+//
+// sqlite doesn't support altering fields
+// this was used to change grace_product to a text field
+//
+// $this->db->Q('PRAGMA foreign_keys=off');
+//
+// $this->db->Q('BEGIN TRANSACTION');
+//
+// $this->db->Q('ALTER TABLE guid RENAME TO _guid_old');
+//
+// $dbc->check();
+//
+// $this->db->Q('INSERT INTO guid ( id, guid, user_id, agreements_id, created, updated )
+//   SELECT id, guid, user_id, agreements_id, created, updated
+//   FROM _guid_old');
+//
+// $this->db->Q('COMMIT');
+//
+// $this->db->Q('PRAGMA foreign_keys=on');
