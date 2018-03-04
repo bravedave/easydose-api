@@ -31,6 +31,7 @@ $dbc->defineField( 'user_id', 'int');
 $dbc->defineField( 'agreements_id', 'int');
 $dbc->defineField( 'created', 'text');
 $dbc->defineField( 'updated', 'text');
+$dbc->defineField( 'use_license', 'int');
 $dbc->defineField( 'grace_product', 'text');
 $dbc->defineField( 'grace_workstations', 'int');
 $dbc->defineField( 'grace_expires', 'text');

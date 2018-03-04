@@ -23,7 +23,13 @@
 			while ( $dto = $this->data->dto()) {	?>
 		<tr data-role="item" data-id="<?php print $dto->id ?>">
 			<td><?php print $dto->name ?></td>
-			<td><?php print $dto->username ?></td>
+			<td>
+				<div class="text-truncate" style="width: 12em">
+					<?php print $dto->username ?>
+
+				</div>
+
+			</td>
 			<td><?php print $dto->email ?></td>
 			<td class="text-center"><?php print ( $dto->admin ? 'yes' : 'no' ) ?></td>
 

@@ -93,6 +93,26 @@ class guid extends _dao {
 
 				}
 
+				/*
+				* The default license is either - in order of priority
+
+					1. The commercially purchased license
+					2. The specified GRATIS license
+					3. If the GUID is less than 3 months old an easydoseFREE license
+
+				*/
+
+				if (( $_time = strtotime( $dto->grace_expires)) > 0 ) {
+					if ( in_array( $dto->grace_product, \config::products))
+					$license->type = 'GRATIS';
+					$license->product = $dto->grace_product;
+					$license->workstations = max( $dto->grace_workstations, 1);
+					$license->state = 'active';
+					$license->expires = date( 'Y-m-d', $_time);
+					return ( $license);
+
+				}
+
 				$dOrigin = strtotime( $dto->created);
 				$dFreeExpires = date( 'Y-m-d', strtotime( '+3 months', $dOrigin));
 				// \sys::logger( sprintf( '%s : %s', date( 'Y-m-d', $dOrigin), $dFreeExpires));

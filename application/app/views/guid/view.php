@@ -6,8 +6,11 @@
 
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
+
+  security  : admin
+
 	*/ ?>
-<div class="row pb-1">
+<div class="row py-1">
   <div class="col col-2 small">
     id
   </div>
@@ -19,7 +22,7 @@
 
 </div>
 
-<div class="row pb-1">
+<div class="row py-1">
   <div class="col col-2 small">
     guid
   </div>
@@ -31,15 +34,15 @@
 
 </div>
 
-<div class="row pb-1">
-  <div class="col col-2 small">
+<div class="row">
+  <div class="col col-2 py-1 small">
     account
   </div>
 
   <div class="col col-10">
     <?php
     if ( $this->data->account) {
-      printf('%s (%s)', $this->data->account->name, $this->data->account->id);
+      printf('<a href="%s" class="btn btn-link pl-0">%s<i class="fa fa-fw fa-link"></i></a>', url::tostring('users/view/' . $this->data->account->id), $this->data->account->name);
 
     }
     else {
@@ -52,7 +55,7 @@
 
 </div>
 
-<div class="row pb-1">
+<div class="row py-1">
   <div class="col col-2 small">
     created
   </div>
@@ -64,7 +67,7 @@
 
 </div>
 
-<div class="row pb-1">
+<div class="row py-1">
   <div class="col col-2 small">
     updated
   </div>
@@ -76,13 +79,13 @@
 
 </div>
 
-<div class="row pb-1">
+<div class="row py-1">
   <div class="col col-2 small">
     sites
   </div>
 
   <div class="col col-10">
-    <table class="table table-striped">
+    <table class="table table-striped table-sm">
       <colgroup>
         <col />
         <col />
@@ -102,6 +105,20 @@
       </tbody>
 
     </table>
+
+  </div>
+
+</div>
+
+<div class="row py-1">
+  <div class="col offset-2 col-10 form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input"
+        id="version-2-license-check"
+        name="<?php uniqid('easydose') ?>" <?php if ( $this->data->dto->use_license) print 'checked'; ?> />
+      Use this site for license (version 2)
+
+    </label>
 
   </div>
 
@@ -150,7 +167,7 @@
     </table>
 
 <?php
-    sys::dump( $this->data->dto, NULL, FALSE);
+    // sys::dump( $this->data->dto, NULL, FALSE);
     ?>
 
   </div>
@@ -167,6 +184,7 @@
 
   <div class="col col-10">
     <form class="form" method="post" action="<?php url::write('guid') ?>">
+      <input type="hidden" name="id" value="<?php print $this->data->dto->id; ?>" />
       <table class="table table-striped table-sm">
         <colgroup>
           <col style="width: 5em" />
@@ -214,7 +232,8 @@
           <tr>
             <td>&nbsp;</td>
             <td colspan="3">
-              <input type="submit" class='btn btn-primary' value="apply license override" />
+              <input type="submit" name="action" class='btn btn-primary' value="apply license override" />
+              <input type="submit" name="action" class='btn btn-danger' value="remove license override" />
 
             </td>
 
@@ -224,6 +243,9 @@
 
       </table>
 
+      <?php
+          // sys::dump( $this->data->dto, NULL, FALSE);
+          ?>
     </form>
 
   </div>
@@ -323,6 +345,26 @@ $(document).ready( function() {
 			},
 
 		});
+
+  })
+
+  $('#version-2-license-check').on( 'change', function() {
+    var _me = $(this);
+
+    _brayworth_.post({
+      url : _brayworth_.url('guid'),
+      data : {
+          action : 'use-version-2-license',
+          value : _me.prop('checked') ? 1 : 0,
+          id : <?php print $this->data->dto->id; ?>,
+
+      }
+
+    })
+    .then( function(d) {
+      _brayworth_.growl(d);
+
+    })
 
   })
 

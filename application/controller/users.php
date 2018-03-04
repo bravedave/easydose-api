@@ -101,7 +101,7 @@ class users extends Controller {
 
 	}
 
-	public function edit( $id = 0) {
+	protected function _edit( $id = 0, $view = 'view') {
 		$this->data = (object)[
 			'dto' => (object)[
 				'id' => 0,
@@ -129,10 +129,20 @@ class users extends Controller {
 				->title();
 
 			$p->primary();
-				$this->load('edit');
+				$this->load( $view);
 
 			$p->secondary();
 				$this->load('index');
+
+	}
+
+	public function view( $id = 0) {
+		$this->_edit( $id, 'view');
+
+	}
+
+	public function edit( $id = 0) {
+		$this->_edit( $id, 'edit');
 
 	}
 

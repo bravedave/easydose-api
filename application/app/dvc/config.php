@@ -33,6 +33,8 @@ abstract class config extends _config {
 
 	const allow_password_recovery = TRUE;
 
+	const products = [ 'easydose5', 'easydose10', 'easydoseOPEN'];
+
 	/*
 	 *	Caching using APCu, Interfaced through https://www.scrapbook.cash/
 	 * 	see dao\_dao

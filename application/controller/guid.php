@@ -13,20 +13,44 @@ class guid extends Controller {
   public function postHandler() {
     $action = $this->getPost('action');
 
-    if ( 'apply license override' == $action) {
+    if ( 'apply license override' == $action || 'remove license override' == $action) {
       if ( $id = (int)$this->getPost('id')) {
-        $a = [
-          'grace_product' => $this->getPost('grace_product'),
-          'grace_workstations' => $this->getPost('grace_workstations'),
-          'grace_expires' => $this->getPost('grace_expires')
-        ];
         $dao = new dao\guid;
+        if ('remove license override' == $action) {
+          $a = [
+            'grace_product' => '',
+            'grace_workstations' => 0,
+            'grace_expires' => ''
+          ];
+
+        }
+        else {
+          $a = [
+            'grace_product' => $this->getPost('grace_product'),
+            'grace_workstations' => $this->getPost('grace_workstations'),
+            'grace_expires' => $this->getPost('grace_expires')
+          ];
+
+        }
         $dao->UpdateByID( $a, $id);
-        Response::redirect( url::toString('guid/' . $id), 'invalid id');
+        Response::redirect( url::toString('guid/view/' . $id), $action);
 
       }
       else {
         Response::redirect( url::toString('guid'), 'invalid id');
+
+      }
+
+    }
+    elseif ( 'use-version-2-license' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\guid;
+        $dao->UpdateByID( ['use_license' => (int)$this->getPost('value')], $id);
+        \Json::ack( $action);
+
+      }
+      else {
+        \Json::nak( $action);
 
       }
 
@@ -55,16 +79,20 @@ class guid extends Controller {
       'sites' => FALSE,
       'license' => $guidDAO->getLicenseOf( $dto)];
 
+    $this->title = 'guid';
     if ( $dto->user_id) {
       $usersDAO = new dao\users;
-      $this->data->account = $usersDAO->getByID( $dto->user_id);
+      if ($this->data->account = $usersDAO->getByID( $dto->user_id)) {
+        $this->title = sprintf('guid: %s', $this->data->account->name);
+
+      }
 
     }
 
     $sitesDAO = new dao\sites;
     $this->data->sites = $sitesDAO->getForGUID( $dto->guid);
 
-    $p = new page( $this->title = 'guid');
+    $p = new page( $this->title);
 		$p
 			->header()
 			->title()
