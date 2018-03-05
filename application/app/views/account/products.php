@@ -52,26 +52,10 @@
 	<div class="row py-1">
 		<div class="offset-2 col-10">
 			<input type="submit" name="action" class="btn btn-primary" value="buy product" />
-			<input type="submit" name="action" class="btn btn-outline-secondary" value="generate invoice" />
+			<a href="<?php url::write('account/createinvoice/') ?>" class="btn btn-outline-secondary">generate invoice</a>
 
 		</div>
 
 	</div>
 
 </form>
-<script>
-$(document).ready( function() {
-	$('input[type="submit"][value="generate invoice"]').on( 'click', function( e) {
-		var product = $('input[type="radio"][name="product_id"]:checked').val();
-
-		if ( 'undefined' != typeof product) {
-			e.stopPropagation(); e.preventDefault();
-
-			window.location.href = _brayworth_.url('account/createinvoice/' + product);
-
-		}
-
-	})
-
-})
-</script>

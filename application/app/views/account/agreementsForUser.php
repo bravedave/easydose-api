@@ -16,12 +16,14 @@
 	*/	?>
 <div class="row py-1 mt-4">
 	<div class="col col-12 col-lg-2">
-		<strong>Agreements</strong>
+		<i class="fa fa-fw fa-caret-right pointer pull-right" id="show-agreements"></i>
+		Agreements
 
 	</div>
 
 	<div class="col col-12 col-lg-10">
-		<table class="table table-striped">
+		<span id="show-agreements-table-ellipses" class="pointer">...</span>
+		<table class="table table-striped d-none" id="show-agreements-table">
 			<colgroup>
 				<col />
 				<col />
@@ -121,6 +123,23 @@ $(document).ready( function() {
     });
 
   });
+
+	$('#show-agreements, #show-agreements-table-ellipses').on( 'click', function(e) {
+		var t = $('#show-agreements-table');
+		if ( t.hasClass( 'd-none')) {
+			t.removeClass( 'd-none');
+			$('#show-agreements-table-ellipses').addClass( 'd-none');
+			$('#show-agreements').removeClass('fa-caret-right').addClass('fa-caret-down');
+
+		}
+		else {
+			t.addClass( 'd-none');
+			$('#show-agreements-table-ellipses').removeClass( 'd-none');
+			$('#show-agreements').removeClass('fa-caret-down').addClass('fa-caret-right');
+
+		}
+
+	})
 
 });
 </script>

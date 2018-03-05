@@ -214,6 +214,162 @@ class account extends Controller {
 				else { throw new \Exception('Invalid Product'); }
 
 			}
+			elseif ( $action == 'pay invoice') {
+				if ( $id = (int)$this->getPost('id')) {
+					$dao = new dao\invoices;
+					if ( $inv = $dao->getByID( $id)) {
+						if ( $inv->user_id == currentUser::id()) {
+							$inv = $dao->getInvoice( $inv);
+
+
+
+							/*--- ---[ pay invoice ]--- ---*/
+							$items = [];
+
+							// ### Itemized information
+							// (Optional) Lets you specify item wise
+							// information
+							foreach ( $inv->lines as $line) {
+								$item = new PayPal\Api\Item;
+								$item->setName( $line->description)
+									->setCurrency('AUD')
+									->setQuantity(1)
+									->setSku( $line->name) // Similar to `item_number` in Classic API
+									->setPrice( $line->rate - ($line->rate / \config::tax_rate_devisor));
+
+								$items[] = $item;
+
+							}
+
+							$itemList = new PayPal\Api\ItemList;
+							$itemList->setItems( $items);
+
+							$details = new PayPal\Api\Details;
+							$details
+								->setTax( $inv->tax)
+								->setSubtotal( $inv->total - $inv->tax);
+
+							$amount = new PayPal\Api\Amount;
+							$amount->setCurrency("AUD")
+								->setTotal( $inv->total)
+								->setDetails( $details);
+
+							$transaction = new PayPal\Api\Transaction;
+							$transaction->setAmount( $amount)
+								->setItemList( $itemList)
+								->setDescription( "EasyDose License Purchase")
+								->setInvoiceNumber( $inv->id);
+
+							/*--- ---[ final build of paypal payment object ]--- ---*/
+							$payer = new PayPal\Api\Payer;
+							$payer->setPaymentMethod("paypal");
+
+							$redirectUrls = new PayPal\Api\RedirectUrls;
+							$redirectUrls->setReturnUrl( url::$PROTOCOL . url::tostring( 'account/ExecutePayment?success=true'))
+								->setCancelUrl( url::$PROTOCOL . url::tostring( 'account/ExecutePayment?success=false'));
+
+							$_payment = new PayPal\Api\Payment;
+							$_payment->setIntent("sale")
+								->setPayer( $payer)
+								->setRedirectUrls($redirectUrls)
+								->setTransactions( [$transaction]);
+
+							$payment = paypal::createPayment( $_payment);
+
+							// 'name' => $dto->name,
+							// 'description' => $dto->description,
+
+							$a = [
+								'payment_id' => $payment->id,
+								'state' => $payment->state,
+								'invoices_id' => $inv->id,
+								'tax' => $inv->tax,
+								'value' => $inv->total,
+								'user_id' => currentUser::id(),
+								'created' => \db::dbTimeStamp(),
+								'updated' => \db::dbTimeStamp()
+							];
+
+							$dao = new dao\payments;
+							$dao->Insert( $a);
+
+							Response::redirect( $payment->getApprovalLink());
+
+							// sys::dump( $inv);
+							// print ('<b>need to store the payment details here</b>');
+							/*--- ---[ pay invoice ]--- ---*/
+
+						}
+						else { throw new \Exceptions\InvoiceAccessViolation;}
+
+					}
+					else { throw new \Exceptions\InvoiceNotFound;}
+
+				}
+				else { throw new \Exceptions\InvoiceNotFound;}
+
+			}
+			elseif ( $action == 'create invoice') {
+				// sys::dump( $this->getPost());
+				if ( $product_id = (int)$this->getPost('product_id')) {
+					$dao = new dao\products;
+					if ( $dto = $dao->getByID( $product_id)) {
+
+						$aInvoices = [
+							'user_id' => currentUser::id(),
+							'created' => \db::dbTimeStamp(),
+							'updated' => \db::dbTimeStamp()
+						];
+
+						$aInvoicesDetail = [];
+						$aInvoicesDetail[] = [
+							'user_id' => currentUser::id(),
+							'invoices_id' => 0,
+							'product_id' => $dto->id,
+							'rate' => $dto->rate,
+							'created' => \db::dbTimeStamp(),
+							'updated' => \db::dbTimeStamp()
+						];
+
+						if ( $workstation_id = (int)$this->getPost('workstation_id')) {
+							if ( $dto = $dao->getByID( $workstation_id)) {
+								$aInvoicesDetail[] = [
+									'user_id' => currentUser::id(),
+									'invoices_id' => 0,
+									'product_id' => $dto->id,
+									'rate' => $dto->rate,
+									'created' => \db::dbTimeStamp(),
+									'updated' => \db::dbTimeStamp()
+								];
+
+							}
+							else { Response::redirect( url::tostring('account/createinvoice/'), 'Invalid workstation product'); }
+
+						}
+
+						if ( count($aInvoicesDetail)) {
+							$dao = new dao\invoices;
+							$invID = $dao->Insert( $aInvoices);
+
+							$dao = new dao\invoices_detail;
+							foreach ($aInvoicesDetail as $line) {
+								$line['invoices_id'] = $invID;
+								$dao->Insert( $line);
+
+							}
+
+							Response::redirect( url::tostring('account/invoice/' . $invID), 'created invoice');
+
+						}
+						else { Response::redirect( url::tostring('account/'), 'failed to create invoice'); }
+
+					}
+					else { Response::redirect( url::tostring('account/invoice/'), 'Invalid product'); }
+
+				}
+				else { Response::redirect( url::tostring('account/invoice/'), 'Invalid product'); }
+
+			}
 			else { new \Exception( $action); }
 
 		}
@@ -370,34 +526,65 @@ class account extends Controller {
 
 	}
 
-	public function createinvoice( $product = 0) {
-		if ( $product = (int)$product) {
-			$dao = new dao\products;
+	public function invoice( $id = 0) {
+		if ( $id = (int)$id) {
 			$settings = new dao\settings;
-			$this->data = (object)[
-				'product' => $dao->getByID( $product),
-				'sys' => $settings->getFirst()
+			$dao = new dao\invoices;
+			if ( $inv = $dao->getByID( $id)) {
+				if ( currentUser::isAdmin() || $inv->user_id == currentUser::id()) {
+					$this->data = (object)[
+						'invoice' => $dao->getInvoice( $inv),
+						'sys' => $settings->getFirst()
+					];
 
-			];
+				//	sys::dump( $this->data);
 
-			$p = new page( $this->title = 'Create Invoice');
-				$p
-					->header()
-					->title();
+					$p = new page( $this->title = 'View Invoice');
+						$p
+							->header()
+							->title();
 
-				$p->primary();
-					$this->load('create-invoice');
+						$p->primary();
+							$this->load('view-invoice');
 
-				$p->secondary();
-					//~ $this->load('index');
-					$this->load('main-index');
+						$p->secondary();
+							//~ $this->load('index');
+							$this->load('main-index');
 
+
+				}
+				else { throw new \Exceptions\InvoiceAccessViolation;}
+
+			}
+			else { throw new \Exceptions\InvoiceNotFound;}
 
 		}
-		else {
-			Throw new \Exceptions\InvalidProduct;
+		else { Response::redirect( url::tostring()); }
 
-		}
+	}
+
+	public function createinvoice() {
+		$daoProducts = new dao\products;
+		$settings = new dao\settings;
+		$this->data = (object)[
+			'products' => $daoProducts->getDtoSet(),
+			'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),
+			'sys' => $settings->getFirst()
+
+		];
+
+		$p = new page( $this->title = 'Create Invoice');
+			$p
+				->header()
+				->title();
+
+			$p->primary();
+				$this->load('create-invoice');
+
+			$p->secondary();
+				//~ $this->load('index');
+				$this->load('main-index');
+
 
 	}
 

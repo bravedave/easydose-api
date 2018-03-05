@@ -85,14 +85,14 @@ class guid extends _dao {
 
 	public function getLicenseOf( \dao\dto\guid $dto) {
 		$debug = FALSE;
-		// $debug = TRUE;
+		$debug = TRUE;
 
 		if ( (int)$dto->user_id) {
 			$licenseDAO = new license;	// dao\license;
 			if ( $license = $licenseDAO->getLicense( $dto->user_id)) {
 				if ( $debug) \sys::logger( sprintf( 'dao\guid->getLicenseOf :: %s license', $license->state));
 				if ( 'active' == strtolower( $license->state)) {
-					if ( $debug) \sys::logger('dao\guid->getLicenseOf :: return active license');
+					if ( $debug) \sys::logger( sprintf( 'dao\guid->getLicenseOf :: return active license : %s', $license->expires));
 					return ( $license);
 
 				}

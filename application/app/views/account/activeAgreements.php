@@ -14,12 +14,19 @@
 	 	Ordinary Authenticated user - non admin
 
 	*/	?>
-<div class="row py-1 mt-2">
+<div class="row py-1 mt-4">
 	<div class="col-12 col-lg-2">
-		<strong>Active Agreement(s)</strong>
+		<i class="fa fa-fw fa-caret-right pointer pull-right" id="show-active-agreements"></i>
+		<div>
+			Active<br />
+			Agreement(s)
+
+		</div>
+
 	</div>
 	<div class="col-12 col-lg-10">
-		<table class="table table-striped table-sm">
+		<span id="show-active-agreements-table-ellipses" class="pointer">...</span>
+		<table class="table table-striped table-sm d-none" id="show-active-agreements-table">
 			<tbody>
 <?php
 		// sys::dump( $this->data->agreement);
@@ -115,3 +122,24 @@
 	</div>
 
 </div>
+<script>
+$(document).ready( function() {
+	$('#show-active-agreements, #show-active-agreements-table-ellipses').on( 'click', function(e) {
+		var t = $('#show-active-agreements-table');
+		if ( t.hasClass( 'd-none')) {
+			t.removeClass( 'd-none');
+			$('#show-active-agreements-table-ellipses').addClass( 'd-none');
+			$('#show-active-agreements').removeClass('fa-caret-right').addClass('fa-caret-down');
+
+		}
+		else {
+			t.addClass( 'd-none');
+			$('#show-active-agreements-table-ellipses').removeClass( 'd-none');
+			$('#show-active-agreements').removeClass('fa-caret-down').addClass('fa-caret-right');
+
+		}
+
+	})
+
+})
+</script>

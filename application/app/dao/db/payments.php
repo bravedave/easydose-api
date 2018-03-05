@@ -18,6 +18,7 @@ $dbc->defineField( 'payment_id', 'text');
 $dbc->defineField( 'state', 'text');
 $dbc->defineField( 'cart', 'text');
 $dbc->defineField( 'product_id', 'int');
+$dbc->defineField( 'invoices_id', 'int');
 $dbc->defineField( 'name', 'text');
 $dbc->defineField( 'description', 'text');
 $dbc->defineField( 'tax', 'text');

@@ -15,6 +15,7 @@
 
 	*/	?>
 <form class="form" method="POST" action="<?php url::write('account') ?>">
+  <input type="hidden" name="id" value="<?php print $this->data->invoice->id ?>" />
   <table class="table borderless">
     <tbody>
       <tr>
@@ -78,12 +79,12 @@
 
             <tr>
               <td>
-                Invoice Number: #
+                Invoice Number: # <?php print $this->data->invoice->id ?>
 
               </td>
 
               <td class="text-right">
-                Invoice Date: <?php print date( \config::$DATE_FORMAT ) ?>
+                Invoice Date: <?php print date( \config::$DATE_FORMAT, strtotime($this->data->invoice->created)) ?>
 
 
               </td>
@@ -102,7 +103,6 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <td>&nbsp;</td>
                 <td>Description</td>
                 <td class="text-right">Rate</td>
                 <td class="text-right">Term</td>
@@ -114,23 +114,9 @@
             <tbody>
 
               <?php
-              foreach ( $this->data->products as $dto) {
+              foreach ( $this->data->invoice->lines as $dto) {
                 // sys::dump( $product);  ?>
                 <tr>
-                  <td><input type="radio" name="product_id" required value="<?php print $dto->id ?>" /></td>
-                  <td><?php printf( '%s<br />%s', $dto->name, $dto->description); ?></td>
-                  <td class="text-right" rate><?php print number_format( $dto->rate, 2) ?></td>
-                  <td class="text-right"><?php print $dto->term ?></td>
-
-                </tr>
-                <?php
-              }	// foreach ( $this->data->products as product)	?>
-
-              <?php
-              foreach ( $this->data->productsWKS as $dto) {
-                // sys::dump( $product);  ?>
-                <tr>
-                  <td><input type="radio" name="workstation_id" value="<?php print $dto->id ?>" /></td>
                   <td><?php printf( '%s<br />%s', $dto->name, $dto->description); ?></td>
                   <td class="text-right" rate><?php print number_format( $dto->rate, 2) ?></td>
                   <td class="text-right"><?php print $dto->term ?></td>
@@ -140,7 +126,7 @@
               }	// foreach ( $this->data->products as product)	?>
 
               <tr>
-                <td colspan="2" style="border-top: 6px double #dee2e6;">
+                <td style="border-top: 6px double #dee2e6;">
                   <strong>
                     Total:
 
@@ -148,7 +134,7 @@
 
                 </td>
                 <td class="text-right" style="border-top: 6px double #dee2e6;">
-                  <strong id="invoice-total-box">&nbsp;</strong>
+                  <strong id="invoice-total-box"><?php print number_format( $this->data->invoice->total, 2) ?></strong>
 
                 </td>
 
@@ -157,17 +143,17 @@
               </tr>
 
               <tr>
-                <td colspan="2">
+                <td>
                   Total includes GST:
                 </td>
-                <td class="text-right" id="invoice-gst-box">&nbsp;</td>
+                <td class="text-right" id="invoice-gst-box"><?php print number_format( $this->data->invoice->tax, 2) ?></td>
                 <td>&nbsp;</td>
 
               </tr>
 
               <tr>
-                <td colspan="4" class="text-right">
-                  <input type="submit" name="action" class="btn btn-primary" value="create invoice" />
+                <td colspan="3" class="text-right">
+                  <input type="submit" name="action" class="btn btn-primary" value="pay invoice" />
 
                 </td>
 
@@ -221,41 +207,3 @@
   </table>
 
 </form>
-<script>
-$(document).ready( function() {
-  $('input[type="radio"][name="product_id"], input[type="radio"][name="workstation_id"]').on( 'change', function(){
-    var product = $('input[type="radio"][name="product_id"]:checked');
-    var wks = $('input[type="radio"][name="workstation_id"]:checked');
-
-    var rate = function( el) {
-      var tr = el.closest( 'tr');
-      // console.log( tr.text());
-      return Number( $('td[rate]', tr).html())
-
-    }
-
-    var iProduct = Number( rate( product));
-    if ( isNaN( iProduct))
-      iProduct = 0;
-
-    var iWks = 0;
-    if ( wks.length > 0) {
-      // console.log( 'calcing', wks);
-      iWks = Number( rate( wks));
-      if ( isNaN( iWks))
-        iWks = 0;
-
-    }
-
-    var iTot = iWks + iProduct;
-
-    $('#invoice-total-box').html( iTot.formatCurrency());
-    $('#invoice-gst-box').html( (iTot/11).formatCurrency());
-
-    console.log( 'calced', iProduct, iWks);
-
-
-  });
-
-})
-</script>
