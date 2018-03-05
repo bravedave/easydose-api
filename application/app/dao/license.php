@@ -16,14 +16,22 @@ Namespace dao;
 
 class license extends _dao {
   public function getLicense( $user = 0) {
+    $debug = FALSE;
+		// $debug = TRUE;
+
+		if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting license', $user));
+
     $dao = new agreements;
     if ( $ret = $dao->getActiveAgreementForUser( $user)) {
       if ( $ret->license) {
+        if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: found agreement', $user));
         return ( $ret);
 
       }
 
     }
+
+    if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting product license', $user));
 
     $dao = new products;
     if ( $ret = $dao->getActiveProductForUser( $user)) {

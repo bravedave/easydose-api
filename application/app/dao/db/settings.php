@@ -15,7 +15,10 @@ $dbc->defineField( 'name', 'text');
 $dbc->defineField( 'lockdown', 'int');
 $dbc->defineField( 'paypal_ClientID', 'text');
 $dbc->defineField( 'paypal_ClientSecret', 'text');
-//~ $dbc->defineField( 'paypal_sandbox', 'int');
+$dbc->defineField( 'street', 'text');
+$dbc->defineField( 'town', 'text');
+$dbc->defineField( 'state', 'text');
+$dbc->defineField( 'postcode', 'text');
 $dbc->check();
 
 if ( $res = $this->db->Result( 'SELECT count(*) count FROM settings' )) {

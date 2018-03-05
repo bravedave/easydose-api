@@ -15,6 +15,10 @@ class settings extends Controller {
 		if ( $action == 'update') {
 			$a = [
 				'name' => $this->getPost( 'name'),
+				'street' => $this->getPost('street'),
+				'town' => $this->getPost('town'),
+				'state' => $this->getPost('state'),
+				'postcode' => $this->getPost('postcode'),
 				'lockdown' => (int)$this->getPost('lockdown'),
 				'paypal_ClientID' => $this->getPost('paypal_ClientID'),
 				'paypal_ClientSecret' => $this->getPost('paypal_ClientSecret')];

@@ -33,7 +33,7 @@
 <?php			foreach ( $this->data->products as $dto) {
 						// sys::dump( $product);	?>
 					<tr>
-						<td><input type="radio" name="product_id" value="<?php print $dto->id ?>" /></td>
+						<td><input type="radio" name="product_id" required value="<?php print $dto->id ?>" /></td>
 						<td><?php printf( '%s<br />%s', $dto->name, $dto->description); ?></td>
 						<td><?php print $dto->rate ?></td>
 						<td><?php print $dto->term ?></td>
@@ -52,9 +52,26 @@
 	<div class="row py-1">
 		<div class="offset-2 col-10">
 			<input type="submit" name="action" class="btn btn-primary" value="buy product" />
+			<input type="submit" name="action" class="btn btn-outline-secondary" value="generate invoice" />
 
 		</div>
 
 	</div>
 
 </form>
+<script>
+$(document).ready( function() {
+	$('input[type="submit"][value="generate invoice"]').on( 'click', function( e) {
+		var product = $('input[type="radio"][name="product_id"]:checked').val();
+
+		if ( 'undefined' != typeof product) {
+			e.stopPropagation(); e.preventDefault();
+
+			window.location.href = _brayworth_.url('account/createinvoice/' + product);
+
+		}
+
+	})
+
+})
+</script>

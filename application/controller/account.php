@@ -370,6 +370,37 @@ class account extends Controller {
 
 	}
 
+	public function createinvoice( $product = 0) {
+		if ( $product = (int)$product) {
+			$dao = new dao\products;
+			$settings = new dao\settings;
+			$this->data = (object)[
+				'product' => $dao->getByID( $product),
+				'sys' => $settings->getFirst()
+
+			];
+
+			$p = new page( $this->title = 'Create Invoice');
+				$p
+					->header()
+					->title();
+
+				$p->primary();
+					$this->load('create-invoice');
+
+				$p->secondary();
+					//~ $this->load('index');
+					$this->load('main-index');
+
+
+		}
+		else {
+			Throw new \Exceptions\InvalidProduct;
+
+		}
+
+	}
+
 	public function index() {
 		if ( $this->isPost())
 			$this->postHandler();

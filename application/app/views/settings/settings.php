@@ -10,9 +10,9 @@
 	*/	?>
 <form class="form" method="POST" action="<?php url::write( 'settings') ?>" >
 <?php	if ( $this->data) {	?>
-	<div class="form-group row">
-		<label class="col-2" for="name">Name</label>
-		<div class="col-8">
+	<div class="form-group row py-1">
+		<label class="col-3" for="name">Name</label>
+		<div class="col-9">
 			<input type="text" name="name" class="form-control" autofocus
 				value="<?php print $this->data->name ?>" />
 
@@ -20,8 +20,42 @@
 
 	</div>
 
-	<div class="row">
-		<div class="form-check offset-2 col-4">
+	<div class="form-group row pt-1">
+		<label class="col-3" for="name">Address</label>
+		<div class="col-9">
+			<input type="text" name="street" class="form-control" placeholder="PO Box / street address" autocomplete="address-line1"
+				value="<?php print $this->data->street ?>" />
+
+		</div>
+
+	</div>
+
+	<div class="form-group row py-0">
+		<div class="offset-3 col-6">
+			<input type="text" name="town" class="form-control" placeholder="town / suburb" autocomplete="address-level2"
+				value="<?php print $this->data->town ?>" />
+
+		</div>
+
+	</div>
+
+	<div class="form-group row pb-1">
+		<div class="offset-3 col-6">
+			<input type="text" name="state" class="form-control" placeholder="state" autocomplete="address-level3"
+				value="<?php print $this->data->state ?>" />
+
+		</div>
+
+		<div class="col-3">
+			<input type="text" name="postcode" class="form-control" placeholder="postcode" autocomplete="postal-code"
+				value="<?php print $this->data->postcode ?>" />
+
+		</div>
+
+	</div>
+
+	<div class="row py-1">
+		<div class="form-check offset-3 col-4">
 			<label class="form-check-label">
 				<input type="checkbox" name="lockdown" class="form-check-input" value="1"
 					<?php if( $this->data->lockdown) print 'checked'; ?> />
@@ -35,9 +69,9 @@
 	</div>
 
 <?php if( $this->data->lockdown) {	?>
-	<div class="form-group row">
-		<label class="col-2" for="paypal_ClientID">Paypal ClientID</label>
-		<div class="col-8">
+	<div class="form-group row py-1">
+		<label class="col-3" for="paypal_ClientID">Paypal ClientID</label>
+		<div class="col-9">
 			<input type="text" name="paypal_ClientID" id="paypal_ClientID" class="form-control" placeholder="ClientID"
 				value="<?php print $this->data->paypal_ClientID ?>" />
 
@@ -46,8 +80,8 @@
 	</div>
 
 	<div class="form-group row">
-		<label class="col-2" for="paypal_ClientSecret">Paypal ClientSecret</label>
-		<div class="col-8">
+		<label class="col-3" for="paypal_ClientSecret">Paypal ClientSecret</label>
+		<div class="col-9">
 			<input type="text" name="paypal_ClientSecret" class="form-control" placeholder="Secret"
 				value="<?php print $this->data->paypal_ClientSecret ?>" />
 
@@ -58,7 +92,7 @@
 <?php }	?>
 
 	<div class="row">
-		<div class="offset-2 col-4">
+		<div class="offset-3 col-9">
 			<input type="submit" name="action" value="update" class="btn btn-primary" />
 
 		</div>
