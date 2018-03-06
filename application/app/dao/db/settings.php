@@ -19,6 +19,7 @@ $dbc->defineField( 'street', 'text');
 $dbc->defineField( 'town', 'text');
 $dbc->defineField( 'state', 'text');
 $dbc->defineField( 'postcode', 'text');
+$dbc->defineField( 'use_subscription', 'int');
 $dbc->check();
 
 if ( $res = $this->db->Result( 'SELECT count(*) count FROM settings' )) {

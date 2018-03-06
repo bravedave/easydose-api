@@ -13,6 +13,7 @@ Namespace dao;
 
 class settings extends _dao {
 	protected $_db_name = 'settings';
+	static $dto = FALSE;
 
 	public function firstRun() {
 		/**
@@ -36,17 +37,28 @@ class settings extends _dao {
 	}
 
 	public function getName() {
-		if ( $dto = $this->getFirst())
-			return ( $dto->name);
+		if ( self::$dto || self::$dto = $this->getFirst())
+			return ( self::$dto->name);
 
 		return ( \config::$WEBNAME);
 
 	}
 
+	public function useSubscriptions() {
+		if ( self::$dto || self::$dto = $this->getFirst()) {
+			if ( isset( self::$dto->use_subscription))
+				return ( (bool)self::$dto->use_subscription);
+
+		}
+
+		return ( FALSE);
+
+	}
+
 	public function lockdown( $set = NULL) {
 		$lockdown = FALSE;
-		if ( $dto = $this->getFirst()) {
-			$lockdown = (int)$dto->lockdown;
+		if ( self::$dto || self::$dto = $this->getFirst()) {
+			$lockdown = (int)self::$dto->lockdown;
 
 			if ( !is_null( $set))
 				$this->Q( sprintf( "UPDATE `settings` SET `lockdown` = %d", (int)$set));
@@ -60,10 +72,10 @@ class settings extends _dao {
 	}
 
 	public function paypalAuth() {
-		if ( $dto = $this->getFirst()) {
+		if ( self::$dto || self::$dto = $this->getFirst()) {
 			$auth = new \PayPal\Auth\OAuthTokenCredential(
-				$dto->paypal_ClientID,
-				$dto->paypal_ClientSecret);
+				self::$dto->paypal_ClientID,
+				self::$dto->paypal_ClientSecret);
 
 			return ( $auth);
 

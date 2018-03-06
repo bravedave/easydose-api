@@ -130,7 +130,7 @@ class account extends Controller {
 
 
 			}
-			elseif( $action == 'buy product') {
+			elseif ( $action == 'buy product') {
 				if ( $product = (int)$this->getPost('product_id')) {
 					$dao = new dao\products;
 					if ( $dto = $dao->getByID( $product)) {
@@ -225,6 +225,7 @@ class account extends Controller {
 
 							/*--- ---[ pay invoice ]--- ---*/
 							$items = [];
+							$lineDescription = [];
 
 							// ### Itemized information
 							// (Optional) Lets you specify item wise
@@ -238,6 +239,7 @@ class account extends Controller {
 									->setPrice( $line->rate - ($line->rate / \config::tax_rate_devisor));
 
 								$items[] = $item;
+								$lineDescription[] = $line->name;
 
 							}
 
@@ -276,13 +278,12 @@ class account extends Controller {
 
 							$payment = paypal::createPayment( $_payment);
 
-							// 'name' => $dto->name,
-							// 'description' => $dto->description,
-
 							$a = [
 								'payment_id' => $payment->id,
 								'state' => $payment->state,
 								'invoices_id' => $inv->id,
+								'name' => 'invoice',
+								'description' => implode(';',$lineDescription),
 								'tax' => $inv->tax,
 								'value' => $inv->total,
 								'user_id' => currentUser::id(),
@@ -445,6 +446,13 @@ class account extends Controller {
 
 						];
 						$dao->UpdateByID( $a, $dto->id);
+
+						if ( $dto->invoices_id) {
+							$dao = new dao\invoices;
+							$dao->UpdateByID( $a, $dto->invoices_id);
+
+						}
+
 						Response::redirect( url::tostring('account'), sprintf( 'payment %s', $payment->state));
 						// \sys::dump( $a, NULL, FALSE);
 						// \sys::dump( $dto, NULL, FALSE);
@@ -496,6 +504,7 @@ class account extends Controller {
 		$daoPlans = new dao\plans;
 		$daoProducts = new dao\products;
 		$daoAgreements = new dao\agreements;
+		$daoInvoices = new dao\invoices;
 		$daoGuid = new dao\guid;
 		$this->data = (object)[
 			'plans' => $daoPlans->getActivePlans(),
@@ -503,6 +512,7 @@ class account extends Controller {
 			'products' => $daoProducts->getDtoSet(),
 			'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),
 			'guids' => $daoGuid->getForUser(),
+			'invoices' => $daoInvoices->getForUser(),
 			'agreementsForUser' => $daoAgreements->getAgreementsForUser( 0, $active = TRUE, $refresh = TRUE),
 			'license' => FALSE
 			];
@@ -517,12 +527,17 @@ class account extends Controller {
 				->header()
 				->title();
 
+		if ( currentUser::isAdmin()) {
 			$p->primary();
-				$this->load('view');
-
+			$this->load('view');
 			$p->secondary();
-				//~ $this->load('index');
-				$this->load('main-index');
+			$this->load('main-index');
+
+		}
+		else {
+			$p->content();
+			$this->load('view');
+		}
 
 	}
 

@@ -17,6 +17,7 @@
 
 	$this->load('account');
  	$this->load('license');
+ 	$this->load('invoices');
  	$this->load('guids');
 	if ( count( $this->data->agreementsForUser)) {
 		/*
@@ -58,7 +59,12 @@
 	}
 	else {
 		// there is no active agreement
-		$this->load('plans');
+		$settings = new dao\settings;
+		if ( $settings->useSubscriptions()) {
+			$this->load('plans');
+
+		}
+
 		$this->load('products');
 
 	}

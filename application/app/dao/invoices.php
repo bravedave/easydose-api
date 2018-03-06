@@ -34,4 +34,32 @@ class invoices extends _dao {
 
 	}
 
+	public function getAll( $fields = 'i.*, u.name user_name', $order = '') {
+
+		$_sql = sprintf( 'SELECT %s
+			FROM invoices i
+				LEFT JOIN
+			 		users u ON u.id = i.user_id %s', $fields, $order);
+
+		return ( $this->Result( $_sql));
+
+	}
+
+	public function getForUser( $userID = 0) {
+		if ( !(int)$userID) {
+			$userID = \currentUser::id();
+
+		}
+
+		$sql = sprintf( 'SELECT * FROM invoices WHERE user_id = %s', $userID);
+
+		if ( $res = $this->Result( $sql)) {
+			return ( $res->dtoSet());
+
+		}
+
+		return ( FALSE);
+
+	}
+
 }

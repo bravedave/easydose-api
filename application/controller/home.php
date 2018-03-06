@@ -90,13 +90,20 @@ class home extends Controller {
 		$p = new page( $this->title = sys::name());
 		$p
 			->header()
-			->title()
-			->primary();
+			->title();
 
-		$this->load( 'readme');
+		if ( currentUser::isAdmin()) {
+			$p->primary();
+				$this->load( 'readme');
+			$p->secondary();
+				$this->load('main-index');
 
-		$p->secondary();
-			$this->load('main-index');
+		}
+		else {
+			$p->content();
+				$this->load( 'readme');
+
+		}
 
 	}
 

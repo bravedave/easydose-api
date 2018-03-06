@@ -8,26 +8,19 @@
 		<a href="http://creativecommons.org/licenses/by/4.0/"></a>
 	*/ ?>
 
-<h3>GIT</h3>
-<div>
-    The source code for this API can be found at:<br />
-    <a href="https://github.com/bravedave/EasyDose-API">
-      <div class="text-truncate">
-        https://github.com/bravedave/EasyDose-API
+<h3>EasyDose Account Backend</h3>
 
-      </div>
-    </a>
-</div>
+<p>
+  <em>we can have some news here .. anyone ...</em>
+</p>
 
-<h3>License</h3>
-<div>
-  This work is licensed under a Creative Commons Attribution 4.0 International Public License.<br />
-  <a href="http://creativecommons.org/licenses/by/4.0/">
-    <div class="text-truncate">
-      http://creativecommons.org/licenses/by/4.0/
-
-    </div>
-
+<h4>Status</h4>
+<p>
+  Alpha
+</p>
+<p>
+  Please report any issues to <a href="mailto:<?php print \config::$SUPPORT_EMAIL ?>?subject=EasyDose Backend" target="_blank">
+    <?php printf( "%s &lt;%s&gt;", \config::$SUPPORT_NAME, \config::$SUPPORT_EMAIL )?>
   </a>
-
-</div>
+  
+</p>
