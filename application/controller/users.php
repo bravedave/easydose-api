@@ -7,6 +7,8 @@
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
 
+	security: admin only
+
 	*/
 class users extends Controller {
 	protected function postHandler() {
@@ -75,74 +77,87 @@ class users extends Controller {
 	}
 
 	protected function _index() {
-		$dao = new dao\users;
-		$this->data = $dao->getAll();
-		//~ sys::dump( $this->data);
+		if ( currentUser::isAdmin()) {
+			$dao = new dao\users;
+			$this->data = $dao->getAll();
+			//~ sys::dump( $this->data);
 
-		$p = new page( $this->title = 'Users');
-			$p
-				->header()
-				->title();
+			$p = new page( $this->title = 'Users');
+				$p
+					->header()
+					->title();
 
-			$p->primary();
-				$this->load('report');
+				$p->primary();
+					$this->load('report');
 
-			$p->secondary();
-				$this->load('index');
+				$p->secondary();
+					$this->load('index');
+
+		}
 
 	}
 
 	public function index() {
-		if ( $this->isPost())
+		if ( $this->isPost()) {
 			$this->postHandler();
 
-		else
+		}
+		else {
 			$this->_index();
+
+		}
 
 	}
 
 	protected function _edit( $id = 0, $view = 'view') {
-		$this->data = (object)[
-			'dto' => (object)[
+		if ( currentUser::isAdmin()) {
+			$this->data = (object)[
+				'dto' => (object)[
 				'id' => 0,
 				'username' => '',
 				'name' => '',
 				'email' => '',
 				'admin' => 0]];
 
-		if ( $id) {
-			$dao = new dao\users;
-			if ( $dto = $dao->getByID( $id)) {
-				$this->data = (object)['dto' => $dto];
+			if ( $id) {
+				$dao = new dao\users;
+				if ( $dto = $dao->getByID( $id)) {
+					$this->data = (object)['dto' => $dto];
+
+				}
+				else {
+					throw new \Exception( 'user not found');
+
+				}
 
 			}
-			else {
-				throw new \Exception( 'user not found');
 
-			}
-
-		}
-
-		$p = new page( $this->title = 'User');
+			$p = new page( $this->title = 'User');
 			$p
 				->header()
 				->title();
 
-			$p->primary();
-				$this->load( $view);
+			$p->primary();$this->load( $view);
 
-			$p->secondary();
-				$this->load('index');
+			$p->secondary();$this->load('index');
+
+		}
 
 	}
 
 	public function view( $id = 0) {
-		$this->_edit( $id, 'view');
+		if ( currentUser::isAdmin()) {
+			$this->_edit( $id, 'view');
+
+		}
 
 	}
 
 	public function edit( $id = 0) {
-		$this->_edit( $id, 'edit');
+		if ( currentUser::isAdmin()) {
+			$this->_edit( $id, 'edit');
+
+		}
 
 	}
 
