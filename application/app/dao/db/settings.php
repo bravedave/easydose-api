@@ -20,6 +20,8 @@ $dbc->defineField( 'town', 'text');
 $dbc->defineField( 'state', 'text');
 $dbc->defineField( 'postcode', 'text');
 $dbc->defineField( 'use_subscription', 'int');
+$dbc->defineField( 'bank_bsb', 'text');
+$dbc->defineField( 'bank_account', 'text');
 $dbc->check();
 
 if ( $res = $this->db->Result( 'SELECT count(*) count FROM settings' )) {

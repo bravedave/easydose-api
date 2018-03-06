@@ -37,7 +37,7 @@
 	</div>
 
 	<div class="row py-1">
-		<div class="col offset-3 col-8 form-check">
+		<div class="col offset-3 col-8">
 			<?php if ( $this->data->dto->admin) print "administrator" ?>
 
 		</div>
@@ -45,8 +45,9 @@
 	</div>
 
 	<div class="row py-1">
-		<div class="col offset-3 col-8 form-check">
+		<div class="col offset-3 col-8">
 			<a href="<?php url::write( 'users/edit/' . $this->data->dto->id) ?>" class="btn btn-primary btn-link">edit</a>
+			<a href="<?php url::write('users/createinvoice/' . $this->data->dto->id) ?>" class="btn btn-outline-secondary">generate invoice</a>
 
 		</div>
 

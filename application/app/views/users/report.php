@@ -46,7 +46,7 @@
 $(document).ready( function() {
 	$('tr[data-role="item"]').each( function( i, el) {
 		var _el = $(el);
-		var editURL = _brayworth_.urlwrite('users/edit/' + _el.data('id'));
+		var editURL = _brayworth_.url('users/view/' + _el.data('id'));
 
 		_el.css('cursor','pointer').on( 'click', function( e) {
 			e.stopPropagation();

@@ -19,9 +19,16 @@ class settings extends Controller {
 				'town' => $this->getPost('town'),
 				'state' => $this->getPost('state'),
 				'postcode' => $this->getPost('postcode'),
-				'lockdown' => (int)$this->getPost('lockdown'),
-				'paypal_ClientID' => $this->getPost('paypal_ClientID'),
-				'paypal_ClientSecret' => $this->getPost('paypal_ClientSecret')];
+				'bank_bsb' => $this->getPost('bank_bsb'),
+				'bank_account' => $this->getPost('bank_account')
+			];
+
+			if ( currentUser::isProgrammer()) {
+				// $a['lockdown'] = (int)$this->getPost('lockdown');
+				$a['paypal_ClientID'] = $this->getPost('paypal_ClientID');
+				$a['paypal_ClientSecret'] = $this->getPost('paypal_ClientSecret');
+
+			}
 
 			$dao = new dao\settings;
 			$dao->UpdateByID( $a, 1);
@@ -123,7 +130,7 @@ class settings extends Controller {
 					$this->load('settings');
 
 				$p->secondary();
-					$this->load('maintenance-index');
+					$this->load('main-index');
 
 		}
 		else {
@@ -178,7 +185,7 @@ class settings extends Controller {
 				$this->load('plans');
 
 			$p->secondary();
-				$this->load('maintenance-index');
+				$this->load('main-index');
 
 	}
 
@@ -200,7 +207,7 @@ class settings extends Controller {
 				//~ sys::dump( $this->data, NULL, FALSE);
 
 			$p->secondary();
-				$this->load('maintenance-index');
+				$this->load('main-index');
 
 	}
 
@@ -219,7 +226,7 @@ class settings extends Controller {
 				$this->load('plan-edit');
 
 			$p->secondary();
-				$this->load('maintenance-index');
+				$this->load('main-index');
 
 	}
 

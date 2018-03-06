@@ -54,21 +54,23 @@
 
 	</div>
 
-	<div class="row py-1">
-		<div class="form-check offset-3 col-4">
-			<label class="form-check-label">
-				<input type="checkbox" name="lockdown" class="form-check-input" value="1"
-					<?php if( $this->data->lockdown) print 'checked'; ?> />
+	<div class="form-group row py-1">
+		<label class="col-3" for="BSB">Banking<br />BSB/Account</label>
+		<div class="col-3">
+			<input type="text" name="bank_bsb" id="BSB" class="form-control" placeholder="000 000"
+				value="<?php print $this->data->bank_bsb ?>" />
 
-				Lockdown
+		</div>
 
-			</label>
+		<div class="col-4">
+			<input type="text" name="bank_account" class="form-control" placeholder="00000 0000"
+				value="<?php print $this->data->bank_account ?>" />
 
 		</div>
 
 	</div>
 
-<?php if( $this->data->lockdown) {	?>
+<?php if ( currentUser::isProgrammer() && $this->data->lockdown) {	?>
 	<div class="form-group row py-1">
 		<label class="col-3" for="paypal_ClientID">Paypal ClientID</label>
 		<div class="col-9">

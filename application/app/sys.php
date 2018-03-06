@@ -8,30 +8,41 @@
 		http://creativecommons.org/licenses/by/4.0/
 	*/
 abstract class sys extends dvc\sys {
+	protected static $_settings = FALSE;
+
+	protected static function _settings() {
+		if ( !self::$_settings) {
+			self::$_settings = new dao\settings;
+
+		}
+
+		return ( self::$_settings);
+
+	}
+
 	static function name() {
-		$dao = new dao\settings;
-		return ( $dao->getName());
+		return ( self::_settings()->getName());
 
 	}
 
 	static function lockdown() {
-		$dao = new dao\settings;
-		return ( $dao->lockdown());
+		return ( self::_settings()->lockdown());
 
 	}
 
 	static function firstRun() {
-		$dao = new dao\settings;
-		return ( $dao->firstRun());
+		return ( self::_settings()->firstRun());
 
 	}
 
 	static function paypalAuth() {
-		$dao = new dao\settings;
-		return ( $dao->paypalAuth());
+		return ( self::_settings()->paypalAuth());
 
 	}
 
+	static function useSubscriptions() {
+		return ( self::_settings()->useSubscriptions());
 
+	}
 
 }

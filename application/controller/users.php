@@ -125,10 +125,7 @@ class users extends Controller {
 					$this->data = (object)['dto' => $dto];
 
 				}
-				else {
-					throw new \Exception( 'user not found');
-
-				}
+				else { throw new \Exceptions\InvalidAccount; }
 
 			}
 
@@ -156,6 +153,35 @@ class users extends Controller {
 	public function edit( $id = 0) {
 		if ( currentUser::isAdmin()) {
 			$this->_edit( $id, 'edit');
+
+		}
+
+	}
+
+	public function createinvoice( $id = 0) {
+		if ( currentUser::isAdmin()) {
+			$this->data = (object)[
+				'dto' => FALSE];
+
+			if ( $id) {
+				$dao = new dao\users;
+				if ( $dto = $dao->getByID( $id)) {
+					$this->data = (object)['dto' => $dto];
+
+				}
+				else { throw new \Exceptions\InvalidAccount; }
+
+				$p = new page( $this->title = 'Create Invoice');
+				$p
+					->header()
+					->title();
+
+				$p->primary();$this->load( 'blank');
+
+				$p->secondary();$this->load('index');
+
+			}
+			else { throw new \Exceptions\InvalidAccount; }
 
 		}
 

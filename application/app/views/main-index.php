@@ -9,24 +9,35 @@
 	*/ ?>
 
 <ul class="menu">
-  <li><h3>contents</h3></li>
-<?php if ( currentUser::isAdmin()) { ?>
-  <li><a href="<?php url::write('sites'); ?>">sites</a></li>
-  <li><a href="<?php url::write('guid'); ?>">guid</a></li>
-  <li>&nbsp;</li>
-  <li><h3>maintenance</h3></li>
-  <li><a href="<?php url::write('users'); ?>">users</a></li>
-  <li><a href="<?php url::write('settings'); ?>">settings</a></li>
-  <li><a href="<?php url::write('products'); ?>">products</a></li>
-  <li><a href="<?php url::write('plans'); ?>">plans</a></li>
-  <li><a href="<?php url::write('payments'); ?>">payments</a></li>
-  <li><a href="<?php url::write('invoices'); ?>">invoices</a></li>
-<?php if ( currentUser::isProgrammer()) { ?>
-  <li><a href="<?php url::write('home/dbinfo'); ?>">dbinfo</a></li>
-  <li><hr /></li>
-  <li><a href="<?php url::write('docs'); ?>">docs</a></li>
-<?php } // if currentUser::isProgrammer() ?>
+  <li><h4>contents</h4></li>
+<?php
+  if ( currentUser::isAdmin()) {
+    $tpl = '<li><a href="%s">%s</a></li>';
 
-<?php } // if currentUser::isAdmin() ?>
+    printf( $tpl, url::tostring('sites'), 'sites');
+    printf( $tpl, url::tostring('guid'), 'guid');
+
+    print '<li>&nbsp;</li>';
+    print '<li><h4>maintenance</h4></li>';
+
+    printf( $tpl, url::tostring('users'), 'users');
+    printf( $tpl, url::tostring('settings'), 'settings');
+    printf( $tpl, url::tostring('products'), 'products');
+    if ( sys::useSubscriptions()) {
+      printf( $tpl, url::tostring('plans'), 'plans');
+
+    }
+
+    printf( $tpl, url::tostring('payments'), 'payments');
+    printf( $tpl, url::tostring('invoices'), 'invoices');
+
+    if ( currentUser::isProgrammer()) {
+      printf( $tpl, url::tostring('home/dbinfo'), 'dbinfo');
+      print '<li><hr /></li>';
+      printf( $tpl, url::tostring('docs'), 'docs');
+
+    }
+
+  } ?>
 
 </ul>

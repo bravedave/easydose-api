@@ -59,8 +59,7 @@
 	}
 	else {
 		// there is no active agreement
-		$settings = new dao\settings;
-		if ( $settings->useSubscriptions()) {
+		if ( sys::useSubscriptions()) {
 			$this->load('plans');
 
 		}
