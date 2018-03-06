@@ -21,9 +21,11 @@
   <li><a href="<?php url::write('plans'); ?>">plans</a></li>
   <li><a href="<?php url::write('payments'); ?>">payments</a></li>
   <li><a href="<?php url::write('invoices'); ?>">invoices</a></li>
+<?php if ( currentUser::isProgrammer()) { ?>
   <li><a href="<?php url::write('home/dbinfo'); ?>">dbinfo</a></li>
   <li><hr /></li>
   <li><a href="<?php url::write('docs'); ?>">docs</a></li>
+<?php } // if currentUser::isProgrammer() ?>
 
 <?php } // if currentUser::isAdmin() ?>
 
