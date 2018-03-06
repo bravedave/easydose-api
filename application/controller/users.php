@@ -160,13 +160,19 @@ class users extends Controller {
 
 	public function createinvoice( $id = 0) {
 		if ( currentUser::isAdmin()) {
-			$this->data = (object)[
-				'dto' => FALSE];
 
 			if ( $id) {
+				$daoProducts = new dao\products;
+				$settings = new dao\settings;
+				$this->data = (object)[
+					'user' => FALSE,
+					'products' => $daoProducts->getDtoSet(),
+					'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),
+					'sys' => $settings->getFirst()];
+
 				$dao = new dao\users;
 				if ( $dto = $dao->getByID( $id)) {
-					$this->data = (object)['dto' => $dto];
+					$this->data->user = $dto;
 
 				}
 				else { throw new \Exceptions\InvalidAccount; }
@@ -176,7 +182,7 @@ class users extends Controller {
 					->header()
 					->title();
 
-				$p->primary();$this->load( 'blank');
+				$p->primary();$this->load( 'account/invoice-create');
 
 				$p->secondary();$this->load('index');
 

@@ -560,7 +560,7 @@ class account extends Controller {
 							->title();
 
 						$p->primary();
-							$this->load('view-invoice');
+							$this->load('invoice-view');
 
 						$p->secondary();
 							//~ $this->load('index');
@@ -594,7 +594,7 @@ class account extends Controller {
 				->title();
 
 			$p->primary();
-				$this->load('create-invoice');
+				$this->load('invoice-create');
 
 			$p->secondary();
 				//~ $this->load('index');
