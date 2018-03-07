@@ -1,0 +1,33 @@
+.text-right { text-align: right; }
+.small { font-size: .8em; }
+.m-0 { margin: 0; }
+
+.table {
+  width: 100%;
+  max-width: 100%;
+}
+.table-invoice { width: 750px; }
+
+.table th,
+.table td {
+  padding: 8px;
+  vertical-align: top;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 1px solid silver;
+}
+
+.table-sm th,
+.table-sm td {
+  padding: 4px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #fcfcfc;
+}
+
+.borderless td, .borderless th {
+  border: none;
+}

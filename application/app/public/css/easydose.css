@@ -6,3 +6,13 @@ ul.menu > li > a { display: block; }
 .borderless td, .borderless th {
     border: none;
 }
+div#easydoseLOGO { text-align: right; font-size: 8pt; font-style: italic; color: silver; padding-bottom: 8px; padding-top: 8px; }
+div#easydoseLOGO a {
+    font-size: 8pt;
+    font-style: italic;
+    display: inline-block;
+    font-weight: 700;
+    text-decoration: none;
+    color: black;
+    padding: 4px 4px 0
+}

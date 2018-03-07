@@ -10,7 +10,7 @@
 	DO NOT change this file
 	Copy it to <application>/app/views/ and modify it there
 	*/	?>
-	<nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top" role="navigation" >
+	<nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top d-print-none" role="navigation" >
 		<div class="navbar-brand">
 			<?php print $this->data->title ?>
 

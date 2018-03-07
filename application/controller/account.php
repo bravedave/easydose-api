@@ -494,6 +494,7 @@ class account extends Controller {
 	public function invoice( $id = 0) {
 		if ( $id = (int)$id) {
 
+			$send = (string)$this->getParam('send');
 			$users = new dao\users;
 			$settings = new dao\settings;
 			$dao = new dao\invoices;
@@ -514,9 +515,37 @@ class account extends Controller {
 							->header()
 							->title();
 
-						$p->primary();$this->load('invoice-view');
+						$p->primary();
+
+						$inv = new invoice( $this->data->sys, $this->data->account, $this->data->invoice);
+				    $html = $inv->render();
+						print $html;
+
+						$this->load('invoice-options');
 
 						$p->secondary();$this->load('main-index');
+
+						if ( 'yes' == $send) {
+							$mail = \sys::mailer();
+
+							// $mail->AddReplyTo( $user->email, $user->name);
+							$mail->Subject  = \config::$WEBNAME . " Invoice";
+							// $mail->AddAddress( $dto->email, $dto->name );
+							$mail->AddAddress( 'david@brayworth.com.au', 'David Bray' );
+
+							$mail->MsgHTML( $html);
+
+							if ( $mail->send()) {
+								print '<h2>Sent</h2>';
+
+							}
+							else {
+								print '<h2>Error - NOT Sent</h2>';
+								\sys::logger( 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo);
+
+							}
+
+						}
 
 					}
 					else { throw new \Exceptions\InvoiceAccount;}
