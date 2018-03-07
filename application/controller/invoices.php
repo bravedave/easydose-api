@@ -16,10 +16,77 @@ class invoices extends Controller {
   protected function postHandler() {
     $action = $this->getPost('action');
 
-    if ( 'aa' == $action) {
-    }
-    else {
-      Response::redirect( url::tostring());
+    if ( 'create invoice' == $action) {
+      if ( $user_id = (int)$this->getPost('user_id')) {
+        if ( $product_id = (int)$this->getPost('product_id')) {
+
+          $productsDAO = new dao\products;
+          $usersDAO = new dao\users;
+
+          if ( $usersDTO = $usersDAO->getByID( $user_id)) {
+
+            // sys::dump( $this->getPost());
+            if ( $productDTO = $productsDAO->getByID( $product_id)) {
+
+              $aInvoices = [
+                'user_id' => $usersDTO->id,
+                'created' => \db::dbTimeStamp(),
+                'updated' => \db::dbTimeStamp()
+              ];
+
+              $aInvoicesDetail = [];
+              $aInvoicesDetail[] = [
+                'user_id' => $usersDTO->id,
+                'invoices_id' => 0,
+                'product_id' => $productDTO->id,
+                'rate' => $productDTO->rate,
+                'created' => \db::dbTimeStamp(),
+                'updated' => \db::dbTimeStamp()
+              ];
+
+              if ( $workstation_id = (int)$this->getPost('workstation_id')) {
+                if ( $wksDTO = $productsDAO->getByID( $workstation_id)) {
+                  $aInvoicesDetail[] = [
+                    'user_id' => $usersDTO->id,
+                    'invoices_id' => 0,
+                    'product_id' => $wksDTO->id,
+                    'rate' => $wksDTO->rate,
+                    'created' => \db::dbTimeStamp(),
+                    'updated' => \db::dbTimeStamp()
+                  ];
+
+                }
+                else { throw new \Exceptions\InvalidWorkstationProduct; }
+
+              }
+
+              if ( count($aInvoicesDetail)) {
+                $dao = new dao\invoices;
+                $invID = $dao->Insert( $aInvoices);
+
+                $dao = new dao\invoices_detail;
+                foreach ($aInvoicesDetail as $line) {
+                  $line['invoices_id'] = $invID;
+                  $dao->Insert( $line);
+
+                }
+
+                Response::redirect( url::tostring('account/invoice/' . $invID), 'created invoice');
+
+              }
+              else { throw new \Exceptions\FailedToCreateInvoice; }
+
+            }
+            else { throw new \Exceptions\ProductNotFound; }
+
+          }
+          else { throw new \Exceptions\InvalidUser; }
+
+        }
+        else { throw new \Exceptions\InvalidProduct; }
+
+      }
+      else { throw new \Exceptions\MissingUserID; }
 
     }
 

@@ -59,12 +59,33 @@
             <tr>
               <td>
                 <div>
-                  <?php print currentUser::name() ?>
+                  <?php print $this->data->account->name ?>
 
                 </div>
 
                 <div>
-                  <?php print currentUser::email() ?>
+            			<?php print $this->data->account->business_name ?>
+
+            		</div>
+
+            		<div>
+            			<?php print $this->data->account->street ?>
+
+            		</div>
+
+            		<div>
+            			<?php printf( '%s, %s %s', $this->data->account->town,
+                    $this->data->account->state, $this->data->account->postcode ); ?>
+
+            		</div>
+
+            		<div>
+                  <?php printf( 'ABN: %s', $this->data->account->abn) ?>
+
+          			</div>
+
+            		<div>
+                  <?php print $this->data->account->email ?>
 
                 </div>
 

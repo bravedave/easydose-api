@@ -14,7 +14,9 @@
 	 	Ordinary Authenticated user - non admin
 
 	*/	?>
-<form class="form" method="POST" action="<?php url::write('account') ?>">
+<form class="form" method="POST" action="<?php url::write('invoices') ?>">
+  <input type="hidden" name="user_id" value="<?php print $this->data->account->id ?>" />
+  <input type="hidden" name="personal" value="<?php print $this->data->personal ?>" />
   <table class="table borderless">
     <tbody>
       <tr>
@@ -52,18 +54,23 @@
 
                 </div>
 
+                <div>
+                  <?php printf( 'BSB : %s Account : %s', $this->data->sys->bank_bsb, $this->data->sys->bank_account) ?>
+
+                </div>
+
               </td>
 
             </tr>
             <tr>
               <td>
                 <div>
-                  <?php print currentUser::name() ?>
+                  <?php print $this->data->account->name ?>
 
                 </div>
 
                 <div>
-                  <?php print currentUser::email() ?>
+                  <?php print $this->data->account->email ?>
 
                 </div>
 
@@ -252,7 +259,7 @@ $(document).ready( function() {
     $('#invoice-total-box').html( iTot.formatCurrency());
     $('#invoice-gst-box').html( (iTot/11).formatCurrency());
 
-    console.log( 'calced', iProduct, iWks);
+    // console.log( 'calced', iProduct, iWks);
 
 
   });

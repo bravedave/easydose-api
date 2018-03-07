@@ -20,8 +20,16 @@ class account extends Controller {
 			$action = $this->getPost('action');
 			if ( $action == 'update') {
 				$a = [
-					'name' => $this->getPost('name'),
-					'email' => $this->getPost('email')];
+					'name' => (string)$this->getPost('name'),
+					'email' => (string)$this->getPost('email'),
+					'business_name' => (string)$this->getPost('business_name'),
+					'street' => (string)$this->getPost('street'),
+					'town' => (string)$this->getPost('town'),
+					'state' => (string)$this->getPost('state'),
+					'postcode' => (string)$this->getPost('postcode'),
+					'abn' => (string)$this->getPost('abn')];
+
+				// sys::dump( $_POST);
 
 				$dao = new dao\users;
 				$dao->UpdateByID( $a, currentUser::id());
@@ -310,67 +318,6 @@ class account extends Controller {
 				else { throw new \Exceptions\InvoiceNotFound;}
 
 			}
-			elseif ( $action == 'create invoice') {
-				// sys::dump( $this->getPost());
-				if ( $product_id = (int)$this->getPost('product_id')) {
-					$dao = new dao\products;
-					if ( $dto = $dao->getByID( $product_id)) {
-
-						$aInvoices = [
-							'user_id' => currentUser::id(),
-							'created' => \db::dbTimeStamp(),
-							'updated' => \db::dbTimeStamp()
-						];
-
-						$aInvoicesDetail = [];
-						$aInvoicesDetail[] = [
-							'user_id' => currentUser::id(),
-							'invoices_id' => 0,
-							'product_id' => $dto->id,
-							'rate' => $dto->rate,
-							'created' => \db::dbTimeStamp(),
-							'updated' => \db::dbTimeStamp()
-						];
-
-						if ( $workstation_id = (int)$this->getPost('workstation_id')) {
-							if ( $dto = $dao->getByID( $workstation_id)) {
-								$aInvoicesDetail[] = [
-									'user_id' => currentUser::id(),
-									'invoices_id' => 0,
-									'product_id' => $dto->id,
-									'rate' => $dto->rate,
-									'created' => \db::dbTimeStamp(),
-									'updated' => \db::dbTimeStamp()
-								];
-
-							}
-							else { Response::redirect( url::tostring('account/createinvoice/'), 'Invalid workstation product'); }
-
-						}
-
-						if ( count($aInvoicesDetail)) {
-							$dao = new dao\invoices;
-							$invID = $dao->Insert( $aInvoices);
-
-							$dao = new dao\invoices_detail;
-							foreach ($aInvoicesDetail as $line) {
-								$line['invoices_id'] = $invID;
-								$dao->Insert( $line);
-
-							}
-
-							Response::redirect( url::tostring('account/invoice/' . $invID), 'created invoice');
-
-						}
-						else { Response::redirect( url::tostring('account/'), 'failed to create invoice'); }
-
-					}
-					else { Response::redirect( url::tostring('account/invoice/'), 'Invalid product'); }
-
-				}
-				else { Response::redirect( url::tostring('account/invoice/'), 'Invalid product'); }
-
-			}
 			else { new \Exception( $action); }
 
 		}
@@ -506,7 +453,11 @@ class account extends Controller {
 		$daoAgreements = new dao\agreements;
 		$daoInvoices = new dao\invoices;
 		$daoGuid = new dao\guid;
+		$daoLicense = new dao\license;
+	 	$users = new dao\users;
+
 		$this->data = (object)[
+			'account' => $users->getByID( currentUser::id()),
 			'plans' => $daoPlans->getActivePlans(),
 			'plansWKS' => $daoPlans->getActivePlans( $type = "WKS"),
 			'products' => $daoProducts->getDtoSet(),
@@ -517,7 +468,6 @@ class account extends Controller {
 			'license' => FALSE
 			];
 
-		$daoLicense = new dao\license;
 		$this->data->license = $daoLicense->getLicense();
 
 		// sys::dump( $this->data);
@@ -543,29 +493,33 @@ class account extends Controller {
 
 	public function invoice( $id = 0) {
 		if ( $id = (int)$id) {
+
+			$users = new dao\users;
 			$settings = new dao\settings;
 			$dao = new dao\invoices;
+
 			if ( $inv = $dao->getByID( $id)) {
 				if ( currentUser::isAdmin() || $inv->user_id == currentUser::id()) {
-					$this->data = (object)[
-						'invoice' => $dao->getInvoice( $inv),
-						'sys' => $settings->getFirst()
-					];
+					if ( $account = $users->getByID( $inv->user_id)) {
+						$this->data = (object)[
+							'invoice' => $dao->getInvoice( $inv),
+							'account' => $account,
+							'sys' => $settings->getFirst()
+						];
 
-				//	sys::dump( $this->data);
+						//	sys::dump( $this->data);
 
-					$p = new page( $this->title = 'View Invoice');
+						$p = new page( $this->title = 'View Invoice');
 						$p
 							->header()
 							->title();
 
-						$p->primary();
-							$this->load('invoice-view');
+						$p->primary();$this->load('invoice-view');
 
-						$p->secondary();
-							//~ $this->load('index');
-							$this->load('main-index');
+						$p->secondary();$this->load('main-index');
 
+					}
+					else { throw new \Exceptions\InvoiceAccount;}
 
 				}
 				else { throw new \Exceptions\InvoiceAccessViolation;}
@@ -582,9 +536,11 @@ class account extends Controller {
 		$daoProducts = new dao\products;
 		$settings = new dao\settings;
 		$this->data = (object)[
+			'account' => currentUser::user(),
 			'products' => $daoProducts->getDtoSet(),
 			'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),
-			'sys' => $settings->getFirst()
+			'sys' => $settings->getFirst(),
+			'personal' => '1',
 
 		];
 

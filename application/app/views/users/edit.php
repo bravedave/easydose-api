@@ -43,6 +43,60 @@
 
 		</div>
 
+		<div class="row py-1">
+			<div class="col col-3">Business Name</div>
+			<div class="col col-9">
+				<input type="text" name="business_name" class="form-control" placeholder="business name"
+				 	value="<?php print $this->data->dto->business_name ?>" />
+
+			</div>
+
+		</div>
+
+		<div class="row py-1">
+			<div class="col col-3">Address</div>
+			<div class="col col-9">
+				<input type="text" name="street" class="form-control" placeholder="street"
+					autocomplete="address-line1" value="<?php print $this->data->dto->street ?>" />
+
+			</div>
+
+		</div>
+
+		<div class="row py-1">
+			<div class="offset-3 col-9">
+				<input type="text" name="town" class="form-control" placeholder="town"
+					autocomplete="address-level2" value="<?php print $this->data->dto->town ?>" />
+
+			</div>
+
+		</div>
+
+		<div class="row py-1">
+			<div class="offset-3 col-5">
+				<input type="text" name="state" class="form-control" placeholder="state"
+				 	autocomplete="address-level3" value="<?php print $this->data->dto->state ?>" />
+
+			</div>
+
+			<div class="col-4">
+				<input type="text" name="postcode" class="form-control" placeholder="postcode"
+				 	autocomplete="postal-code" value="<?php print $this->data->dto->postcode ?>" />
+
+			</div>
+
+		</div>
+
+		<div class="row py-1">
+			<div class="col-3">ABN</div>
+			<div class="col-9">
+				<input type="text" name="abn" class="form-control"
+				 	placeholder="ABN" value="<?php print $this->data->dto->abn ?>" />
+
+			</div>
+
+		</div>
+
 		<div class="row form-group">
 			<div class="col offset-3 col-8 form-check">
 				<label class="form-check-label">

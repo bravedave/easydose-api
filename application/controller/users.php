@@ -21,9 +21,15 @@ class users extends Controller {
 
 			$a = [
 				'updated' => db::dbTimeStamp(),
-				'name' => $this->getPost('name'),
-				'email' => $this->getPost('email'),
-				'admin' => (int)$this->getPost('admin')];
+				'name' => (string)$this->getPost('name'),
+				'email' => (string)$this->getPost('email'),
+				'admin' => (int)$this->getPost('admin'),
+				'business_name' => (string)$this->getPost('business_name'),
+				'street' => (string)$this->getPost('street'),
+				'town' => (string)$this->getPost('town'),
+				'state' => (string)$this->getPost('state'),
+				'postcode' => (string)$this->getPost('postcode'),
+				'abn' => (string)$this->getPost('abn')];
 
 			if ( $pass = $this->getPost('pass')) {
 				$a['pass'] = password_hash( $pass, PASSWORD_DEFAULT);
@@ -162,29 +168,31 @@ class users extends Controller {
 		if ( currentUser::isAdmin()) {
 
 			if ( $id) {
-				$daoProducts = new dao\products;
-				$settings = new dao\settings;
-				$this->data = (object)[
-					'user' => FALSE,
-					'products' => $daoProducts->getDtoSet(),
-					'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),
-					'sys' => $settings->getFirst()];
 
 				$dao = new dao\users;
 				if ( $dto = $dao->getByID( $id)) {
-					$this->data->user = $dto;
+
+					$daoProducts = new dao\products;
+					$settings = new dao\settings;
+
+					$this->data = (object)[
+						'account' => $dto,
+						'products' => $daoProducts->getDtoSet(),
+						'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),
+						'sys' => $settings->getFirst(),
+						'personal' => '0'];
+
+					$p = new page( $this->title = 'Create Invoice');
+					$p
+						->header()
+						->title();
+
+					$p->primary();$this->load( 'account/invoice-create');
+
+					$p->secondary();$this->load('index');
 
 				}
 				else { throw new \Exceptions\InvalidAccount; }
-
-				$p = new page( $this->title = 'Create Invoice');
-				$p
-					->header()
-					->title();
-
-				$p->primary();$this->load( 'account/invoice-create');
-
-				$p->secondary();$this->load('index');
 
 			}
 			else { throw new \Exceptions\InvalidAccount; }
