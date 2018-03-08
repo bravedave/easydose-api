@@ -38,8 +38,7 @@ class invoice {
 
     $td->appendChild( new html\div( $this->sys->name));
     $td->appendChild( new html\div( $this->sys->street));
-    $td->appendChild( new html\div( $this->sys->town));
-    $td->appendChild( new html\div( sprintf( '%s %s', $this->sys->state, $this->sys->postcode)));
+    $td->appendChild( new html\div( sprintf( '%s, %s %s', $this->sys->town, $this->sys->state, $this->sys->postcode)));
     $td->appendChild( new html\div( sprintf('ABN: %s', $this->sys->abn)));
 
     $tr = $thead->tr();
@@ -52,11 +51,12 @@ class invoice {
     $td->appendChild( new html\div( sprintf( '%s, %s %s', $this->account->town,
                       $this->account->state, $this->account->postcode )));
     $td->appendChild( new html\div( sprintf('ABN: %s', $this->account->abn)));
-    $td->appendChild( new html\div( $this->account->email));
 
     $tr = $thead->tr();
-    $tr->td( new html\div( sprintf('Invoice Number: # %s', $this->invoice->id)));
-    $tr->td( new html\div( sprintf('Invoice Date: # %s', date( \config::$DATE_FORMAT, strtotime($this->invoice->created)))));
+    $tr->td( new html\div( sprintf('Invoice Number: # %s', $this->invoice->id)),
+      [ 'style' => 'border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;']);
+    $tr->td( new html\div( sprintf('Invoice Date: %s', strings::asLocalDate( $this->invoice->created))),
+      [ 'style' => 'border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;']);
 
     /*-- ---[ body of invoice ]---
     +--------------------+----------+----------+
@@ -69,7 +69,7 @@ class invoice {
     +--------------------+----------+----------+
     --*/
 
-    $tbody = new html\table("table borderless");
+    $tbody = new html\table("table");
     $tr = $tbody->head()->tr();
     $tr->td('Description');
     $tr->td('Rate',['class' => 'text-right']);
@@ -84,7 +84,7 @@ class invoice {
     }	// foreach ( $this->invoice->lines as $dto)
 
     $tr = $tbody->tr();
-    $tr->td( '<strong>Total:</strong>',[ 'style' => 'border-top: 6px double #dee2e6;']);
+    $tr->td( '<strong>Total:</strong>', [ 'style' => 'border-top: 6px double #dee2e6;']);
     $tr->td( sprintf( '<strong>%s</strong>', number_format( $this->invoice->total, 2)),
       [ 'style' => 'border-top: 6px double #dee2e6;', 'class' => 'text-right']);
     $tr->td( '&nbsp;',[ 'style' => 'border-top: 6px double #dee2e6;']);
@@ -101,16 +101,27 @@ class invoice {
     --*/
     $tfoot = new html\table("table borderless");
     $tr = $tfoot->tr();
+    $td = $tr->td( sprintf('<div>
+          <strong>Banking</strong>
+
+          %s BSB: %s Account: %s
+
+        </div>',
+        $this->sys->bank_name,
+        $this->sys->bank_bsb,
+         $this->sys->bank_account));
+
+    $tr = $tfoot->tr();
     $td = $tr->td('<div>
-          <strong>year</strong>
+        <strong>year</strong>
 
-        </div>
+      </div>
 
-        <p>
-          Products with a term of <em>year</em> are valid 1 year from the payment date.
-          Where the product is an extension, the product will be valid 1 year from the
-          expiry date of the product
-        </p>', ['class' => 'small']);
+      <p>
+        Products with a term of <em>year</em> are valid 1 year from the
+        payment date. Where the product is an extension, the product will
+        be valid 1 year from the expiry date of the product</p>',
+      ['class' => 'small']);
 
     $ret = new html\table("table borderless table-invoice");
     $ret->tr()->td( $thead);

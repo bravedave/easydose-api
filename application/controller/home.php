@@ -145,6 +145,30 @@ class home extends Controller {
 
 	}
 
+	public function phpinfo() {
+		if ( $this->firstRun || currentUser::isAdmin()) {
+			phpinfo();
+
+		}
+		else {
+			$this->_index();
+
+		}
+
+	}
+
+	public function mailtest() {
+		if ( $this->firstRun || currentUser::isAdmin()) {
+			sys::mailtest();
+
+		}
+		else {
+			$this->_index();
+
+		}
+
+	}
+
 	public function edjs() {
 				//~ 'debug' => TRUE,
 			jslib::viewjs([

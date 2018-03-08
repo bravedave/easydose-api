@@ -57,7 +57,8 @@
 	<div class="form-group row py-1">
 		<label class="col-3" for="ABN">ABN</label>
 		<div class="col-3">
-			<input type="text" name="abn" id="ABN" class="form-control" placeholder="00 000 000 000"
+			<input type="text" name="abn" id="ABN" class="form-control"
+			 	placeholder="00 000 000 000"
 				value="<?php print $this->data->abn ?>" />
 
 		</div>
@@ -65,14 +66,32 @@
 	</div>
 
 	<div class="form-group row py-1">
-		<label class="col-3" for="BSB">Banking<br />BSB/Account</label>
-		<div class="col-3">
+		<label class="col-3" for="invoice_email">Invoice Email</label>
+		<div class="col-9">
+			<input type="text" name="invoice_email" id="invoice_email" class="form-control"
+				placeholder="@"
+				autocomplete="email"
+				value="<?php print $this->data->invoice_email ?>" />
+
+		</div>
+
+	</div>
+
+	<div class="form-group row py-1">
+		<label class="col-3" for="bank_name">Banking</label>
+		<div class="col-4">
+			<input type="text" name="bank_name" id="BSB" class="form-control" placeholder="Bank Name"
+				value="<?php print $this->data->bank_name ?>" />
+
+		</div>
+
+		<div class="col-2">
 			<input type="text" name="bank_bsb" id="BSB" class="form-control" placeholder="000 000"
 				value="<?php print $this->data->bank_bsb ?>" />
 
 		</div>
 
-		<div class="col-4">
+		<div class="col-3">
 			<input type="text" name="bank_account" class="form-control" placeholder="00000 0000"
 				value="<?php print $this->data->bank_account ?>" />
 

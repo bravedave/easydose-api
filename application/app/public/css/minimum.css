@@ -8,19 +8,27 @@
 }
 .table-invoice { width: 750px; }
 
-.table th,
-.table td {
+.table thead > tr > th,
+.table thead > tr > td,
+.table tbody > tr > th,
+.table tbody > tr > td {
   padding: 8px;
   vertical-align: top;
 }
 
-.table thead th {
+.table > thead > tr > th {
   vertical-align: bottom;
   border-bottom: 1px solid silver;
 }
 
-.table-sm th,
-.table-sm td {
+.table-invoice thead > tr > th,
+.table-invoice thead > tr > td,
+.table-invoice tbody > tr > th,
+.table-invoice tbody > tr > td,
+.table-sm thead > tr > th,
+.table-sm thead > tr > td,
+.table-sm tbody > tr > th,
+.table-sm tbody > tr > td {
   padding: 4px;
 }
 
@@ -28,6 +36,9 @@
   background-color: #fcfcfc;
 }
 
-.borderless td, .borderless th {
+.borderless > thead > tr > th,
+.borderless > thead > tr > td,
+.borderless > tbody > tr > th,
+.borderless > tbody > tr > td {
   border: none;
 }

@@ -74,6 +74,14 @@ abstract class strings extends dvc\strings {
 
   }
 
+  static function asLocalDate( $date) {
+		if ( $time = strtotime( $date))
+			return ( date( config::$DATE_FORMAT, $time));
+
+		return FALSE;
+
+	}
+
   static function asShortDateTime( $date) {
 		if ( (string)$date == '0000-00-00')
 			return ( FALSE);

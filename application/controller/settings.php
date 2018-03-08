@@ -14,14 +14,16 @@ class settings extends Controller {
 
 		if ( $action == 'update') {
 			$a = [
-				'name' => $this->getPost( 'name'),
-				'street' => $this->getPost('street'),
-				'town' => $this->getPost('town'),
-				'state' => $this->getPost('state'),
-				'postcode' => $this->getPost('postcode'),
-				'bank_bsb' => $this->getPost('bank_bsb'),
-				'bank_account' => $this->getPost('bank_account'),
-				'abn' => $this->getPost('abn')
+				'name' => (string)$this->getPost( 'name'),
+				'street' => (string)$this->getPost('street'),
+				'town' => (string)$this->getPost('town'),
+				'state' => (string)$this->getPost('state'),
+				'postcode' => (string)$this->getPost('postcode'),
+				'bank_name' => (string)$this->getPost('bank_name'),
+				'bank_bsb' => (string)$this->getPost('bank_bsb'),
+				'bank_account' => (string)$this->getPost('bank_account'),
+				'abn' => (string)$this->getPost('abn'),
+				'invoice_email' => (string)$this->getPost('invoice_email')
 			];
 
 			if ( currentUser::isProgrammer()) {

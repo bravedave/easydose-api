@@ -3,8 +3,13 @@ table.table > thead > tr > td { vertical-align: bottom; }
 ul.menu { background-color: inherit; }
 ul.menu > li > a { display: block; }
 
-.borderless td, .borderless th {
-    border: none;
+.borderless > tr > th,
+.borderless > tr > td,
+.borderless > thead > tr > th,
+.borderless > thead > tr > td,
+.borderless > tbody > tr > th,
+.borderless > tbody > tr > td {
+  border: none;
 }
 div#easydoseLOGO { text-align: right; font-size: 8pt; font-style: italic; color: silver; padding-bottom: 8px; padding-top: 8px; }
 div#easydoseLOGO a {

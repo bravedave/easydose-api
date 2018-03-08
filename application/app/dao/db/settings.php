@@ -20,8 +20,10 @@ $dbc->defineField( 'town', 'text');
 $dbc->defineField( 'state', 'text');
 $dbc->defineField( 'postcode', 'text');
 $dbc->defineField( 'use_subscription', 'int');
+$dbc->defineField( 'bank_name', 'text');
 $dbc->defineField( 'bank_bsb', 'text');
 $dbc->defineField( 'bank_account', 'text');
+$dbc->defineField( 'invoice_email', 'text');
 $dbc->defineField( 'abn', 'text');
 $dbc->check();
 

@@ -528,7 +528,11 @@ class account extends Controller {
 						if ( 'yes' == $send) {
 							$mail = \sys::mailer();
 
-							// $mail->AddReplyTo( $user->email, $user->name);
+							if ( strings::IsEmailAddress( $this->data->sys->invoice_email)) {
+								$mail->SetFrom( $this->data->sys->invoice_email, \config::$WEBNAME);
+
+							}
+
 							$mail->Subject  = \config::$WEBNAME . " Invoice";
 							// $mail->AddAddress( $dto->email, $dto->name );
 							$mail->AddAddress( 'david@brayworth.com.au', 'David Bray' );
