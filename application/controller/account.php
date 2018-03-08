@@ -534,8 +534,8 @@ class account extends Controller {
 							}
 
 							$mail->Subject  = \config::$WEBNAME . " Invoice";
-							// $mail->AddAddress( $dto->email, $dto->name );
-							$mail->AddAddress( 'david@brayworth.com.au', 'David Bray' );
+							$mail->AddAddress( $dto->email, $dto->name );
+							// $mail->AddAddress( 'david@brayworth.com.au', 'David Bray' );
 
 							$mail->MsgHTML( $html);
 
