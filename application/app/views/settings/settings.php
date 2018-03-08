@@ -31,7 +31,7 @@
 	</div>
 
 	<div class="form-group row py-0">
-		<div class="offset-3 col-6">
+		<div class="offset-3 col-5">
 			<input type="text" name="town" class="form-control" placeholder="town / suburb" autocomplete="address-level2"
 				value="<?php print $this->data->town ?>" />
 
@@ -40,15 +40,25 @@
 	</div>
 
 	<div class="form-group row pb-1">
-		<div class="offset-3 col-6">
+		<div class="offset-3 col-3">
 			<input type="text" name="state" class="form-control" placeholder="state" autocomplete="address-level3"
 				value="<?php print $this->data->state ?>" />
 
 		</div>
 
-		<div class="col-3">
+		<div class="col-2">
 			<input type="text" name="postcode" class="form-control" placeholder="postcode" autocomplete="postal-code"
 				value="<?php print $this->data->postcode ?>" />
+
+		</div>
+
+	</div>
+
+	<div class="form-group row py-1">
+		<label class="col-3" for="ABN">ABN</label>
+		<div class="col-3">
+			<input type="text" name="abn" id="ABN" class="form-control" placeholder="00 000 000 000"
+				value="<?php print $this->data->abn ?>" />
 
 		</div>
 

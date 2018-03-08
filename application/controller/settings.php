@@ -20,7 +20,8 @@ class settings extends Controller {
 				'state' => $this->getPost('state'),
 				'postcode' => $this->getPost('postcode'),
 				'bank_bsb' => $this->getPost('bank_bsb'),
-				'bank_account' => $this->getPost('bank_account')
+				'bank_account' => $this->getPost('bank_account'),
+				'abn' => $this->getPost('abn')
 			];
 
 			if ( currentUser::isProgrammer()) {
