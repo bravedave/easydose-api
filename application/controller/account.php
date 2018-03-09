@@ -508,7 +508,7 @@ class account extends Controller {
 							'sys' => $settings->getFirst()
 						];
 
-						//	sys::dump( $this->data);
+						// sys::dump( $this->data);
 
 						$p = new page( $this->title = 'View Invoice');
 						$p

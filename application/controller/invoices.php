@@ -89,6 +89,22 @@ class invoices extends Controller {
       else { throw new \Exceptions\MissingUserID; }
 
     }
+    elseif ( 'update-expires' == $action) {
+      if ( currentUser::isAdmin()) {
+        if ( $id = (int)$this->getPost('invoice_id')) {
+          $a = [ 'expires' => $this->getPost('expires')];
+          $dao = new dao\invoices;
+          $dao->UpdateByID( $a, $id);
+
+          \Json::ack( $action);
+
+        }
+        else { \Json::nak( $action); }
+
+      }
+      else { \Json::nak( $action); }
+
+    }
 
   }
 

@@ -52,11 +52,20 @@ class invoice {
                       $this->account->state, $this->account->postcode )));
     $td->appendChild( new html\div( sprintf('ABN: %s', $this->account->abn)));
 
-    $tr = $thead->tr();
+    /*--- ---[ headline ]--- ---*/
+    $headline = new html\table("table table-sm borderless m-0");
+
+    $tr = $headline->tr();
     $tr->td( new html\div( sprintf('Invoice Number: # %s', $this->invoice->id)),
-      [ 'style' => 'border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;']);
+      [ 'class' => 'bx-1', 'style' => 'width: 33%;']);
     $tr->td( new html\div( sprintf('Invoice Date: %s', strings::asLocalDate( $this->invoice->created))),
-      [ 'style' => 'border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6;']);
+      [ 'class' => 'bx-1 text-center', 'style' => 'width: 33%;']);
+    $tr->td( new html\div( sprintf('Expires: %s', strings::asLocalDate( $this->invoice->expires))),
+      [ 'class' => 'bx-1 text-right', 'style' => 'width: 33%;']);
+
+    $tr = $thead->tr();
+    $td = $tr->td( $headline, ['colspan' => '2', 'style' => 'padding: 0;' ]);
+    /*--- ---[ headline ]--- ---*/
 
     /*-- ---[ body of invoice ]---
     +--------------------+----------+----------+
@@ -73,13 +82,16 @@ class invoice {
     $tr = $tbody->head()->tr();
     $tr->td('Description');
     $tr->td('Rate',['class' => 'text-right']);
-    $tr->td('Term',['class' => 'text-right']);
+    $tr->td('Valid To',['class' => 'text-center']);
 
     foreach ( $this->invoice->lines as $dto) {
+      $validTo = $this->invoice->expires;
+
       $tr = $tbody->tr();
       $tr->td( sprintf( '%s<br />%s', $dto->name, $dto->description));
       $tr->td( number_format( $dto->rate, 2), ['class' => 'text-right']);
-      $tr->td($dto->term, ['class' => 'text-right']);
+      // $tr->td( strings::asLocalDate( $validFrom), ['class' => 'text-center']);
+      $tr->td( strings::asLocalDate( $validTo), ['class' => 'text-center']);
 
     }	// foreach ( $this->invoice->lines as $dto)
 

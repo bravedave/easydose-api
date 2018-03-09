@@ -22,6 +22,9 @@
         <input type="submit" name="action" class="btn btn-primary" value="pay invoice" />
 
       <?php } ?>
+      <?php if ( currentUser::isAdmin()) {  ?>
+        <a href="#" class="btn btn-default" id="change-expiry">change expiry</a>
+      <?php } ?>
       <a href="<?php url::write( sprintf( 'account/invoice/%s?send=yes', $this->data->invoice->id )) ?>" class="btn btn-default">send invoice</a>
 
 
@@ -30,3 +33,49 @@
   </div>
 
 </div>
+<?php if ( currentUser::isAdmin()) {  ?>
+<script>
+$(document).ready( function() {
+  $('#change-expiry').on( 'click', function( e) {
+      var fld = $('<input type="date" class="form-control" value="<?php print $this->data->invoice->expires ?>" />')
+      _brayworth_.modal({
+        title : 'change expiry date',
+        text : fld,
+        width : 300,
+        buttons : {
+          update : function() {
+            hourglass.on();
+            $(this).modal('close');
+
+            _brayworth_.post({
+              url : _brayworth_.url('invoices'),
+              data : {
+                action : 'update-expires',
+                invoice_id : <?php print $this->data->invoice->id ?>,
+                expires : fld.val()
+
+              }
+
+            })
+            .then( function( d) {
+                _brayworth_.growl(d).then( function() {
+                  window.location.reload();
+                  hourglass.off();
+
+                });
+
+            })
+
+          }
+
+        }
+
+      })
+
+      $(this).blur();
+
+  });
+
+});
+</script>
+<?php } ?>

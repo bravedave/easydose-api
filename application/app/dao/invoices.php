@@ -28,6 +28,12 @@ class invoices extends _dao {
 			$dto->total = $tot;
 			$dto->tax = $tot / \config::tax_rate_devisor;
 
+			if ( !$dto->expires) {
+				$created = strtotime( $dto->created);
+				$dto->expires = date( 'Y-m-d', strtotime( '+1 year', $created));
+
+			}
+
 		}
 
 		return ( $dto);

@@ -14,6 +14,8 @@ class invoices extends _dto {
   var
     $lines = [],
     $total = 0,
-    $tax = 0;
+    $tax = 0,
+    $created = '',
+    $expires = '';
 
 }
