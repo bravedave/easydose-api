@@ -12,6 +12,9 @@ Namespace dvc\sqlite;
 
 $dbc = new dbCheck( $this->db, 'invoices' );
 $dbc->defineField( 'state', 'text');
+$dbc->defineField( 'state_change', 'text');
+$dbc->defineField( 'state_changed', 'text');
+$dbc->defineField( 'state_changed_by', 'text');
 $dbc->defineField( 'cart', 'text');
 $dbc->defineField( 'user_id', 'text');
 $dbc->defineField( 'created', 'text');

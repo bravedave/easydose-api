@@ -57,11 +57,13 @@ class invoice {
 
     $tr = $headline->tr();
     $tr->td( new html\div( sprintf('Invoice Number: # %s', $this->invoice->id)),
-      [ 'class' => 'bx-1', 'style' => 'width: 33%;']);
+      [ 'class' => 'bx-1', 'style' => 'width: 25%;']);
+    $tr->td( new html\div( sprintf('Status: %s', ( $this->invoice->state == 'approved' ? 'paid' : 'not paid'))),
+      [ 'class' => 'bx-1', 'style' => 'width: 25%;']);
     $tr->td( new html\div( sprintf('Invoice Date: %s', strings::asLocalDate( $this->invoice->created))),
-      [ 'class' => 'bx-1 text-center', 'style' => 'width: 33%;']);
+      [ 'class' => 'bx-1 text-center', 'style' => 'width: 25%;']);
     $tr->td( new html\div( sprintf('Expires: %s', strings::asLocalDate( $this->invoice->expires))),
-      [ 'class' => 'bx-1 text-right', 'style' => 'width: 33%;']);
+      [ 'class' => 'bx-1 text-right', 'style' => 'width: 25%;']);
 
     $tr = $thead->tr();
     $td = $tr->td( $headline, ['colspan' => '2', 'style' => 'padding: 0;' ]);

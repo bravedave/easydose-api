@@ -18,7 +18,15 @@
   <div class="col">
     <form class="form" method="POST" action="<?php url::write('account') ?>">
       <input type="hidden" name="id" value="<?php print $this->data->invoice->id ?>" />
-      <?php if ( currentUser::id() == $this->data->invoice->user_id) {  ?>
+
+      <?php
+       if (
+
+        $this->data->invoice->state != 'approved' &&
+        currentUser::id() == $this->data->invoice->user_id
+
+        ) {  ?>
+
         <input type="submit" name="action" class="btn btn-primary" value="pay invoice" />
 
       <?php } ?>
@@ -26,10 +34,18 @@
       <?php if ( currentUser::isAdmin()) {  ?>
         <a href="#" class="btn btn-default" id="change-expiry">change expiry</a>
 
+        <?php if ( $this->data->invoice->state != 'approved') {  ?>
+          <a href="#" class="btn btn-default" id="change-state">change status</a>
+
+        <?php } ?>
+
       <?php } ?>
 
-      <a href="<?php url::write( sprintf( 'account/invoice/%s?send=yes', $this->data->invoice->id )) ?>" class="btn btn-default">send invoice</a>
+      <?php if ( $this->data->invoice->state != 'approved') {  ?>
+        <a href="<?php url::write( sprintf( 'account/invoice/%s?send=yes', $this->data->invoice->id )) ?>" class="btn btn-default">send invoice</a>
 
+      <?php } ?>
+      
       <?php if ( currentUser::isAdmin()) {  ?>
         <a href="<?php url::write( sprintf( 'users/view/%s', $this->data->invoice->user_id )) ?>" class="btn btn-default">account</a>
 
@@ -60,6 +76,49 @@ $(document).ready( function() {
                 action : 'update-expires',
                 invoice_id : <?php print $this->data->invoice->id ?>,
                 expires : fld.val()
+
+              }
+
+            })
+            .then( function( d) {
+                _brayworth_.growl(d).then( function() {
+                  window.location.reload();
+                  hourglass.off();
+
+                });
+
+            })
+
+          }
+
+        }
+
+      })
+
+      $(this).blur();
+
+  });
+
+  $('#change-state').on( 'click', function( e) {
+      var fld = $('<select class="form-control"></select>');
+      $('<option></option>').appendTo( fld);
+      $('<option value="approved">approved</option>').appendTo( fld);
+
+      _brayworth_.modal({
+        title : 'change invoice state',
+        text : fld,
+        width : 300,
+        buttons : {
+          update : function() {
+            hourglass.on();
+            $(this).modal('close');
+
+            _brayworth_.post({
+              url : _brayworth_.url('invoices'),
+              data : {
+                action : 'update-state',
+                invoice_id : <?php print $this->data->invoice->id ?>,
+                state : fld.val()
 
               }
 
