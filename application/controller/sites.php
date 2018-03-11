@@ -37,12 +37,9 @@ class sites extends Controller {
       				->header()
       				->title();
 
-      			$p->primary();
-      				$this->load('view');
+      			$p->primary(); $this->load('view');
 
-      			$p->secondary();
-      				//~ $this->load('index');
-      				$this->load('main-index');
+      			$p->secondary(); $this->load('main-index');
 
 
         }
@@ -75,10 +72,10 @@ class sites extends Controller {
   				->header()
   				->title();
 
-  			$p->primary();
+        $p->primary('col-sm-8 col-md-10 pt-3 pb-4');
   				$this->load('list');
 
-  			$p->secondary();
+        $p->secondary('col-sm-4 col-md-2 pt-3 pb-4 bg-light d-print-none');
   				//~ $this->load('index');
   				$this->load('main-index');
 
