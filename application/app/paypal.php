@@ -320,7 +320,7 @@ abstract class paypal {
 
 		}
 		catch ( Exception $ex) {
-			//~ sys::dump( $ex);
+			// sys::dump( $ex);
 			sys::logger( $ex->getMessage());
 
 			echo $ex->getCode();
@@ -353,7 +353,7 @@ abstract class paypal {
 
 			}
 			catch ( Exception $ex) {
-				//~ sys::dump( $ex);
+				// sys::dump( $ex);
 				sys::logger( $ex->getMessage());
 				throw new \Exceptions\Paypal( 'could not execute payment');
 

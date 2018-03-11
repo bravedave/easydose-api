@@ -115,17 +115,17 @@ class users extends Controller {
 
 	}
 
-	protected function _edit( $id = 0, $view = 'view') {
+	protected function _edit( $id = 0, $readonly = FALSE) {
 		if ( currentUser::isAdmin()) {
 			$this->data = (object)[
 				'dto' => (object)[
-				'id' => 0,
-				'username' => '',
-				'name' => '',
-				'email' => '',
-				'admin' => 0]];
+					'id' => 0,
+					'username' => '',
+					'name' => '',
+					'email' => '',
+					'admin' => 0]];
 
-			if ( $id) {
+			if ( $id = (int)$id) {
 				$dao = new dao\users;
 				if ( $dto = $dao->getByID( $id)) {
 					$this->data = (object)['dto' => $dto];
@@ -135,12 +135,21 @@ class users extends Controller {
 
 			}
 
+			$this->data->readonly = $readonly;
+			if ( $readonly) {
+				$dao = new dao\license;
+				$this->data->license = $dao->getLicense( $id);
+				$dao = new dao\invoices;
+				$this->data->invoices = $dao->getForUser( $id);
+
+			}
+
 			$p = new page( $this->title = 'User');
 			$p
 				->header()
 				->title();
 
-			$p->primary();$this->load( $view);
+			$p->primary();$this->load( 'edit');
 
 			$p->secondary();$this->load('index');
 
@@ -150,7 +159,7 @@ class users extends Controller {
 
 	public function view( $id = 0) {
 		if ( currentUser::isAdmin()) {
-			$this->_edit( $id, 'view');
+			$this->_edit( $id, $readonly = TRUE);
 
 		}
 
@@ -158,7 +167,7 @@ class users extends Controller {
 
 	public function edit( $id = 0) {
 		if ( currentUser::isAdmin()) {
-			$this->_edit( $id, 'edit');
+			$this->_edit( $id, $readonly = FALSE);
 
 		}
 

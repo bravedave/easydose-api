@@ -1,5 +1,6 @@
 application/data/
-application/controller/.bak/user.php
+application/controller/.bak/
+application/app/.bak/
 vendor/
 *.lock
 application/app/public/css/dvc-4.min.css

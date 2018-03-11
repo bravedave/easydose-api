@@ -22,11 +22,18 @@
         <input type="submit" name="action" class="btn btn-primary" value="pay invoice" />
 
       <?php } ?>
+
       <?php if ( currentUser::isAdmin()) {  ?>
         <a href="#" class="btn btn-default" id="change-expiry">change expiry</a>
+
       <?php } ?>
+
       <a href="<?php url::write( sprintf( 'account/invoice/%s?send=yes', $this->data->invoice->id )) ?>" class="btn btn-default">send invoice</a>
 
+      <?php if ( currentUser::isAdmin()) {  ?>
+        <a href="<?php url::write( sprintf( 'users/view/%s', $this->data->invoice->user_id )) ?>" class="btn btn-default">account</a>
+
+      <?php } ?>
 
     </form>
 

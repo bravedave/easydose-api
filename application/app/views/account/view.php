@@ -64,6 +64,6 @@
 
 		}
 
-		$this->load('products');
+		$this->load('products-buy');
 
 	}
