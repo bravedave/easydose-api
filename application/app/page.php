@@ -17,4 +17,20 @@ class page extends dvc\pages\bootstrap {
 
   }
 
+  public function primary10( $class = NULL) {
+    if ( is_null( $class))
+      $class =  'col-sm-8 col-md-10 pt-3 pb-4';
+
+    return ( parent::primary( $class));	// chain
+
+  }
+
+  public function secondary2( $class = NULL) {
+    if ( is_null( $class))
+      $class =  'col-sm-4 col-md-2 pt-3 pb-4 bg-light d-print-none';
+
+    return ( parent::secondary( $class));	// chain
+
+  }
+
 }
