@@ -211,9 +211,9 @@
             <td>
               <select class="form-control" name="grace_product">
                 <option></option>
-                <option value="easydose5" <?php if ( 'easydose5' == $this->data->dto->grace_product) print "selected"; ?>>easydose5</option>
-                <option value="easydose10" <?php if ( 'easydose10' == $this->data->dto->grace_product) print "selected"; ?>>easydose10</option>
-                <option value="easydoseOPEN" <?php if ( 'easydoseOPEN' == $this->data->dto->grace_product) print "selected"; ?>>easydoseOPEN</option>
+                <option value="easydose5" <?php if ( 'easydose5' == (string)$this->data->dto->grace_product) print "selected"; ?>>easydose5</option>
+                <option value="easydose10" <?php if ( 'easydose10' == (string)$this->data->dto->grace_product) print "selected"; ?>>easydose10</option>
+                <option value="easydoseOPEN" <?php if ( 'easydoseOPEN' == (string)$this->data->dto->grace_product) print "selected"; ?>>easydoseOPEN</option>
 
               </select>
 

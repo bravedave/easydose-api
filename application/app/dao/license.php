@@ -43,6 +43,32 @@ class license extends _dao {
 
     }
 
+    if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting Invoiced license', $user));
+
+    $dao = new invoices;
+    if ( $ret = $dao->getActiveLicenseForUser( $user)) {
+      // \sys::dump( $ret);
+      if ( $ret->license) {
+        return ( $ret);
+
+      }
+
+    }
+
+    if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting Gratis license', $user));
+
+    $dao = new guid;
+    if ( $dtoSet = $dao->getForUser( $user)) {
+      if ( count( $dtoSet)) {
+        if ( $ret = $dao->getGratisLicenseOf( $dtoSet[0])) {
+          return ( $ret);
+
+        }
+
+      }
+
+    }
+
     return ( new dto\license);
 
   }

@@ -92,7 +92,11 @@ class invoices extends Controller {
     elseif ( 'update-expires' == $action) {
       if ( currentUser::isAdmin()) {
         if ( $id = (int)$this->getPost('invoice_id')) {
-          $a = [ 'expires' => $this->getPost('expires')];
+          $a = [
+            'expires' => $this->getPost('expires'),
+            'updated' => \db::dbTimeStamp()
+          ];
+
           $dao = new dao\invoices;
           $dao->UpdateByID( $a, $id);
 
@@ -112,10 +116,11 @@ class invoices extends Controller {
             'state' => $this->getPost('state'),
             'state_change' => 'manual',
             'state_changed' => \db::dbTimeStamp(),
-            'state_changed_by' => currentUser::id()
+            'state_changed_by' => currentUser::id(),
+            'updated' => \db::dbTimeStamp()
 
           ];
-          
+
           $dao = new dao\invoices;
           $dao->UpdateByID( $a, $id);
 

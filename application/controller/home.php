@@ -6,6 +6,9 @@
 
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
+
+	security: ordinary user
+
 	*/
 class home extends Controller {
 	protected $firstRun = FALSE;
@@ -125,7 +128,7 @@ class home extends Controller {
 
 	public function dbinfo() {
 		if ( $this->firstRun || currentUser::isAdmin()) {
-			$p = new dvc\pages\bootstrap('dbinfo');
+			$p = new page('dbinfo');
 			$p
 				->header()
 				->title()

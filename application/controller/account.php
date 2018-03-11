@@ -500,6 +500,7 @@ class account extends Controller {
 			$users = new dao\users;
 			$settings = new dao\settings;
 			$dao = new dao\invoices;
+			$daoLicense = new dao\license;
 
 			if ( $inv = $dao->getByID( $id)) {
 				if ( currentUser::isAdmin() || $inv->user_id == currentUser::id()) {
@@ -507,7 +508,9 @@ class account extends Controller {
 						$this->data = (object)[
 							'invoice' => $dao->getInvoice( $inv),
 							'account' => $account,
-							'sys' => $settings->getFirst()
+							'sys' => $settings->getFirst(),
+							'license' => $daoLicense->getLicense( $inv->user_id)
+
 						];
 
 						// sys::dump( $this->data);
@@ -519,7 +522,12 @@ class account extends Controller {
 
 						$p->primary();
 
-						$inv = new invoice( $this->data->sys, $this->data->account, $this->data->invoice);
+						$inv = new invoice(
+							$this->data->sys,
+						 	$this->data->account,
+							$this->data->invoice,
+						 	$this->data->license);
+							
 				    $html = $inv->render();
 						print $html;
 

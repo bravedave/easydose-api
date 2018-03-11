@@ -42,11 +42,11 @@
 
       <tbody>
 <?php
-  if ( $ag = $this->data->license) {
+  if ( ( $ag = $this->data->license) && ( 'active' == $this->data->license->state)) {
 
     // sys::dump( $ag);  ?>
         <tr>
-          <td><?php printf( '%s : %s', $ag->product, $ag->description) ?></td>
+          <td><?php printf( '%s<br />%s', $ag->description, $ag->product) ?></td>
           <td class="text-center"><?php print $ag->workstations ?></td>
           <td class="text-center"><?php print strings::asShortDate( $ag->expires) ?></td>
           <td class="text-center"><?php print $ag->state ?></td>

@@ -26,6 +26,14 @@
 
     foreach ( [$this->data->license->license, $this->data->license->workstation] as $ag) {
       if ( $ag) {	?>
+
+				<?php
+					// print '<tr><td colspan="2">';
+					// sys::dump( $ag, NULL, FALSE);
+					// print '</td></tr>';
+
+				?>
+
         <tr>
 					<td>Product</td>
 					<td>

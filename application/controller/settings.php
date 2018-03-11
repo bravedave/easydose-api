@@ -7,6 +7,8 @@
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
 
+	security: admin only
+
 	*/
 class settings extends Controller {
 	protected function postHandler() {
@@ -118,26 +120,29 @@ class settings extends Controller {
 	}
 
 	protected function _index() {
-		$dao = new dao\settings;
-		if ( $res = $dao->getAll()) {
-			$this->data = $res->dto();
+		if ( currentUser::isAdmin()) {
+			$dao = new dao\settings;
+			if ( $res = $dao->getAll()) {
+				$this->data = $res->dto();
 
-			//~ sys::dump( $this->data);
+				//~ sys::dump( $this->data);
 
-			$p = new page( $this->title = 'Settings');
+				$p = new page( $this->title = 'Settings');
 				$p
-					->header()
-					->title();
+				->header()
+				->title();
 
 				$p->primary();
-					$this->load('settings');
+				$this->load('settings');
 
 				$p->secondary();
-					$this->load('main-index');
+				$this->load('main-index');
 
-		}
-		else {
-			throw new \Exception( 'missing system settings');
+			}
+			else {
+				throw new \Exception( 'missing system settings');
+
+			}
 
 		}
 
@@ -153,83 +158,83 @@ class settings extends Controller {
 	}
 
 	public function plans( $state = 'ACTIVE') {
-		$state = strtoupper( $state);
-		if ( $state == 'CREATED') {
-			$this->data = (object)[
-				'plans' => paypal::billingPlans( paypal::STATE_CREATED)
+		if ( currentUser::isAdmin()) {
+			$state = strtoupper( $state);
+			if ( $state == 'CREATED') {
+				$this->data = (object)[
+					'plans' => paypal::billingPlans( paypal::STATE_CREATED)
 				];
 
-			$p = new page( $this->title = 'Created Paypal Plans');
+				$p = new page( $this->title = 'Created Paypal Plans');
 
-		}
-		elseif ( $state == 'INACTIVE') {
-			$this->data = (object)[
-				'plans' => paypal::billingPlans( paypal::STATE_INACTIVE)
+			}
+			elseif ( $state == 'INACTIVE') {
+				$this->data = (object)[
+					'plans' => paypal::billingPlans( paypal::STATE_INACTIVE)
 				];
 
-			$p = new page( $this->title = 'Inactive Paypal Plans');
+				$p = new page( $this->title = 'Inactive Paypal Plans');
 
-		}
-		else {
-			$this->data = (object)[
-				'plans' => paypal::billingPlans( paypal::STATE_ACTIVE)
+			}
+			else {
+				$this->data = (object)[
+					'plans' => paypal::billingPlans( paypal::STATE_ACTIVE)
 				];
 
-			$p = new page( $this->title = 'Active Paypal Plans');
+				$p = new page( $this->title = 'Active Paypal Plans');
 
-		}
+			}
 
 			$p
 				->header()
 				->title();
 
-			$p->primary();
-				//~ sys::dump( $this->data);
-				$this->load('plans');
+			$p->primary(); $this->load('plans');
+			//~ sys::dump( $this->data);
 
-			$p->secondary();
-				$this->load('main-index');
+			$p->secondary(); $this->load('main-index');
+
+		}
 
 	}
 
 	public function plan( $id) {
-		if ( 0 === strlen( (string)$id))
-			throw new Exceptions\paypal;
+		if ( currentUser::isAdmin()) {
+			if ( 0 === strlen( (string)$id)) {
+				throw new Exceptions\paypal;
 
-		$this->data = (object)[
-			'plan' => paypal::billingPlan( $id)
+			}
+
+			$this->data = (object)[
+				'plan' => paypal::billingPlan( $id)
 			];
 
-		$p = new page( $this->title = 'Paypal Plan');
+			$p = new page( $this->title = 'Paypal Plan');
 			$p
 				->header()
 				->title();
 
-			$p->primary();
-				$this->load('plan-view');
-				//~ sys::dump( $this->data, NULL, FALSE);
+			$p->primary(); $this->load('plan-view');
+			//~ sys::dump( $this->data, NULL, FALSE);
 
-			$p->secondary();
-				$this->load('main-index');
+			$p->secondary(); $this->load('main-index');
+
+		}
 
 	}
 
 	public function newplan() {
-		//~ $this->data = (object)[
-			//~ 'plans' => paypal::billingPlans()
-			//~ ];
-
-		$p = new page( $this->title = 'New Paypal Plan');
+		if ( currentUser::isAdmin()) {
+			$p = new page( $this->title = 'New Paypal Plan');
 			$p
 				->header()
 				->title();
 
-			$p->primary();
-				//~ sys::dump( $this->data);
-				$this->load('plan-edit');
+			$p->primary(); $this->load('plan-edit');
 
-			$p->secondary();
-				$this->load('main-index');
+			$p->secondary(); $this->load('main-index');
+
+		}
 
 	}
 

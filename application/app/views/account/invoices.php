@@ -13,7 +13,7 @@
 
   if ( $this->data->invoices) {
   	?>
-<div class="row py-1 mt-4">
+<div class="row py-1 mt-2">
   <div class="col col-12 col-lg-2">
     <i class="fa fa-fw fa-caret-right pointer pull-right" id="show-user-invoices"></i>
     Invoices
@@ -22,7 +22,7 @@
 
   <div class="col col-12 col-lg-10">
     <span id="show-user-invoices-table-ellipses" class="pointer">...</span>
-		<table class="table table-striped d-none" id="show-user-invoices-table">
+		<table class="table table-striped table-sm d-none" id="show-user-invoices-table">
       <thead>
         <tr>
           <td>date</td>

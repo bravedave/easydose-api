@@ -64,7 +64,7 @@ class guid extends _dao {
 		$sql = sprintf( 'SELECT * FROM guid WHERE user_id = %s', $userID);
 
 		if ( $res = $this->Result( $sql)) {
-			return ( $res->dtoSet());
+			return ( $res->dtoSet( NULL, $this->template));
 
 		}
 
@@ -80,6 +80,53 @@ class guid extends _dao {
 		$sql = sprintf( 'SELECT %s FROM guid LEFT JOIN users u on user_id = u.id %s', $fields, $order);
 
 		return ( $this->Result( $sql));
+
+	}
+
+	public function getGratisLicenseOf( \dao\dto\guid $dto) {
+
+		$license = new \dao\dto\license;
+
+		if (( $_time = strtotime( $dto->grace_expires)) > 0 ) {
+			if ( in_array( $dto->grace_product, \config::products)) {
+				$license->type = 'GRATIS';
+				$license->product = $dto->grace_product;
+				$license->description = sprintf( 'GRATIS : %s', $dto->grace_product);
+				$license->workstations = max( (int)$dto->grace_workstations, 1);
+				$license->state = 'active';
+				$license->expires = date( 'Y-m-d', $_time);
+
+				return ( $license);
+
+			}
+
+		}
+
+		$dOrigin = strtotime( $dto->created);
+		$dFreeExpires = date( 'Y-m-d', strtotime( '+3 months', $dOrigin));
+		// \sys::logger( sprintf( '%s : %s', date( 'Y-m-d', $dOrigin), $dFreeExpires));
+
+		if ( date( 'Y-m-d') <= $dFreeExpires) {
+			$license->type = 'GRATIS';
+			$license->product = 'easydoseFREE';
+			$license->description = 'GRATIS : easydoseFREE';
+			$license->state = 'active';
+			$license->workstations = 1;
+			$license->expires = $dFreeExpires;
+
+			return ( $license);
+
+		}
+
+	}
+
+	public function getGratisLicense( $guid) {
+		if ( $dto = $this->getByGUID( $guid)) { // will add guid if it doesn't exist
+			return ( $this->getGratisLicenseOf( $dto));
+
+		}
+
+		return ( FALSE);
 
 	}
 
@@ -105,31 +152,7 @@ class guid extends _dao {
 					3. If the GUID is less than 3 months old an easydoseFREE license
 
 				*/
-
-				if (( $_time = strtotime( $dto->grace_expires)) > 0 ) {
-					if ( in_array( $dto->grace_product, \config::products))
-					$license->type = 'GRATIS';
-					$license->product = $dto->grace_product;
-					$license->workstations = max( $dto->grace_workstations, 1);
-					$license->state = 'active';
-					$license->expires = date( 'Y-m-d', $_time);
-					return ( $license);
-
-				}
-
-				$dOrigin = strtotime( $dto->created);
-				$dFreeExpires = date( 'Y-m-d', strtotime( '+3 months', $dOrigin));
-				// \sys::logger( sprintf( '%s : %s', date( 'Y-m-d', $dOrigin), $dFreeExpires));
-
-				if ( date( 'Y-m-d') <= $dFreeExpires) {
-					$license->type = 'GRATIS';
-					$license->product = 'easydoseFREE';
-					$license->state = 'active';
-					$license->workstations = 1;
-					$license->expires = $dFreeExpires;
-					return ( $license);
-
-				}
+				return ( $this->getGratisLicenseOf( $dto));
 
 			}
 

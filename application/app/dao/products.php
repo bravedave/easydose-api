@@ -14,6 +14,22 @@ Namespace dao;
 class products extends _dao {
 	protected $_db_name = 'products';
 
+	public function getByName( $name) {
+		if ( (string)$name) {
+			if ( $res = $this->Result( sprintf( 'SELECT * FROM products WHERE `name` = "%s"', $name))) {
+				if ( $dto = $res->dto()) {
+					return ( $dto);
+
+				}
+
+			}
+
+		}
+
+		return ( FALSE);
+
+	}
+
 	public function getDtoSet( $type = '') {
 		if ( 'WKS' == $type) {
 			if ( $res = $this->Result( 'SELECT * FROM products WHERE `name` LIKE "WKS%" ORDER BY `name` ASC')) {

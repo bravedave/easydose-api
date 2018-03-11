@@ -14,7 +14,10 @@
 	</h6>
 
 <?php
-	if ( $this->data->license ) { ?>
+	if ( $this->data->license && ( 'active' == $this->data->license->state)) {
+		// $license = $this->data->license;
+		// sys::dump( $this->data->license, NULL, FALSE);
+ ?>
 
 		<table class="table table-striped table-sm">
 			<thead>
@@ -32,8 +35,8 @@
 				<tr>
 					<td>
 						<?php printf( '%s<br />%s',
-						$this->data->license->description,
-						$this->data->license->product ) ?>
+							$this->data->license->description,
+							$this->data->license->product ) ?>
 
 					</td>
 
@@ -57,7 +60,7 @@
 			</tbody>
 
 		</table>
-		
+
 <?php
 
 		// sys::dump( $this->data->license, NULL, FALSE);

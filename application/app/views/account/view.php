@@ -40,18 +40,22 @@
 
 			}
 			else {
-				$this->load('productsWKS');	// offering opportunity to purchase
+				// $this->load('productsWKS');	// offering opportunity to purchase
 
 			}
 
 		}
 
-		// \sys::dump($this->data->license);
 		if ( $this->data->license->type == 'SUBSCRIPTION') {
 			$this->load('activeAgreements');
 
 		}
+		elseif ( 'dao\dto\license' == get_class( $this->data->license)) {
+			$this->load('activeInvoice');
+
+		}
 		else {
+			print get_class( $this->data->license);
 			$this->load('activeLicense');
 
 		}
