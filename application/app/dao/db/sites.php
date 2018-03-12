@@ -26,6 +26,7 @@ $dbc->defineField( 'activated', 'int');
 $dbc->defineField( 'expires', 'text');
 $dbc->defineField( 'guid', 'text');
 $dbc->defineField( 'abn', 'text');
+$dbc->defineField( 'email', 'text');
 $dbc->defineField( 'updated', 'text');
 
 $dbc->check();
