@@ -51,7 +51,20 @@
 
 <div class="row py-1">
   <div class="col col-3 pt-1 small">
-    ABN.
+    Email
+
+  </div>
+
+  <div class="col col-9">
+    <?php print $dto->email ?>
+
+  </div>
+
+</div>
+
+<div class="row py-1">
+  <div class="col col-3 pt-1 small">
+    ABN
 
   </div>
 

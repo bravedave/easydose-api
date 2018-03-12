@@ -16,6 +16,7 @@
           <td>State</td>
           <td role="sort-header" data-key="site">Site</td>
           <td class="d-none d-lg-table-cell">Tel.</td>
+          <td class="d-none d-lg-table-cell">@</td>
           <td class="d-none d-lg-table-cell">ABN</td>
           <td class="d-none d-xl-table-cell">IP</td>
           <td>Product</td>
@@ -56,7 +57,8 @@ while ( $dto = $this->data->sites->dto()) {
             <?php print $dto->site ?>
           </td>
           <td class="d-none d-lg-table-cell text-nowrap"><?php print $tel ?></td>
-          <td class="d-none d-lg-table-cell"><?php print $dto->abn ?></td>
+          <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?php print ( $dto->email ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
+          <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?php print ( $dto->abn ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
           <td class="d-none d-xl-table-cell"><?php print $dto->ip ?></td>
           <td><?php print strings::ShortLicense( $dto->productid); ?></td>
           <td class="d-none d-md-table-cell"><?php print sprintf( '%s/%s', $dto->patients, $dto->patientsActive) ?></td>
