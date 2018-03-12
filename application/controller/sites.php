@@ -16,7 +16,7 @@
 	*/
 class sites extends Controller {
 
-  function view( $id = 0) {
+  public function view( $id = 0) {
     if ( currentUser::isAdmin()) {
       if ( (int)$id) {
         $dao = new dao\sites;
@@ -59,12 +59,12 @@ class sites extends Controller {
     if ( currentUser::isAdmin()) {
       $dao = new dao\sites;
       $this->data = (object)[
-        'sites' => $dao->getAll()
+        'sites' => $dao->getAll( '*', 'ORDER BY updated DESC')
 
       ];
 
       $p = new page( $this->title = 'Sites');
-        $p->meta[] = sprintf( '<meta http-equiv="refresh" content="60; url=%s" />', url::tostring('sites'));
+        $p->meta[] = sprintf( '<meta http-equiv="refresh" content="300; url=%s" />', url::tostring('sites'));
   			$p
   				->header()
   				->title();

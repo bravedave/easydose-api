@@ -27,7 +27,7 @@
           <td class="d-none d-lg-table-cell" role="sort-header" data-key="version">Version</td>
           <td>Act</td>
           <td class="d-none d-md-table-cell" role="sort-header" data-key="expires">Expires</td>
-          <td class="d-none d-lg-table-cell">Update</td>
+          <td class="d-none d-lg-table-cell" role="sort-header" data-key="updated">Update</td>
 
         </tr>
 
@@ -50,6 +50,7 @@ while ( $dto = $this->data->sites->dto()) {
           data-site="<?php print $dto->site ?>"
           data-version="<?php print $dto->version ?>"
           data-expires="<?php print $dto->expires ?>"
+          data-updated="<?php print $dto->updated ?>"
           site>
 
           <td><?php print $dto->state ?></td>
