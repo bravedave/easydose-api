@@ -62,7 +62,7 @@ while ( $dto = $this->data->sites->dto()) {
           <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?php print ( $dto->abn ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
           <td class="d-none d-xl-table-cell"><?php print $dto->ip ?></td>
           <td><?php print strings::ShortLicense( $dto->productid); ?></td>
-          <td class="d-none d-md-table-cell"><?php print sprintf( '%s/%s', $dto->patients, $dto->patientsActive) ?></td>
+          <td class="d-none d-md-table-cell"><?php print sprintf( '%s/%s', $dto->patientsActive, $dto->patients) ?></td>
           <td class="d-none d-xl-table-cell"><?php print strings::StringToOS($dto->os) ?></td>
           <td class="d-none d-xl-table-cell"><?php print $dto->workstation ?></td>
           <td class="d-none d-xl-table-cell"><?php print $dto->deployment ?></td>
