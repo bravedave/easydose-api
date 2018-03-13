@@ -38,7 +38,7 @@ class users extends Controller {
 
 			if ( $id) {
 				$dao->UpdateByID( $a, $id);
-				Response::redirect( 'users', 'updated user');
+				Response::redirect( 'users/view/' . $id, 'updated user');
 
 			}
 			else {
@@ -47,12 +47,12 @@ class users extends Controller {
 				$a['username'] = strtolower( $this->getPost('username'));
 
 				if ( $dto = $dao->getUserByUserName( $a['username'])) {
-					Response::redirect( 'users', 'user already exists');
+					Response::redirect( 'users/view/' . $dto->id, 'user already exists');
 
 				}
 				else {
-					$dao->Insert( $a);
-					Response::redirect( 'users', 'added user');
+					$id = $dao->Insert( $a);
+					Response::redirect( 'users/view/' . $id, 'added user');
 
 				}
 

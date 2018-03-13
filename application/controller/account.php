@@ -537,6 +537,8 @@ class account extends Controller {
 
 						if ( 'yes' == $send) {
 							$mail = \sys::mailer();
+							$mail->CharSet = 'UTF-8';
+							$mail->Encoding = 'base64';
 
 							if ( strings::IsEmailAddress( $this->data->sys->invoice_email)) {
 								$mail->SetFrom( $this->data->sys->invoice_email, \config::$WEBNAME);
