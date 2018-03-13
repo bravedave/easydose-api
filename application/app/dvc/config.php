@@ -22,6 +22,7 @@ abstract class config extends _config {
 	static $DB_TYPE = 'sqlite';
 	static $DATE_FORMAT = 'd/m/Y';
 
+	static $EMAIL_ERRORS_TO_SUPPORT = TRUE;	// when a trappable error occurs, email it to support email
 	static $SUPPORT_NAME = 'My.EasyDose Webmaster';
 	static $SUPPORT_EMAIL = 'help@easydose.net.au';
 
