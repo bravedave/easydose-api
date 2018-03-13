@@ -34,8 +34,17 @@ class invoice {
     $thead = new html\table("table table-sm borderless m-0");
 
     $tr = $thead->tr();
-    $tr->td('&nbsp;', ['style' => 'width: 50%;']);
-    $td = $tr->td( NULL, ['style' => 'width: 50%;']);
+
+    $path = __DIR__ . '/public/images/logo.jpg';
+    $type = pathinfo( $path, PATHINFO_EXTENSION);
+    $data = file_get_contents( $path);
+    $base64 = 'data:image/' . $type . ';base64,' . base64_encode( $data);
+
+    $img = sprintf( '<img src="%s" />', $base64);
+
+    $tr->td( $img, ['style' => 'width: 400px; padding: 0']);
+
+    $td = $tr->td( NULL);
 
     $td->appendChild( new html\div( $this->sys->name));
     $td->appendChild( new html\div( $this->sys->street));
@@ -43,8 +52,8 @@ class invoice {
     $td->appendChild( new html\div( sprintf('ABN: %s', $this->sys->abn)));
 
     $tr = $thead->tr();
-    $td = $tr->td( NULL, ['style' => 'width: 50%;']);
-    $tr->td('&nbsp;', ['style' => 'width: 50%;']);
+    $td = $tr->td( NULL);
+    $tr->td('&nbsp;');
 
     $td->appendChild( new html\div( $this->account->name));
     $td->appendChild( new html\div( $this->account->business_name));
@@ -155,12 +164,8 @@ class invoice {
          $this->sys->bank_account));
 
     $tr = $tfoot->tr();
-    $td = $tr->td('<div>
-        <strong>year</strong>
-
-      </div>
-
-      <p>
+    $td = $tr->td(
+      '<p><strong>year</strong>:
         Products with a term of <em>year</em> are valid 1 year from the
         payment date. Where the product is an extension, the product will
         be valid 1 year from the expiry date of the product</p>',
