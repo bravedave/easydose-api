@@ -84,8 +84,8 @@ class invoices extends _dao {
 	}
 
 	public function getActiveLicenseForUser( $userID = 0) {
-		// $debug = FALSE;
-		$debug = TRUE;
+		$debug = FALSE;
+		// $debug = TRUE;
 
 		$license = FALSE;
 
