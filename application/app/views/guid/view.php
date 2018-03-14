@@ -86,17 +86,24 @@
 
   <div class="col col-10">
     <table class="table table-striped table-sm">
-      <colgroup>
-        <col />
-        <col />
-        <col />
-      </colgroup>
+      <thead>
+        <tr>
+          <td>site</td>
+          <td>workstation</td>
+          <td>state</td>
+          <td class="text-right">act/tot</td>
+
+        </tr>
+
+      </thead>
+
       <tbody>
 <?php while ($dto = $this->data->sites->dto()) {  ?>
         <tr data-id="<?php print $dto->id ?>" site>
           <td><?php print $dto->site ?></td>
+          <td><?php print $dto->workstation ?></td>
           <td><?php print $dto->state ?></td>
-          <td><?php print $dto->patientsActive ?>/<?php print $dto->patients ?></td>
+          <td class="text-right"><?php print $dto->patientsActive ?>/<?php print $dto->patients ?></td>
 
         </tr>
 

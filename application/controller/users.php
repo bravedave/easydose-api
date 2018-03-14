@@ -141,6 +141,8 @@ class users extends Controller {
 				$this->data->license = $dao->getLicense( $id);
 				$dao = new dao\invoices;
 				$this->data->invoices = $dao->getForUser( $id);
+				$dao = new dao\guid;
+				$this->data->guid = $dao->getForUser( $id);
 
 			}
 

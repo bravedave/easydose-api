@@ -55,6 +55,7 @@
   <li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#license">License</a></li>
   <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#detail">Account</a></li>
   <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#invoices">Invoices</a></li>
+  <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#guid">GUID</a></li>
 
 </ul>
 
@@ -74,7 +75,18 @@
 		<div class="row">
 			<div class="col p-0">
 				<?php $this->load('invoices') ?>
-				
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div id="guid" class="tab-pane fade in">
+		<div class="row">
+			<div class="col p-0">
+				<?php $this->load('guid') ?>
+
 			</div>
 
 		</div>
