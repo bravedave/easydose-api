@@ -66,7 +66,7 @@ class invoice {
     $headline = new html\table("table table-sm borderless m-0");
 
     $tr = $headline->tr();
-    $tr->td( new html\div( sprintf('Invoice Number: # <strong>%s</strong>', $this->invoice->id)),
+    $tr->td( new html\div( sprintf('Invoice Number: # <strong>%s</strong>', sys::format_invoice_number( $this->invoice->id))),
       [ 'class' => 'bx-1', 'style' => 'width: 33%;']);
     $tr->td( new html\div( sprintf('Status: <strong>%s</strong>', ( 'approved' == $this->invoice->state ? 'paid' : 'not paid'))),
       [ 'class' => 'bx-1 text-center', 'style' => 'width: 33%;']);
@@ -158,18 +158,21 @@ class invoice {
 
           %s BSB: %s Account: %s
 
+          <p class="lead">
+          Please <strong>Quote</strong> Invoice : <strong>%s</strong>
+          when making a Bank Deposit</p>
+
         </div>',
         $this->sys->bank_name,
         $this->sys->bank_bsb,
-         $this->sys->bank_account));
+        $this->sys->bank_account,
+        sys::format_invoice_number( $this->invoice->id)));
 
     $tr = $tfoot->tr();
     $td = $tr->td(
-      '<p><strong>year</strong>:
-        Products with a term of <em>year</em> are valid 1 year from the
-        payment date. Where the product is an extension, the product will
-        be valid 1 year from the expiry date of the product</p>',
-      ['class' => 'small']);
+      '<p>Products with a term of <em><strong>year</strong></em> are valid 1 year
+        from the payment date. Where the product is an extension, the product will
+        be valid 1 year from the expiry date of the previous product</p>');
 
     $ret = new html\table("table borderless table-invoice");
     $ret->tr()->td( $thead);

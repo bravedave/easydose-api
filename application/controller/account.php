@@ -268,7 +268,7 @@ class account extends Controller {
 							$transaction->setAmount( $amount)
 								->setItemList( $itemList)
 								->setDescription( "EasyDose License Purchase")
-								->setInvoiceNumber( 'my.easydose.' . $inv->id);
+								->setInvoiceNumber( sys::format_invoice_number( $inv->id));
 
 							/*--- ---[ final build of paypal payment object ]--- ---*/
 							$payer = new PayPal\Api\Payer;

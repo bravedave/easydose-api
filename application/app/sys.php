@@ -76,4 +76,9 @@ abstract class sys extends dvc\sys {
 
 	}
 
+	static function format_invoice_number( $s) {
+		return ( sprintf( '%s%s', \config::invoice_prefix, str_pad( $s, 4, '0', STR_PAD_LEFT)));
+
+	}
+
 }

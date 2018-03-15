@@ -37,6 +37,7 @@ abstract class config extends _config {
 	const products = [ 'easydose5', 'easydose10', 'easydoseOPEN'];
 	const country_code = 'AU';
 	const tax_rate_devisor = 11;
+	const invoice_prefix = 'me.';
 
 	/*
 	 *	Caching using APCu, Interfaced through https://www.scrapbook.cash/
