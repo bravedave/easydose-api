@@ -9,6 +9,15 @@
 
 	*/ ?>
 <div class="row">
+  <div class="col-md-6 p-0">
+      <input type="text" name="<?php print $sid = uniqid( 'ed') ?>"
+        id="<?php print $sid ?>" placeholder="search..." class="form-control" />
+
+  </div>
+
+</div>
+
+<div class="row">
   <div class="col p-0">
     <table class="table table-striped table-sm small" sites-list>
       <thead>
@@ -98,6 +107,33 @@ while ( $dto = $this->data->sites->dto()) {
 </div>
 <script>
 $(document).ready( function() {
+  $('#<?php print $sid ?>').on( 'keyup', function(e) {
+    var _me = $(this);
+    var t = _me.val();
+
+    $('tr[site]').each( function( i, tr) {
+      var _tr = $(tr);
+
+      if ( t == '') {
+        _tr.removeClass('d-none');
+      }
+      else {
+        var rex = new RegExp(t,'i')
+        // console.log( t, _tr.text())
+        if ( rex.test( _tr.text())) {
+          _tr.removeClass('d-none');
+        }
+        else {
+          _tr.addClass('d-none');
+
+        }
+
+      }
+
+    })
+
+  })
+
   $('tr[site]').each( function( i, tr) {
     var _tr = $(tr);
 
