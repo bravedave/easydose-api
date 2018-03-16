@@ -42,25 +42,79 @@ class invoice {
 
     $img = sprintf( '<img src="%s" />', $base64);
 
+    /*--- ---[ start our details]--- ---*/
     $tr->td( $img, ['style' => 'width: 400px; padding: 0']);
 
     $td = $tr->td( NULL);
 
     $td->appendChild( new html\div( $this->sys->name));
-    $td->appendChild( new html\div( $this->sys->street));
-    $td->appendChild( new html\div( sprintf( '%s, %s %s', $this->sys->town, $this->sys->state, $this->sys->postcode)));
-    $td->appendChild( new html\div( sprintf('ABN: %s', $this->sys->abn)));
+    if ( $this->sys->street) {
+      $td->appendChild( new html\div( $this->sys->street));
 
+    }
+
+    $_a = [];
+    if ( $this->sys->town) {
+      $_a[] = $this->sys->town;
+
+    }
+    if ( $this->sys->state) {
+      $_a[] = $this->sys->state;
+
+    }
+    if ( $this->sys->postcode ) {
+      $_a[] = $this->sys->postcode;
+
+    }
+    if ( count( $_a)) {
+      $td->appendChild( new html\div( implode( ' ', $_a)));
+
+    }
+    if ( $this->sys->abn) {
+      $td->appendChild( new html\div( sprintf('ABN: %s', $this->sys->abn)));
+
+    }
+    /*--- ---[ end our details]--- ---*/
+
+    /*--- ---[ start their details]--- ---*/
     $tr = $thead->tr();
     $td = $tr->td( NULL);
     $tr->td('&nbsp;');
 
     $td->appendChild( new html\div( $this->account->name));
-    $td->appendChild( new html\div( $this->account->business_name));
-    $td->appendChild( new html\div( $this->account->street));
-    $td->appendChild( new html\div( sprintf( '%s, %s %s', $this->account->town,
-                      $this->account->state, $this->account->postcode )));
-    $td->appendChild( new html\div( sprintf('ABN: %s', $this->account->abn)));
+    if ( $this->account->business_name) {
+      $td->appendChild( new html\div( $this->account->business_name));
+
+    }
+
+    if ( $this->account->street) {
+      $td->appendChild( new html\div( $this->account->street));
+
+    }
+
+    $_a = [];
+    if ( $this->account->town) {
+      $_a[] = $this->account->town;
+
+    }
+    if ( $this->account->state) {
+      $_a[] = $this->account->state;
+
+    }
+    if ( $this->account->postcode ) {
+      $_a[] = $this->account->postcode;
+
+    }
+    if ( count( $_a)) {
+      $td->appendChild( new html\div( implode( ' ', $_a)));
+
+    }
+
+    if ( $this->account->abn) {
+      $td->appendChild( new html\div( sprintf('ABN: %s', $this->account->abn)));
+
+    }
+    /*--- ---[ end their details]--- ---*/
 
     /*--- ---[ headline ]--- ---*/
     $headline = new html\table("table table-sm borderless m-0");
