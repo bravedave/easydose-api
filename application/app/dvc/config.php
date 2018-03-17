@@ -18,26 +18,34 @@
 NameSpace dvc;
 
 abstract class config extends _config {
-	static $WEBNAME = 'My.EasyDose';
 	static $DB_TYPE = 'sqlite';
 	static $DATE_FORMAT = 'd/m/Y';
 
 	static $EMAIL_ERRORS_TO_SUPPORT = TRUE;	// when a trappable error occurs, email it to support email
+
+	static $PAGE_TEMPLATE = '\page';
+	//~ static $paypalSandbox = TRUE;
+	static $paypalSandbox = FALSE;
+
+
 	static $SUPPORT_NAME = 'My.EasyDose Webmaster';
 	static $SUPPORT_EMAIL = 'help@easydose.net.au';
 
-	const use_inline_logon = TRUE;
-
-	//~ static $paypalSandbox = TRUE;
-	static $paypalSandbox = FALSE;
 	static $TIMEZONE = 'Australia/Perth';
+
+	static $WEBNAME = 'My.EasyDose';
 
 	const allow_password_recovery = TRUE;
 
-	const products = [ 'easydose5', 'easydose10', 'easydoseOPEN'];
 	const country_code = 'AU';
-	const tax_rate_devisor = 11;
+
 	const invoice_prefix = 'me.';
+
+	const products = [ 'easydose5', 'easydose10', 'easydoseOPEN'];
+
+	const tax_rate_devisor = 11;
+
+	const use_inline_logon = TRUE;
 
 	/*
 	 *	Caching using APCu, Interfaced through https://www.scrapbook.cash/

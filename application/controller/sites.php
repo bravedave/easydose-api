@@ -32,21 +32,13 @@ class sites extends Controller {
 
           }
 
-          $p = new page( $this->title = 'Site');
-      			$p
-      				->header()
-      				->title();
-
-      			$p->primary(); $this->load('view');
-
-      			$p->secondary(); $this->load('main-index');
-
+          $this->render([
+						'title' => $this->title = 'Site',
+						'primary' => 'view',
+						'secondary' => 'main-index']);
 
         }
-        else {
-          Respose::redirect( url::toString( 'sites', 'not found'));
-
-        }
+        else { Respose::redirect( url::toString( 'sites', 'not found')); }
 
       }
       else { $this->index(); }

@@ -88,16 +88,10 @@ class users extends Controller {
 			$this->data = $dao->getAll();
 			//~ sys::dump( $this->data);
 
-			$p = new page( $this->title = 'Users');
-				$p
-					->header()
-					->title();
-
-				$p->primary();
-					$this->load('report');
-
-				$p->secondary();
-					$this->load('index');
+			$this->render([
+				'title' => $this->title = 'Users',
+				'primary' => 'report',
+				'secondary' => 'index']);
 
 		}
 
@@ -146,14 +140,10 @@ class users extends Controller {
 
 			}
 
-			$p = new page( $this->title = 'User');
-			$p
-				->header()
-				->title();
-
-			$p->primary();$this->load( 'edit');
-
-			$p->secondary();$this->load('index');
+			$this->render([
+				'title' => $this->title = 'User',
+				'primary' => 'edit',
+				'secondary' => 'index']);
 
 		}
 
@@ -193,14 +183,10 @@ class users extends Controller {
 						'sys' => $settings->getFirst(),
 						'personal' => '0'];
 
-					$p = new page( $this->title = 'Create Invoice');
-					$p
-						->header()
-						->title();
-
-					$p->primary();$this->load( 'account/invoice-create');
-
-					$p->secondary();$this->load('index');
+					$this->render([
+						'title' => $this->title = 'Create Invoice',
+						'primary' => 'account/invoice-create',
+						'secondary' => 'index']);
 
 				}
 				else { throw new \Exceptions\InvalidAccount; }

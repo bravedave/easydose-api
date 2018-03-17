@@ -90,21 +90,18 @@ class home extends Controller {
 	}
 
 	protected function _index() {
-		$p = new page( $this->title = sys::name());
-		$p
-			->header()
-			->title();
 
 		if ( currentUser::isAdmin()) {
-			$p->primary();
-				$this->load( 'readme');
-			$p->secondary();
-				$this->load('main-index');
+			$this->render([
+				'title' => $this->title = sys::name(),
+				'primary' => 'readme',
+				'secondary' => 'main-index']);
 
 		}
 		else {
-			$p->content();
-				$this->load( 'readme');
+			$this->render([
+				'title' => $this->title = sys::name(),
+				'content' => 'readme']);
 
 		}
 
@@ -128,17 +125,10 @@ class home extends Controller {
 
 	public function dbinfo() {
 		if ( $this->firstRun || currentUser::isAdmin()) {
-			$p = new page('dbinfo');
-			$p
-				->header()
-				->title()
-				->primary();
-
-			$dbinfo = new dao\dbinfo;
-			$dbinfo->dump();
-
-			$p->secondary();
-			$this->load('main-index');
+			$this->render([
+				'title' => 'dbinfo',
+				'primary' => 'dbinfo',
+				'secondary' => 'main-index']);
 
 		}
 		else {
