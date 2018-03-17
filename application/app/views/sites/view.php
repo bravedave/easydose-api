@@ -208,15 +208,45 @@
   <div class="col col-9">
     <?php
     if ( $this->data->account) {
-      sys::dump( $this->data->account, NULL, FALSE);
-      // printf( '<a href="%s">%s<i class="fa fa-fw fa-link"></i></a>', url::tostring('guid/view/' . $this->data->guid->id), $dto->guid )
+      // sys::dump( $this->data->account, NULL, FALSE);
+      ?>
+      <table class="table table-striped table-sm">
+        <tbody>
+          <tr>
+            <td>
+              <?php print $this->data->account->name ?>
 
+            </td>
+
+          </tr>
+
+          <?php if ($this->data->account->business_name != $this->data->account->name) {  ?>
+            <tr>
+              <td>
+                <?php print $this->data->account->business_name ?>
+
+              </td>
+
+            </tr>
+          <?php } ?>
+
+          <tr>
+            <td class="text-right">
+              <?php printf( '<a href="%s"><i class="fa fa-fw fa-link"></i></a>', url::tostring('users/view/' . $this->data->account->id)) ?>
+
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+<?php
     }
     else {
       printf( '<a href="%s">no account - create</a>', url::tostring('sites/createaccount/' . $this->data->site->id));
 
     } // if ( $this->data->account) ?>
-    
+
   </div>
 
 </div>
