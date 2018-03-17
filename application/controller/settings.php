@@ -14,7 +14,7 @@ class settings extends Controller {
 	protected function postHandler() {
 		$action = $this->getPost('action');
 
-		if ( $action == 'update') {
+		if ( 'update' == $action) {
 			$a = [
 				'name' => (string)$this->getPost( 'name'),
 				'street' => (string)$this->getPost('street'),
@@ -41,7 +41,7 @@ class settings extends Controller {
 			Response::redirect( url::tostring('settings'), 'updated settings');
 
 		}
-		elseif ( $action == 'save plan') {
+		elseif ( 'save plan' == $action) {
 			$plan = new PayPal\Api\Plan;
 			$plan
 				->setName( $this->getPost('name'))
@@ -83,7 +83,7 @@ class settings extends Controller {
 			Response::redirect( url::tostring('settings/plans/created'), paypal::createBillingPlan( $plan));
 
 		}
-		elseif ( $action == 'delete plan') {
+		elseif ( 'delete plan' == $action) {
 			if ( $id = $this->getPost('plan_id')) {
 				$dao = new dao\plans;
 				$dao->deleteByPayPalID( $id);
@@ -92,18 +92,38 @@ class settings extends Controller {
 			}
 
 		}
-		elseif ( $action == 'activate plan') {
+		elseif ( 'activate plan' == $action) {
 			if ( $id = $this->getPost('plan_id')) {
 				Response::redirect( url::tostring('settings/plans'), paypal::activateBillingPlan( $id));
 
 			}
 
 		}
-		elseif ( $action == 'de-activate plan') {
+		elseif ( 'de-activate plan' == $action) {
 			if ( $id = $this->getPost('plan_id')) {
 				Response::redirect( url::tostring('settings/plans'), paypal::deactivateBillingPlan( $id));
 
 			}
+
+		}
+		elseif ( 'reset database' == $action) {
+			if ( currentUser::isProgrammer()) {
+				if ( $confirmation = $this->getPost('confirmation')) {
+					if ( 'Reset Confirmed' == $confirmation) {
+
+						$dbinfo = new dao\dbinfo;
+					  $dbinfo->reset();
+
+						Response::redirect( 'logout');
+
+					}
+					else { throw new \Exceptions\MissingResetConfirmation; }
+
+				}
+				else { throw new \Exceptions\MissingResetConfirmation; }
+
+			}
+			else { throw new \Exceptions\AccessViolation; }
 
 		}
 		else {

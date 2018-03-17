@@ -124,10 +124,25 @@ class home extends Controller {
 	}
 
 	public function dbinfo() {
-		if ( $this->firstRun || currentUser::isAdmin()) {
+		if ( $this->firstRun || currentUser::isProgrammer()) {
 			$this->render([
 				'title' => 'dbinfo',
-				'primary' => 'dbinfo',
+				'primary' => 'db-info',
+				'secondary' => 'main-index']);
+
+		}
+		else {
+			$this->_index();
+
+		}
+
+	}
+
+	public function dbreset() {
+		if ( currentUser::isProgrammer()) {
+			$this->render([
+				'title' => 'dbReset',
+				'primary' => 'db-reset',
 				'secondary' => 'main-index']);
 
 		}
