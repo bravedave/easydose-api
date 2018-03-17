@@ -55,7 +55,7 @@ class sites extends Controller {
 
       ];
 
-      $p = new page( $this->title = 'Sites');
+      $p = $this->page(['title' => ( $this->title = 'Sites')]);
         $p->meta[] = sprintf( '<meta http-equiv="refresh" content="300; url=%s" />', url::tostring('sites'));
   			$p
   				->header()
