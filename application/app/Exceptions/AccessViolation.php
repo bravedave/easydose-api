@@ -11,7 +11,7 @@
 
 NameSpace Exceptions;
 
-class _template extends Exception {
-	protected $_text = 'template exception';
+class AccessViolation extends Exception {
+	protected $_text = 'Access Violation';
 
 }
