@@ -53,7 +53,8 @@ class dbinfo extends _dbinfo {
 
 		}
 
-		$this->check();
+		$dao = new \dao\users;
+		$dao->check();
 
 		$fields = 'username, name, email, business_name,
 			street, town, state, postcode, abn, pass, admin,
@@ -74,6 +75,8 @@ class dbinfo extends _dbinfo {
 			$this->db->Q( $_sql);
 
 		}
+
+		$this->check();
 
 	}
 

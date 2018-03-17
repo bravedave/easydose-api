@@ -116,7 +116,7 @@
 
 <div class="row py-1">
   <div class="col col-3 pt-1 small">
-    Active/<br />Patients
+    Active/Patients
 
   </div>
 
@@ -129,37 +129,15 @@
 
 <div class="row py-1">
   <div class="col col-3 pt-1 small">
-    OS
+    OS / Deploy / Version
 
   </div>
 
   <div class="col col-9">
     <?php print strings::StringToOS($dto->os) ?>
-
-  </div>
-
-</div>
-
-<div class="row py-1">
-  <div class="col col-3 pt-1 small">
-    Deploy
-
-  </div>
-
-  <div class="col col-9">
+    /
     <?php print $dto->deployment ?>
-
-  </div>
-
-</div>
-
-<div class="row py-1">
-  <div class="col col-3 pt-1 small">
-    Version
-
-  </div>
-
-  <div class="col col-9">
+    /
     <?php print $dto->version ?>
 
   </div>
@@ -220,6 +198,29 @@
 </div>
 
 <?php } // if ( $this->data->guid) ?>
+
+<div class="row py-1">
+  <div class="col col-3 pt-1 small">
+    Account
+
+  </div>
+
+  <div class="col col-9">
+    <?php
+    if ( $this->data->account) {
+      sys::dump( $this->data->account, NULL, FALSE);
+      // printf( '<a href="%s">%s<i class="fa fa-fw fa-link"></i></a>', url::tostring('guid/view/' . $this->data->guid->id), $dto->guid )
+
+    }
+    else {
+      printf( '<a href="%s">no account - create</a>', url::tostring('sites/createaccount/' . $this->data->site->id));
+
+    } // if ( $this->data->account) ?>
+    
+  </div>
+
+</div>
+
 
 <div class="row py-1">
   <div class="col pt-1 small">

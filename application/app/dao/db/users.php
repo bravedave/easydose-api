@@ -10,23 +10,8 @@
 	*/
 Namespace dvc\sqlite;
 
-$dbc = new dbCheck( $this->db, 'users' );
-$dbc->defineField( 'username', 'text');
-$dbc->defineField( 'name', 'text');
-$dbc->defineField( 'email', 'text');
-$dbc->defineField( 'business_name', 'text');
-$dbc->defineField( 'street', 'text');
-$dbc->defineField( 'town', 'text');
-$dbc->defineField( 'state', 'text');
-$dbc->defineField( 'postcode', 'text');
-$dbc->defineField( 'abn', 'text');
-$dbc->defineField( 'pass', 'text');
-$dbc->defineField( 'admin', 'int');
-$dbc->defineField( 'reset_guid', 'text');
-$dbc->defineField( 'reset_guid_date', 'text');
-$dbc->defineField( 'created', 'text');
-$dbc->defineField( 'updated', 'text');
-$dbc->check();
+$dao = new \dao\users;
+$dao->check();
 
 if ( $res = $this->db->Result( 'SELECT count(*) count FROM users' )) {
 	if ( $dto = $res->dto()) {

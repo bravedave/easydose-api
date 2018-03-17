@@ -147,22 +147,13 @@ class settings extends Controller {
 
 				//~ sys::dump( $this->data);
 
-				$p = new page( $this->title = 'Settings');
-				$p
-				->header()
-				->title();
-
-				$p->primary();
-				$this->load('settings');
-
-				$p->secondary();
-				$this->load('main-index');
+				$this->render([
+					'title' => $this->title = 'Settings',
+					'primary' => 'settings',
+					'secondary' => 'main-index']);
 
 			}
-			else {
-				throw new \Exception( 'missing system settings');
-
-			}
+			else { throw new \Exception( 'missing system settings'); }
 
 		}
 
@@ -185,7 +176,10 @@ class settings extends Controller {
 					'plans' => paypal::billingPlans( paypal::STATE_CREATED)
 				];
 
-				$p = new page( $this->title = 'Created Paypal Plans');
+				$this->render([
+					'title' => $this->title = 'Created Paypal Plans',
+					'primary' => 'plans',
+					'secondary' => 'main-index']);
 
 			}
 			elseif ( $state == 'INACTIVE') {
@@ -193,7 +187,10 @@ class settings extends Controller {
 					'plans' => paypal::billingPlans( paypal::STATE_INACTIVE)
 				];
 
-				$p = new page( $this->title = 'Inactive Paypal Plans');
+				$this->render([
+					'title' => $this->title = 'Inactive Paypal Plans',
+					'primary' => 'plans',
+					'secondary' => 'main-index']);
 
 			}
 			else {
@@ -201,18 +198,12 @@ class settings extends Controller {
 					'plans' => paypal::billingPlans( paypal::STATE_ACTIVE)
 				];
 
-				$p = new page( $this->title = 'Active Paypal Plans');
+				$this->render([
+					'title' => $this->title = 'Active Paypal Plans',
+					'primary' => 'plans',
+					'secondary' => 'main-index']);
 
 			}
-
-			$p
-				->header()
-				->title();
-
-			$p->primary(); $this->load('plans');
-			//~ sys::dump( $this->data);
-
-			$p->secondary(); $this->load('main-index');
 
 		}
 
@@ -229,15 +220,10 @@ class settings extends Controller {
 				'plan' => paypal::billingPlan( $id)
 			];
 
-			$p = new page( $this->title = 'Paypal Plan');
-			$p
-				->header()
-				->title();
-
-			$p->primary(); $this->load('plan-view');
-			//~ sys::dump( $this->data, NULL, FALSE);
-
-			$p->secondary(); $this->load('main-index');
+			$this->render([
+				'title' => $this->title = 'Paypal Plan',
+				'primary' => 'plan-view',
+				'secondary' => 'main-index']);
 
 		}
 
@@ -245,14 +231,10 @@ class settings extends Controller {
 
 	public function newplan() {
 		if ( currentUser::isAdmin()) {
-			$p = new page( $this->title = 'New Paypal Plan');
-			$p
-				->header()
-				->title();
-
-			$p->primary(); $this->load('plan-edit');
-
-			$p->secondary(); $this->load('main-index');
+			$this->render([
+				'title' => $this->title = 'New Paypal Plan',
+				'primary' => 'plan-edit',
+				'secondary' => 'main-index']);
 
 		}
 

@@ -515,7 +515,7 @@ class account extends Controller {
 
 						// sys::dump( $this->data);
 
-						$p = new page( $this->title = 'View Invoice');
+						$p = $this->page(['title' => ( $this->title = 'View Invoice')]);
 						$p
 							->header()
 							->title();
@@ -589,18 +589,10 @@ class account extends Controller {
 
 		];
 
-		$p = new page( $this->title = 'Create Invoice');
-			$p
-				->header()
-				->title();
-
-			$p->primary();
-				$this->load('invoice-create');
-
-			$p->secondary();
-				//~ $this->load('index');
-				$this->load('main-index');
-
+		$this->render([
+			'title' => $this->title = 'Create Invoice',
+			'primary' => 'invoice-create',
+			'secondary' => 'main-index']);
 
 	}
 

@@ -16,6 +16,82 @@
 	*/
 class sites extends Controller {
 
+  public function createaccount( $id = 0) {
+    /**
+    * we are going to create an account from this id
+    */
+    if ( currentUser::isAdmin()) {
+      if ( (int)$id) {
+        $dao = new dao\sites;
+        if ( $site = $dao->getByID( $id)) {
+          /*
+          * it must have an email and
+          * the email must be unique
+          * in the system
+          */
+          if ( strings::IsEmailAddress( $site->email)) {
+            $usersDAO = new dao\users;
+            if ( $userDTO = $usersDAO->getUserByEmail( $site->email)) {
+              Response::redirect( url::tostring('users/view/' . $userDTO->id), 'user exists');
+
+            }
+            else {
+              /*
+              * It will have a guid - that was
+              * how it got created
+              * fetch it so we can update it
+              */
+              if ( $site->guid) {
+                $guidDAO = new dao\guid;
+                if ( $guidDTO = $guidDAO->getByGUID( $site->guid)) {
+                  $a = explode( '@', $site->email);
+                  $username = (string)$a[0];
+
+                  /*
+                  * create the user and update
+                  * the guid table with the
+                  * created users id
+                  */
+                  $id = $usersDAO->Insert([
+                    'username' => $username,
+                    'name' => $site->site,
+                    'email' => $site->email,
+                    'business_name' => $site->site,
+                    'state' => $site->state,
+                    'abn' => $site->abn,
+                    'created' => \db::dbTimeStamp(),
+                    'updated' => \db::dbTimeStamp()
+                  ]);
+
+                  $guidDAO->UpdateByID([
+                    'user_id' => $id,
+                    'updated' => \db::dbTimeStamp()
+                  ], $guidDTO->id);
+
+                  Response::redirect( url::tostring('users/view/' . $id), 'created user');
+
+                }
+                else { throw new \Exceptions\InvalidGUID; }
+
+              }
+              else { throw new \Exceptions\InvalidGUID; }
+
+            }
+
+          }
+          else { throw new \Exceptions\InvalidEmailAddress; }
+
+        }
+        else { Respose::redirect( url::toString( 'sites', 'site not found')); }
+
+      }
+      else { Respose::redirect( url::toString( 'sites', 'invalid site id')); }
+
+    }
+    else { throw new \Exceptions\AccessViolation; }
+
+  }
+
   public function view( $id = 0) {
     if ( currentUser::isAdmin()) {
       if ( (int)$id) {
@@ -23,12 +99,16 @@ class sites extends Controller {
         if ( $site = $dao->getByID( $id)) {
           $this->data = (object)[
             'site' => $site,
-            'guid' => FALSE
+            'guid' => FALSE,
+            'account' => FALSE
           ];
 
           if ( $this->data->site->guid) {
             $dao = new dao\guid;
-            $this->data->guid = $dao->getByGUID( $this->data->site->guid);
+            if ($this->data->guid = $dao->getByGUID( $this->data->site->guid)) {
+              $this->data->account = $dao->getUserOf( $this->data->guid);
+
+            }
 
           }
 
@@ -38,7 +118,7 @@ class sites extends Controller {
 						'secondary' => 'main-index']);
 
         }
-        else { Respose::redirect( url::toString( 'sites', 'not found')); }
+        else { Respose::redirect( url::toString( 'sites', 'site not found')); }
 
       }
       else { $this->index(); }

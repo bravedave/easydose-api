@@ -22,17 +22,10 @@ class plans extends Controller {
       'plans' => $dao->getAll(),
     ];
 
-    $p = new page( $this->title = 'Plans');
-			$p
-				->header()
-				->title();
-
-			$p->primary();
-				$this->load('plans');
-
-			$p->secondary();
-				//~ $this->load('index');
-				$this->load('main-index');
+    $this->render([
+      'title' => $this->title = 'Plans',
+      'primary' => 'plans',
+      'secondary' => 'main-index']);
 
   }
 
