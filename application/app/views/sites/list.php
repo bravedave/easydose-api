@@ -8,10 +8,14 @@
 		http://creativecommons.org/licenses/by/4.0/
 
 	*/ ?>
+<style>
+i[title="download as CSV"] {margin-top: -18px;}
+</style>
 <div class="row">
   <div class="col-md-6 p-0">
       <input type="text" name="<?php print $sid = uniqid( 'ed') ?>"
-        id="<?php print $sid ?>" placeholder="search..." class="form-control" />
+        id="<?php print $sid ?>" placeholder="search..." class="form-control"
+        autofocus />
 
   </div>
 

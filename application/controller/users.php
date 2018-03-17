@@ -138,6 +138,19 @@ class users extends Controller {
 				$dao = new dao\guid;
 				$this->data->guid = $dao->getForUser( $id);
 
+				$dao = new dao\sites;
+				$this->data->sites = [];
+				foreach( $this->data->guid as $guid) {
+					if ( $res = $dao->getForGUID( $guid->guid)) {
+						while ( $site = $res->dto()) {
+							$this->data->sites[] = $site;
+
+						}
+
+					}
+
+				}
+
 			}
 
 			$this->render([

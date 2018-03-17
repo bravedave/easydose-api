@@ -190,10 +190,11 @@
 
   </div>
 
-  <div class="col col-9">
-    <?php printf( '<a href="%s">%s<i class="fa fa-fw fa-link"></i></a>', url::tostring('guid/view/' . $this->data->guid->id), $dto->guid ) ?>
+  <div class="col col-9"><?php
 
-  </div>
+  printf( '<a href="%s">%s</a>', url::tostring('guid/view/' . $this->data->guid->id), $dto->guid )
+
+  ?></div>
 
 </div>
 
@@ -205,52 +206,34 @@
 
   </div>
 
-  <div class="col col-9">
-    <?php
-    if ( $this->data->account) {
-      // sys::dump( $this->data->account, NULL, FALSE);
-      ?>
-      <table class="table table-striped table-sm">
-        <tbody>
-          <tr>
-            <td>
-              <?php print $this->data->account->name ?>
+  <div class="col col-9"><?php
 
-            </td>
+  if ( $this->data->account) {
+    // sys::dump( $this->data->account, NULL, FALSE);
+    if ($this->data->account->business_name == $this->data->account->name) {
+      printf( '<a href="%s">%s</a>',
+        url::tostring('users/view/' . $this->data->account->id),
+        $this->data->account->name );
 
-          </tr>
-
-          <?php if ($this->data->account->business_name != $this->data->account->name) {  ?>
-            <tr>
-              <td>
-                <?php print $this->data->account->business_name ?>
-
-              </td>
-
-            </tr>
-          <?php } ?>
-
-          <tr>
-            <td class="text-right">
-              <?php printf( '<a href="%s"><i class="fa fa-fw fa-link"></i></a>', url::tostring('users/view/' . $this->data->account->id)) ?>
-
-            </td>
-
-          </tr>
-        </tbody>
-      </table>
-
-<?php
     }
     else {
-      printf( '<a href="%s">no account - create</a>', url::tostring('sites/createaccount/' . $this->data->site->id));
+      printf( '<a href="%s">%s (%s)</a>',
+        url::tostring('users/view/' . $this->data->account->id),
+        $this->data->account->business_name,
+        $this->data->account->name );
 
-    } // if ( $this->data->account) ?>
+    }
 
-  </div>
+  }
+  else {
+    printf( '<a href="%s">no account - create</a>',
+      url::tostring('sites/createaccount/' . $this->data->site->id));
+
+  } // if ( $this->data->account)
+
+  ?></div>
 
 </div>
-
 
 <div class="row py-1">
   <div class="col pt-1 small">
