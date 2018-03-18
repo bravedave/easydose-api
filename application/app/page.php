@@ -14,6 +14,7 @@ class page extends dvc\pages\bootstrap {
 
     parent::__construct( $title);
 
+    $this->scripts[] = sprintf( '<script type="text/javascript" src="%s"></script>', url::tostring('primo'));
     $this->latescripts[] = sprintf( '<script type="text/javascript" src="%s"></script>', \url::tostring( 'edjs'));
     $this->css[] = sprintf( '<link type="text/css" rel="stylesheet" media="all" href="%s" />', \url::tostring( 'css/easydose.css'));
 

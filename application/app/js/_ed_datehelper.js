@@ -6,13 +6,21 @@
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
 	*/
-_ed_.datepicker = function( params) {
+_ed_.datehelper = function( params) {
   var options = {
     date : _brayworth_.moment().format('YYYY-MM-DD'),
+    element : $(this),
     parent : $(this).parent(),
+    dateFormat : false,
     select : function( date) {
       var _el = $(this);
-      console.log( _el.text(), date);
+
+      if ( 'text' == options.element.prop('type')) {
+        var m = _brayworth_.moment( date);
+        options.element.val( m.format( options.dateFormat));
+        console.log( _el.text(), date, options.dateFormat);
+
+      }
 
     }
 
@@ -20,12 +28,35 @@ _ed_.datepicker = function( params) {
 
   $.extend( options, params);
 
+  if ( !options.dateFormat) {
+    var df = options.element.data('dateformat');
+    if ( !!df) {
+      if ( 'yyyy-mm-dd' == df) {
+        options.dateFormat = 'YYYY-MM-DD';
+      }
+      else if ( 'dd/mm/yy' == df ) {
+        options.dateFormat = 'L';
+
+      }
+      else {
+        options.dateFormat = df;
+
+      }
+
+    }
+    else {
+      options.dateFormat = 'YYYY-MM-DD';
+
+    }
+
+  }
+
   var _el = $(this);
 
   var dt = function() {
     var m = _brayworth_.moment( options.date);
 
-    var div = $('<div class="card" />');
+    var div = $('<div class="card date-helper" />');
     var box = {
       head : $('<div class="card-header bg-primary text-light py-1" />').appendTo(div),
       body : $('<div class="card-body py-1" />').appendTo(div),
@@ -113,7 +144,42 @@ _ed_.datepicker = function( params) {
   })
   .appendTo( c);
 
+  if ( 'text' == options.element.prop('type')) {
+    options.element
+    .on( 'focus.date-helper', function() {
+      options.parent.addClass( 'date-helper-focused')
+
+    })
+    .on( 'blur.date-helper', function() {
+      options.parent.removeClass( 'date-helper-focused')
+
+    })
+
+    // console.log( $('.date-helper', options.element));
+
+    $('.date-helper', options.parent)
+    .on( 'mouseover.date-helper', function() {
+      // console.log( 'mouseover');
+      options.parent.addClass( 'date-helper-mouseover')
+
+    })
+    .on( 'mouseout.date-helper', function() {
+      // console.log( 'mouseout');
+      options.parent.removeClass( 'date-helper-mouseover')
+
+    })
+
+    // console.log( 'text dude');
+
+  }
+
   return dt();
 
 }
+
+$('[data-provide="date-helper"]').each( function( i, el) {
+  _ed_.datehelper.call( el);
+
+});
+
 ;
