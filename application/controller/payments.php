@@ -25,16 +25,10 @@ class payments extends Controller {
           'res' => $dao->getAll()
       ];
 
-  		$p = new page( $this->title = "payments");
-        $p
-          ->header()
-          ->title();
-  			$p->primary();
-  				$this->load( 'payments' );
-
-  			$p->secondary();
-          $this->load('main-index');
-
+      $this->render([
+        'title' => $this->title = 'payments',
+        'primary' => 'payments',
+        'secondary' => 'main-index']);
 
      }
 
@@ -47,15 +41,10 @@ class payments extends Controller {
           'dto' => $dao->getByID( $id)
       ];
 
-  		$p = new page( $this->title = "payments");
-        $p
-          ->header()
-          ->title();
-  			$p->primary();
-  				$this->load( 'view');
-
-  			$p->secondary();
-          $this->load('main-index');
+      $this->render([
+        'title' => $this->title = 'payments',
+        'primary' => 'view',
+        'secondary' => 'main-index']);
 
      }
 
@@ -70,22 +59,13 @@ class payments extends Controller {
             Response::redirect( url::tostring('payments'), 'deleted payment');
 
           }
-          else {
-            throw new \Exception( 'cannot delete approved payment');
-
-          }
+          else { throw new \Exception( 'cannot delete approved payment'); }
 
       }
-      else {
-        Response::redirect( url::tostring('payments'), 'payment not found');
-
-      }
+      else { Response::redirect( url::tostring('payments'), 'payment not found'); }
 
     }
-    else {
-      throw new \Exceptions\InvalidUser;
-
-    }
+    else { throw new \Exceptions\AccessViolation; }
 
 	}
 

@@ -34,5 +34,50 @@ class dbinfo extends _dbinfo {
 
 	}
 
-}
+	public function reset() {
+		$sql = [
+			'DROP TABLE IF EXISTS _guid_old',
+			'DROP TABLE IF EXISTS agreements',
+			'DROP TABLE IF EXISTS invoices',
+			'DROP TABLE IF EXISTS invoices_detail',
+			'DROP TABLE IF EXISTS payments',
+			'DROP TABLE IF EXISTS plans',
+			'UPDATE guid SET user_id = 0',
 
+			'ALTER TABLE users RENAME TO _users_old'
+
+		];
+
+		foreach ($sql as $_sql) {
+			$this->db->Q( $_sql);
+
+		}
+
+		$dao = new \dao\users;
+		$dao->check();
+
+		$fields = 'username, name, email, business_name,
+			street, town, state, postcode, abn, pass, admin,
+			created, updated';
+
+		$sql = [
+			sprintf('INSERT INTO users(%s)
+			 SELECT %s FROM _users_old
+				 where username in ("davidb", "steve", "noel", "phil")',
+				 $fields, $fields),
+
+			'DROP TABLE _users_old'
+
+		];
+
+		foreach ($sql as $_sql) {
+			// \sys::logger( $_sql);
+			$this->db->Q( $_sql);
+
+		}
+
+		$this->check();
+
+	}
+
+}

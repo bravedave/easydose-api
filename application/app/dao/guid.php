@@ -132,7 +132,7 @@ class guid extends _dao {
 
 	public function getLicenseOf( \dao\dto\guid $dto) {
 		$debug = FALSE;
-		$debug = TRUE;
+		// $debug = TRUE;
 
 		if ( (int)$dto->user_id) {
 			$licenseDAO = new license;	// dao\license;
@@ -170,6 +170,39 @@ class guid extends _dao {
 
 		if ( $dto = $this->getByGUID( $guid)) { // will add guid if it doesn't exist
 			return ( $this->getLicenseOf( $dto));
+
+		}
+
+		return ( FALSE);
+
+	}
+
+	public function getUserOf( \dao\dto\guid $dto) {
+		$debug = FALSE;
+		$debug = TRUE;
+
+		if ( (int)$dto->user_id) {
+			$userDAO = new users;	// dao\users;
+			if ( $user = $userDAO->getByID( $dto->user_id)) {
+				if ( $debug) \sys::logger( sprintf( 'dao\guid->getUserOf :: %s', $user->name));
+				return ( $user);
+
+			}
+
+		}
+
+		return ( FALSE);
+
+	}
+
+	public function getUser( $guid) {
+		$debug = FALSE;
+		// $debug = TRUE;
+
+		if ( $debug) \sys::logger( sprintf( 'dao\guid->getUser(%s) :: getting user', $guid));
+
+		if ( $dto = $this->getByGUID( $guid)) { // will add guid if it doesn't exist
+			return ( $this->getUserOf( $dto));
 
 		}
 

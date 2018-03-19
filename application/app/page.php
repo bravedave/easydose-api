@@ -10,8 +10,11 @@
 	*/
 class page extends dvc\pages\bootstrap {
   function __construct( $title = '' ) {
+    self::$momentJS = TRUE;
+
     parent::__construct( $title);
 
+    $this->scripts[] = sprintf( '<script type="text/javascript" src="%s"></script>', url::tostring('primo'));
     $this->latescripts[] = sprintf( '<script type="text/javascript" src="%s"></script>', \url::tostring( 'edjs'));
     $this->css[] = sprintf( '<link type="text/css" rel="stylesheet" media="all" href="%s" />', \url::tostring( 'css/easydose.css'));
 

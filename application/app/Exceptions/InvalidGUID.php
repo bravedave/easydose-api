@@ -11,7 +11,7 @@
 
 NameSpace Exceptions;
 
-class _template extends Exception {
-	protected $_text = 'template exception';
+class InvalidGUID extends Exception {
+	protected $_text = 'Invalid GUID';
 
 }

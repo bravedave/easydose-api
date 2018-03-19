@@ -141,16 +141,10 @@ class invoices extends Controller {
       $dao = new dao\invoices;
       $this->data = (object)[ 'invoices' => $dao->getAll() ];
 
-      $p = new page( $this->title = 'invoices');
-      $p
-        ->header()
-        ->title()
-        ->primary();
-
-        $this->load( 'list');
-
-      $p->secondary();
-        $this->load('main-index');
+      $this->render([
+        'title' => $this->title = 'invoices',
+        'primary' => 'list',
+        'secondary' => 'main-index']);
 
     }
     else { throw new \exceptions\AccessViolation; }

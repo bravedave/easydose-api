@@ -14,6 +14,27 @@ Namespace dao;
 class users extends _dao {
 	protected $_db_name = 'users';
 
+	function check() {
+		$dbc = new \dvc\sqlite\dbCheck( $this->db, 'users' );
+		$dbc->defineField( 'username', 'text');
+		$dbc->defineField( 'name', 'text');
+		$dbc->defineField( 'email', 'text');
+		$dbc->defineField( 'business_name', 'text');
+		$dbc->defineField( 'street', 'text');
+		$dbc->defineField( 'town', 'text');
+		$dbc->defineField( 'state', 'text');
+		$dbc->defineField( 'postcode', 'text');
+		$dbc->defineField( 'abn', 'text');
+		$dbc->defineField( 'pass', 'text');
+		$dbc->defineField( 'admin', 'int');
+		$dbc->defineField( 'reset_guid', 'text');
+		$dbc->defineField( 'reset_guid_date', 'text');
+		$dbc->defineField( 'created', 'text');
+		$dbc->defineField( 'updated', 'text');
+		$dbc->check();
+
+	}
+
 	function getUserByUserName( $username ) {
 		if ( (string)$username) {
 			if ( $res = $this->Result( sprintf( "SELECT * FROM users WHERE username = '%s'", $this->escape( $username))))

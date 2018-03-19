@@ -33,6 +33,8 @@ abstract class config extends _config {
 
 	static $TIMEZONE = 'Australia/Perth';
 
+	static $UTC_OFFSET = '+08:00';
+
 	static $WEBNAME = 'My.EasyDose';
 
 	const allow_password_recovery = TRUE;

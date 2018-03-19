@@ -124,10 +124,40 @@ class home extends Controller {
 	}
 
 	public function dbinfo() {
-		if ( $this->firstRun || currentUser::isAdmin()) {
+		if ( $this->firstRun || currentUser::isProgrammer()) {
 			$this->render([
 				'title' => 'dbinfo',
-				'primary' => 'dbinfo',
+				'primary' => 'db-info',
+				'secondary' => 'main-index']);
+
+		}
+		else {
+			$this->_index();
+
+		}
+
+	}
+
+	public function dbreset() {
+		if ( currentUser::isProgrammer()) {
+			$this->render([
+				'title' => 'dbReset',
+				'primary' => 'db-reset',
+				'secondary' => 'main-index']);
+
+		}
+		else {
+			$this->_index();
+
+		}
+
+	}
+
+	public function test() {
+		if ( currentUser::isProgrammer()) {
+			$this->render([
+				'title' => 'test',
+				'primary' => 'test',
 				'secondary' => 'main-index']);
 
 		}
@@ -171,6 +201,53 @@ class home extends Controller {
 				'libFile' => config::tempdir()  . 'easydose.js'
 
 			]);
+
+	}
+
+	public function primo() {
+		if ( !$this->authorised)
+			return;
+
+		// $debug = FALSE;
+		$debug = TRUE;
+
+		Response::javascript_headers();
+
+		ob_start();
+
+		$jsFiles = sprintf( '%s/app/js/primo/*.js', $this->rootPath );
+		$gi = new GlobIterator( $jsFiles, FilesystemIterator::KEY_AS_FILENAME);
+
+		//~ $n = 0;
+		foreach ($gi as $key => $item) {
+			//~ sys::logger( sprintf( "[%s] %s", $key, $item->getRealPath()));
+			include_once $item->getRealPath();
+			print PHP_EOL;
+
+		}
+
+		$out = ob_get_contents();
+		ob_end_clean();
+
+		if ( $debug || $this->Request->ClientIsLocal()) {
+			if ( $debug) \sys::logger( sprintf( ' not minifying primo :: %s', $this->timer->elapsed()));
+			print $out;
+
+		}
+		else {
+			if ( $debug) \sys::logger( sprintf( 'primo :: %s', $this->timer->elapsed()));
+
+			$minifier = new MatthiasMullie\Minify\JS;
+			$minifier->add( $out);
+			$minified =  $minifier->minify();
+
+			if ( $debug) \sys::logger( sprintf( 'primo :: minified :: %s', $this->timer->elapsed()));
+
+			print $minified;
+
+			if ( $debug) \sys::logger( sprintf( 'primo :: %s', $this->timer->elapsed()));
+
+		}
 
 	}
 

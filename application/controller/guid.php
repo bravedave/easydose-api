@@ -94,16 +94,10 @@ class guid extends Controller {
       $sitesDAO = new dao\sites;
       $this->data->sites = $sitesDAO->getForGUID( $dto->guid);
 
-      $p = new page( $this->title);
-  		$p
-  			->header()
-  			->title()
-  			->primary();
-
-  		$this->load( 'view');
-
-  		$p->secondary();
-  			$this->load('main-index');
+      $this->render([
+        'title' => $this->title,
+        'primary' => 'view',
+        'secondary' => 'main-index']);
 
     }
     else {
@@ -118,17 +112,11 @@ class guid extends Controller {
       $guidDAO = new dao\guid;
       $this->data = (object)[ 'res' => $guidDAO->getAll() ];
 
-      $p = new page( $this->title = 'guid');
-      $p
-        ->header()
-        ->title()
-        ->primary();
-
-        $this->load( 'list');
-
-      $p->secondary();
-        $this->load('main-index');
-
+      $this->render([
+        'title' => $this->title = 'guid',
+        'primary' => 'list',
+        'secondary' => 'main-index']);
+        
     }
     else {
       response::Redirect();

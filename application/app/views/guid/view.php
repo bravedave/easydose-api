@@ -92,6 +92,9 @@
           <td>workstation</td>
           <td>state</td>
           <td class="text-right">act/tot</td>
+<?php     if ( !$this->data->account) { ?>
+          <td>&nbsp;</td>
+<?php     } // if ( !$this->data->account) ?>
 
         </tr>
 
@@ -104,6 +107,9 @@
           <td><?php print $dto->workstation ?></td>
           <td><?php print $dto->state ?></td>
           <td class="text-right"><?php print $dto->patientsActive ?>/<?php print $dto->patients ?></td>
+<?php     if ( !$this->data->account) { ?>
+          <td class="text-center"><a href="#" class="btn btn-pimary">Create Account</a></td>
+<?php     } // if ( !$this->data->account) ?>
 
         </tr>
 

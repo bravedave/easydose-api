@@ -33,6 +33,7 @@
 
     if ( currentUser::isProgrammer()) {
       printf( $tpl, url::tostring('home/dbinfo'), 'dbinfo');
+      printf( $tpl, url::tostring('home/dbreset'), 'db reset');
       printf( $tpl, url::tostring('home/phpinfo'), 'info');
       printf( $tpl, url::tostring('home/mailtest'), 'mailtest');
       print '<li><hr /></li>';
