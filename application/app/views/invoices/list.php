@@ -27,6 +27,7 @@
       <td>date</td>
       <td>id</td>
       <td>state</td>
+      <td>changed</td>
       <td>user</td>
 
     </tr>
@@ -39,6 +40,7 @@
       <td><?php print strings::asShortDate( $dto->created) ?></td>
       <td><?php print $dto->id ?></td>
       <td><?php print $dto->state ?></td>
+      <td><?php print $dto->state_changed ?></td>
       <td><?php print $dto->user_name ?></td>
 
     </tr>

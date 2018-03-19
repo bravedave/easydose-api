@@ -82,7 +82,7 @@ class invoice {
     $tr->td('&nbsp;');
 
     $td->appendChild( new html\div( $this->account->name));
-    if ( $this->account->business_name) {
+    if ( $this->account->business_name && $this->account->business_name != $this->account->name) {
       $td->appendChild( new html\div( $this->account->business_name));
 
     }
@@ -189,7 +189,7 @@ class invoice {
       $tr = $tlicense->tr();
       $td = $tr->td( sprintf( '%s<br />%s', $this->license->description, $this->license->product));
       $td = $tr->td( (string)$this->license->workstations);
-      $td = $tr->td( strings::asShortDate( $this->license->expires));
+      $td = $tr->td( strings::asLocalDate( $this->license->expires));
       $td = $tr->td( $this->license->state);
 
     }

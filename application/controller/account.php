@@ -502,14 +502,14 @@ class account extends Controller {
 			$dao = new dao\invoices;
 			$daoLicense = new dao\license;
 
-			if ( $inv = $dao->getByID( $id)) {
-				if ( currentUser::isAdmin() || $inv->user_id == currentUser::id()) {
-					if ( $account = $users->getByID( $inv->user_id)) {
+			if ( $invoice = $dao->getByID( $id)) {
+				if ( currentUser::isAdmin() || $invoice->user_id == currentUser::id()) {
+					if ( $account = $users->getByID( $invoice->user_id)) {
 						$this->data = (object)[
-							'invoice' => $dao->getInvoice( $inv),
+							'invoice' => $dao->getInvoice( $invoice),
 							'account' => $account,
 							'sys' => $settings->getFirst(),
-							'license' => $daoLicense->getLicense( $inv->user_id)
+							'license' => $daoLicense->getLicense( $invoice->user_id)
 
 						];
 
@@ -553,6 +553,18 @@ class account extends Controller {
 
 							if ( $mail->send()) {
 								print '<h2>Sent</h2>';
+
+								$a = [
+									'state' => 'sent',
+									'state_change' => 'manual',
+									'state_changed' => \db::dbTimeStamp(),
+									'state_changed_by' => \currentUser::id(),
+			            'updated' => \db::dbTimeStamp()
+
+								];
+								
+								$dao = new dao\invoices;
+								$dao->UpdateByID( $a, $invoice->id);
 
 							}
 							else {
