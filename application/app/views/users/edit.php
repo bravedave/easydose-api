@@ -34,27 +34,12 @@
 
 		</div>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 		<div class="row form-group">
 			<div class="col col-3">Email</div>
 			<div class="col col-8">
 				<input type="email" name="email" class="form-control" placeholder="@" autocomplete="email"
 					value="<?php print $this->data->dto->email ?>" required
 					<?php if ( $this->data->readonly) print 'readonly'; ?> />
-=======
-=======
->>>>>>> 2d204af702ea9ef6a31346a129b73ddf0c3cded3
-		<div class="form-group row">
-			<div class="col-3">Email</div>
-			<div class="col-8">
-				<input type="text" name="email" class="form-control" placeholder="@" autocomplete="email"
-				value="<?php print $this->data->dto->email ?>" required
-				<?php if ( $this->data->readonly) print 'readonly'; ?> />
-<<<<<<< HEAD
->>>>>>> 2d204af702ea9ef6a31346a129b73ddf0c3cded3
-=======
->>>>>>> 2d204af702ea9ef6a31346a129b73ddf0c3cded3
 
 			</div>
 
