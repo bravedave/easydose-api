@@ -182,7 +182,7 @@ class invoice {
 
       $tr = $tlicense->head()->tr();
       $td = $tr->td( 'description');
-      $td = $tr->td( 'wks');
+      $td = $tr->td( 'workstation');
       $td = $tr->td( 'expires');
       $td = $tr->td( 'state');
 
