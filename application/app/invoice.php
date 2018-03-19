@@ -120,7 +120,7 @@ class invoice {
     $headline = new html\table("table table-sm borderless m-0");
 
     $tr = $headline->tr();
-    $tr->td( new html\div( sprintf('Invoice Number: # <strong>%s</strong>', sys::format_invoice_number( $this->invoice->id))),
+    $tr->td( new html\div( sprintf('Tax Invoice: <strong>%s</strong>', sys::format_invoice_number( $this->invoice->id))),
       [ 'class' => 'bx-1', 'style' => 'width: 33%;']);
     $tr->td( new html\div( sprintf('Status: <strong>%s</strong>', ( 'approved' == $this->invoice->state ? 'paid' : 'not paid'))),
       [ 'class' => 'bx-1 text-center', 'style' => 'width: 33%;']);
