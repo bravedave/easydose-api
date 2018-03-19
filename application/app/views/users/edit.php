@@ -38,7 +38,7 @@
 		<div class="row form-group">
 			<div class="col col-3">Email</div>
 			<div class="col col-8">
-				<input type="text" name="email" class="form-control" placeholder="@" autocomplete="email"
+				<input type="email" name="email" class="form-control" placeholder="@" autocomplete="email"
 					value="<?php print $this->data->dto->email ?>" required
 					<?php if ( $this->data->readonly) print 'readonly'; ?> />
 

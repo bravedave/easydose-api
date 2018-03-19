@@ -117,7 +117,20 @@ class users extends Controller {
 					'username' => '',
 					'name' => '',
 					'email' => '',
+					'business_name' => '',
+					'street' => '',
+					'town' => '',
+					'state' => '',
+					'postcode' => '',
+					'abn' => '',
 					'admin' => 0]];
+
+					// $dbc->defineField( 'pass', 'text');
+					// $dbc->defineField( 'admin', 'int');
+					// $dbc->defineField( 'reset_guid', 'text');
+					// $dbc->defineField( 'reset_guid_date', 'text');
+					// $dbc->defineField( 'created', 'text');
+					// $dbc->defineField( 'updated', 'text');
 
 			if ( $id = (int)$id) {
 				$dao = new dao\users;
