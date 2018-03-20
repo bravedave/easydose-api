@@ -15,12 +15,12 @@
     $tpl = '<li><a href="%s">%s</a></li>';
 
     printf( $tpl, url::tostring('sites'), 'sites');
-    printf( $tpl, url::tostring('guid'), 'guid');
+    printf( $tpl, url::tostring('guid'), 'pharmacy databases');
+    printf( $tpl, url::tostring('users'), 'accounts');
 
     print '<li>&nbsp;</li>';
     print '<li><h4>maintenance</h4></li>';
 
-    printf( $tpl, url::tostring('users'), 'users');
     printf( $tpl, url::tostring('settings'), 'settings');
     printf( $tpl, url::tostring('products'), 'products');
     if ( sys::useSubscriptions()) {

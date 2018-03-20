@@ -81,7 +81,7 @@ class guid extends Controller {
         'sites' => FALSE,
         'license' => $guidDAO->getLicenseOf( $dto)];
 
-      $this->title = 'guid';
+      $this->title = 'pharmacy database';
       if ( $dto->user_id) {
         $usersDAO = new dao\users;
         if ($this->data->account = $usersDAO->getByID( $dto->user_id)) {
@@ -113,10 +113,10 @@ class guid extends Controller {
       $this->data = (object)[ 'res' => $guidDAO->getAll() ];
 
       $this->render([
-        'title' => $this->title = 'guid',
+        'title' => $this->title = 'pharmacy databases',
         'primary' => 'list',
         'secondary' => 'main-index']);
-        
+
     }
     else {
       response::Redirect();
@@ -145,7 +145,7 @@ class guid extends Controller {
 
       }
 
-      Response::Redirect( url::tostring( 'guid/'), 'removed guid');
+      Response::Redirect( url::tostring( 'guid/'), 'removed pharmacy database');
 
     }
     else {

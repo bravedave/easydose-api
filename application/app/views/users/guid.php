@@ -8,82 +8,80 @@
 		http://creativecommons.org/licenses/by/4.0/
 
 	*/	?>
-	<h6 class="m-0">
-		GUID
+<div class="row">
+	<div class="col">
+		<h6>
+			Pharmacy Database
 
-	</h6>
+		</h6>
+
+	</div>
+
+</div>
 
 <?php
-	if ( $this->data->guid ) {
-		foreach ($this->data->guid as $dto) {
-	  	// will only be 1	?>
-			<table class="table table-striped table-sm">
-				<thead>
-					<tr>
-						<td colspan="3">
-							<strong>
-								<?php print $dto->guid ?>
+if ( $this->data->guid ) {
+	foreach ($this->data->guid as $dto) {
+		// will only be 1	?>
 
-							</strong>
+<div class="row">
+	<div class="col">
+		<table class="table table-sm">
+			<tbody>
+				<tr>
+					<td>GUID</td>
+					<td>
+						<strong><?php print $dto->guid ?></strong>
 
-						</td>
+					</td>
 
-					</tr>
+				</tr>
 
-					<tr>
-						<td>created</td>
-						<td>use</td>
-						<td>Grace</td>
+				<tr>
+					<td>created</td>
+					<td><?php print strings::asShortDate( $dto->created) ?></td>
 
-					</tr>
+				</tr>
 
-				</thead>
+				<tr>
+					<td>use license</td>
+					<td><?php print $dto->use_license ? 'yes' : '' ?></td>
 
-				<tbody>
-					<tr>
-						<tr>
-							<td><?php print strings::asShortDate( $dto->created) ?></td>
-							<td><?php print $dto->use_license ? 'yes' : '' ?></td>
-							<td class="p-0">
-								<table class="table table-sm">
-									<tr>
-										<td>Product</td>
-										<td><?php print $dto->grace_product ?></td>
+				</tr>
+				<tr>
+					<td>Grace Product</td>
+					<td><?php print $dto->grace_product ?></td>
 
-									</tr>
-									<tr>
-										<td>Grace Wks</td>
-										<td><?php print $dto->grace_workstations ?></td>
+				</tr>
+				<tr>
+					<td>Grace Wks</td>
+					<td><?php if ((int)$dto->grace_workstations) print $dto->grace_workstations ?></td>
 
-									</tr>
-									<tr>
-										<td>Grace Expires</td>
-										<td><?php print strings::asShortDate( $dto->grace_expires) ?></td>
+				</tr>
+				<tr>
+					<td>Grace Expires</td>
+					<td><?php print strings::asShortDate( $dto->grace_expires) ?></td>
 
-									</tr>
+				</tr>
 
-								</table>
+			</tbody>
 
-							</td>
+			<tfoot>
+				<tr>
+					<td colspan="3" class="text-right">
+						<a href="<?php url::write('guid/view/' . $dto->id) ?>" class="btn btn-outline-secondary">view</a>
 
-						</tr>
+					</td>
 
-					</tr>
+				</tr>
 
-				</tbody>
+			</tfoot>
 
-				<tfoot>
-					<tr>
-						<td colspan="3" class="text-right">
-							<a href="<?php url::write('guid/view/' . $dto->id) ?>" class="btn btn-outline-secondary">view</a>
+		</table>
 
-						</td>
+	</div>
 
-					</tr>
-
-				</tfoot>
-
-			</table>
+</div>
 
 <?php }	// foreach ($this->data->guid as $dto)  ?>
 
