@@ -208,8 +208,8 @@ class home extends Controller {
 		if ( !$this->authorised)
 			return;
 
-		// $debug = FALSE;
-		$debug = TRUE;
+		$debug = FALSE;
+		// $debug = TRUE;
 
 		Response::javascript_headers();
 

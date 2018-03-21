@@ -12,4 +12,14 @@ $(document).ready( function() {
 
 	});
 
+	$('[data-provide="easyLog-table"]').each( function( i, el) {
+    _ed_.easyLog.call( el);
+
+  });
+
+  $('[data-provide="add-comment"]').each( function( i, el) {
+    _ed_.easyComment.call( el);
+
+  });
+
 })

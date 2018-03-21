@@ -85,14 +85,18 @@ class easyLog extends Controller {
 	}
 
 	public function index() {
-		if ( $this->isPost()) {
-      $this->postHandler();
+		if ( currentUser::isAdmin()) {
+			if ( $this->isPost()) {
+				$this->postHandler();
 
-    }
-    else {
-      $this->_index();
+			}
+			else {
+				$this->_index();
 
-    }
+			}
+
+		}
+		else { throw new \Exceptions\AccessViolation; }
 
 	}
 

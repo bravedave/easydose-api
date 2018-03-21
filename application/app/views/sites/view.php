@@ -77,29 +77,19 @@
 
 <div class="row py-1">
   <div class="col col-3 pt-1 small">
-    IP
+    Workstation / IP
 
   </div>
 
   <div class="col col-9">
+    <?php print $dto->workstation ?>
+    /
     <?php print $dto->ip ?>
 
   </div>
 
 </div>
 
-<div class="row py-1">
-  <div class="col col-3 pt-1 small">
-    Workstation
-
-  </div>
-
-  <div class="col col-9">
-    <?php print $dto->workstation ?>
-
-  </div>
-
-</div>
 
 <div class="row py-1">
   <div class="col col-3 pt-1 small">
@@ -232,6 +222,11 @@
   } // if ( $this->data->account)
 
   ?></div>
+
+</div>
+
+<div class="row py-1">
+  <div class="col" data-provide="easyLog-table" data-site="<?php print $this->data->site->id ?>"></div>
 
 </div>
 
