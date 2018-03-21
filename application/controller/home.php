@@ -153,6 +153,63 @@ class home extends Controller {
 
 	}
 
+	public function dbMigrateSQLite2MySQL() {
+		if ( currentUser::isProgrammer()) {
+
+			/*
+			* This is written to access SQLite3
+			*
+			* I'm not so sure of the wisdom of this - I have
+			* had one 'Database is Busy' error
+			*
+			* roughly this could be used to migrate to MySQL
+			* the escape sequencing would need fixing
+			*
+			*/
+			print 'disabled';
+			return;
+
+			// $sq = new SQLite3( 'sqlite3.db' );
+			Response::text_headers();
+
+			// $mysqli = new mysqli( "localhost", "my_user", "my_password", "world");
+			$sqlitedb = $this->db;
+
+			$tables = $sqlitedb->Q( 'SELECT name FROM sqlite_master WHERE type="table"' );
+			while ( $table = $tables->fetchArray() ) {
+				$table = current( $table );
+
+				$result = $sqlitedb->Q( sprintf( 'SELECT * FROM %s', $table ) );
+
+				if ( strpos( $table, 'sqlite' ) !== false ) {
+					continue;
+
+				}
+
+				printf( "-- %s\n", $table );
+
+				while ( $row = $result->fetchArray( SQLITE3_ASSOC)) {
+					$values = array_map( function( $value ) {
+
+						// return sprintf( "'%s'", mysqli_real_escape_string( $value));
+						return sprintf( "'%s'", addslashes( $value));
+
+					}, array_values( $row));
+
+					printf( "INSERT INTO `%s` VALUES( %s );\n", $table, implode( ', ', $values ) );
+
+				}
+
+			}
+
+		}
+		else {
+			$this->_index();
+
+		}
+
+	}
+
 	public function test() {
 		if ( currentUser::isProgrammer()) {
 			$this->render([
