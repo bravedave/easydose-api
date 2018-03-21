@@ -29,8 +29,9 @@ i[title="download as CSV"] {margin-top: -18px;}
           <td>State</td>
           <td role="sort-header" data-key="site">Site</td>
           <td class="d-none d-lg-table-cell">Tel.</td>
-          <td class="d-none d-lg-table-cell">@</td>
-          <td class="d-none d-lg-table-cell">ABN</td>
+          <td class="d-none d-lg-table-cell text-center"><i class="fa fa-user"></i></td>
+          <td class="d-none d-lg-table-cell text-center">@</td>
+          <td class="d-none d-lg-table-cell text-center">ABN</td>
           <td class="d-none d-xl-table-cell">IP</td>
           <td>Product</td>
           <td class="d-none d-md-table-cell">Active/<br />Patients</td>
@@ -38,7 +39,7 @@ i[title="download as CSV"] {margin-top: -18px;}
           <td class="d-none d-xl-table-cell">Workstation</td>
           <td class="d-none d-xl-table-cell">Deploy</td>
           <td class="d-none d-lg-table-cell" role="sort-header" data-key="version">Version</td>
-          <td>Act</td>
+          <td class="text-center">Act</td>
           <td class="d-none d-md-table-cell" role="sort-header" data-key="expires">Expires</td>
           <td class="d-none d-lg-table-cell" role="sort-header" data-key="updated">Update</td>
 
@@ -71,6 +72,7 @@ while ( $dto = $this->data->sites->dto()) {
             <?php print $dto->site ?>
           </td>
           <td class="d-none d-lg-table-cell text-nowrap"><?php print $tel ?></td>
+          <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?php print ( $dto->guid_user_id ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
           <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?php print ( $dto->email ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
           <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?php print ( $dto->abn ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
           <td class="d-none d-xl-table-cell"><?php print $dto->ip ?></td>

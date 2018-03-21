@@ -23,6 +23,14 @@ class sites extends _dao {
 
 	}
 
+	public function getAllIncludeUserID() {
+		return ( $this->Result(
+			'SELECT sites.*, guid.user_id guid_user_id
+			FROM sites LEFT JOIN guid on guid.guid = sites.guid
+			WHERE sites.deployment <> "Build" ORDER BY updated DESC'));
+
+	}
+
 	public function getForGUID( $guid) {
 		return ( $res = $this->Result( sprintf( 'SELECT * FROM %s WHERE guid = "%s"', $this->db_name(), $guid )));
 

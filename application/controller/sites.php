@@ -131,7 +131,7 @@ class sites extends Controller {
     if ( currentUser::isAdmin()) {
       $dao = new dao\sites;
       $this->data = (object)[
-        'sites' => $dao->getAll( '*', 'ORDER BY updated DESC')
+        'sites' => $dao->getAllIncludeUserID()
 
       ];
 
