@@ -7,18 +7,18 @@
 		http://creativecommons.org/licenses/by/4.0/
 	*/
 _ed_.datehelper = function( params) {
-  var options = {
+  let options = {
     date : _brayworth_.moment().format('YYYY-MM-DD'),
     element : $(this),
     parent : $(this).parent(),
     dateFormat : false,
     select : function( date) {
-      var _el = $(this);
+      let _el = $(this);
 
       if ( 'text' == options.element.prop('type')) {
-        var m = _brayworth_.moment( date);
+        let m = _brayworth_.moment( date);
         options.element.val( m.format( options.dateFormat));
-        console.log( _el.text(), date, options.dateFormat);
+        // console.log( _el.text(), date, options.dateFormat);
 
       }
 
@@ -29,10 +29,11 @@ _ed_.datehelper = function( params) {
   $.extend( options, params);
 
   if ( !options.dateFormat) {
-    var df = options.element.data('dateformat');
+    let df = options.element.data('dateformat');
     if ( !!df) {
       if ( 'yyyy-mm-dd' == df) {
         options.dateFormat = 'YYYY-MM-DD';
+
       }
       else if ( 'dd/mm/yy' == df ) {
         options.dateFormat = 'L';
@@ -51,58 +52,60 @@ _ed_.datehelper = function( params) {
 
   }
 
-  var _el = $(this);
+  let _el = $(this);
 
-  var dt = function() {
-    var m = _brayworth_.moment( options.date);
+  let dtElement = function() {
+    let m = _brayworth_.moment( options.date);
 
-    var div = $('<div class="card date-helper" />');
-    var box = {
+    let div = $('<div class="card date-helper" />');
+    let box = {
       head : $('<div class="card-header bg-primary text-light py-1" />').appendTo(div),
       body : $('<div class="card-body py-1" />').appendTo(div),
       foot : $('<div class="card-footer py-1" />').appendTo(div),
 
     }
 
-    var navMonth = function( i) {
+    let navMonth = function( i) {
       m.add( i, 'month');
       display( m.format('YYYY-MM-DD'), box);
 
     }
 
-    var lastMonth = $('<a href="#">&lt;</a>').on( 'click', function( e) {
+    let lastMonth = $('<a href="#">&lt;</a>').on( 'click', function( e) {
       e.stopPropagation(); e.preventDefault();
       navMonth( -1);
 
     });
 
-    var nextMonth = $('<a href="#">&gt;</a>').on( 'click', function( e) {
+    let nextMonth = $('<a href="#">&gt;</a>').on( 'click', function( e) {
       e.stopPropagation(); e.preventDefault();
       navMonth( 1);
 
     });
 
-    var dow = ['S','M','T','W','T','F','S'];
-    var r = $('<div class="row" />').appendTo( box.head)
-    for ( var iD = 0; iD < 7; iD++) {
+    let dow = ['S','M','T','W','T','F','S'];
+    let r = $('<div class="row" />').appendTo( box.head)
+    for ( let iD = 0; iD < 7; iD++) {
       $('<div class="col p-0 text-center" />').html(dow[iD]).appendTo(r);
 
     }
 
-    var r = $('<div class="row" />').appendTo( box.foot)
+    r = $('<div class="row" />').appendTo( box.foot)
     $('<div class="col-1 p-0 text-center" />').append( lastMonth).appendTo(r);
     box.foot = $('<div class="col-10 p-0 text-center">---</div>').appendTo(r);
     $('<div class="col-1 p-0 text-center" />').append( nextMonth).appendTo(r);
 
-    var display = function( seed, box ) {
-      var m = _brayworth_.moment( seed);
+    let display = function( seed, box ) {
+      let m = _brayworth_.moment( seed);
 
       box.foot.html( m.format('MMM YYYY'));
       box.body.html( '');
 
-      // console.log( options.date);
-      var start = _brayworth_.moment( m.format('YYYY-MM-01'));
-      var startMonth = start.month();
+      // console.log( 'display:', seed, m.format('YYYY-MM-01'));
+      let start = _brayworth_.moment( m.format('YYYY-MM-01'));
+      let startMonth = start.month();
+
+      // console.log( 'display:', seed, m.format('YYYY-MM-01'), start.format('l'));
 
       for ( iW = 0; iW < 7; iW++) {
         if ( startMonth != start.month()) {
@@ -110,9 +113,9 @@ _ed_.datehelper = function( params) {
 
         }
 
-        var r = $('<div class="row" />').appendTo( box.body);
-        for ( iD = 0; iD < 7; iD++) {
-          var cell = $('<div class="col p-0 text-center pointer" />').appendTo(r);
+        r = $('<div class="row" />').appendTo( box.body);
+        for ( let iD = 0; iD < 7; iD++) {
+          let cell = $('<div class="col p-0 text-center pointer" />').appendTo(r);
           if ( startMonth == start.month() && (start.date() > 1 || start.day() == iD)) {
             cell.data('date', start.format('YYYY-MM-DD')).html( start.date()).on( 'click', function( e) {
               e.stopPropagation(); e.preventDefault();
@@ -135,10 +138,10 @@ _ed_.datehelper = function( params) {
 
   }
 
-  var d = dt();
+  let dt = dtElement();
 
-  var c = $('<div style="position: relative" />').appendTo( options.parent);
-  d.css({
+  let c = $('<div style="position: relative; z-index: 1;" />').appendTo( options.parent);
+  dt.css({
     'position' : 'absolute',
     'width' : '100%',
   })
@@ -173,11 +176,12 @@ _ed_.datehelper = function( params) {
 
   }
 
-  return dt();
+  return dt;
 
 }
 
 $('[data-provide="date-helper"]').each( function( i, el) {
+  // console.log( el);
   _ed_.datehelper.call( el);
 
 });

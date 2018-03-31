@@ -12,13 +12,8 @@ if ( typeof _cms_ == 'undefined')
 _ed_.utcOffset = '<?php print \config::$UTC_OFFSET ?>';
 
 if ( typeof moment != 'undefined') {
-	_brayworth_.moment = _ed_.moment = function( a,b,c,d) {
-		/** we only want to work in the timezone of the office, not the browser */
-		var d = moment( a,b,c,d)
-		d.utcOffset( _ed_.utcOffset);
-		return (d);
-
-	};
+	moment().utcOffset( _ed_.utcOffset);
+	_brayworth_.moment = _ed_.moment = moment;	// reset
 
 	moment.updateLocale('en', {
 		longDateFormat : {
