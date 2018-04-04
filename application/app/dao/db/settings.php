@@ -13,6 +13,7 @@ Namespace dvc\sqlite;
 $dbc = new dbCheck( $this->db, 'settings' );
 $dbc->defineField( 'name', 'text');
 $dbc->defineField( 'lockdown', 'int');
+$dbc->defineField( 'paypal_live', 'int');
 $dbc->defineField( 'paypal_ClientID', 'text');
 $dbc->defineField( 'paypal_ClientSecret', 'text');
 $dbc->defineField( 'street', 'text');
