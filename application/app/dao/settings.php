@@ -71,6 +71,18 @@ class settings extends _dao {
 
 	}
 
+	public function paypalLive() {
+		if ( self::$dto || self::$dto = $this->getFirst()) {
+			if ( self::$dto->paypal_live) {
+				return ( 'live');
+
+			}
+
+		}
+		return ( 'sandbox');
+
+	}
+
 	public function paypalAuth() {
 		if ( self::$dto || self::$dto = $this->getFirst()) {
 			$auth = new \PayPal\Auth\OAuthTokenCredential(

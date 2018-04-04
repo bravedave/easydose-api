@@ -22,6 +22,7 @@ use PayPal\Api\PatchRequest;
 use PayPal\Api\Payment;
 use PayPal\Api\PaymentExecution;
 use PayPal\Common\PayPalModel;
+use PayPal\Exception;
 use PayPal\Rest\ApiContext;
 
 abstract class paypal {
@@ -30,7 +31,13 @@ abstract class paypal {
 	const STATE_INACTIVE = 2;
 
 	protected static function apiContext() {
-		return ( new ApiContext( sys::paypalAuth()));
+		$context = new ApiContext( sys::paypalAuth());
+
+		$context->setConfig([
+			'mode' => sys::paypalLive()
+		]);
+
+		return ( $context);
 
 	}
 

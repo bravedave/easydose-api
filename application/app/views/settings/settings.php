@@ -86,14 +86,14 @@
 		</div>
 
 		<div class="col-2">
-			<input type="text" name="bank_bsb" id="BSB" class="form-control" placeholder="000 000"
-				value="<?php print $this->data->bank_bsb ?>" />
+			<input type="text" name="bank_bsb" id="BSB" class="form-control"
+			 placeholder="000 000" value="<?php print $this->data->bank_bsb ?>" />
 
 		</div>
 
 		<div class="col-3">
-			<input type="text" name="bank_account" class="form-control" placeholder="00000 0000"
-				value="<?php print $this->data->bank_account ?>" />
+			<input type="text" name="bank_account" class="form-control"
+			 placeholder="00000 0000" value="<?php print $this->data->bank_account ?>" />
 
 		</div>
 
@@ -101,10 +101,26 @@
 
 <?php if ( currentUser::isProgrammer() && $this->data->lockdown) {	?>
 	<div class="form-group row py-1">
+		<div class="offset-3 col-9">
+			<div class="form-check">
+				<input type="checkbox" name="paypal_live" id="paypal_live"
+				 class="form-check-input" value="1"
+				 <?php if ((int)$this->data->paypal_live) print 'checked'; ?> />
+
+				<label class="form-check-label" for="paypal_live">Paypal is Live</label>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="form-group row py-1">
 		<label class="col-3" for="paypal_ClientID">Paypal ClientID</label>
 		<div class="col-9">
-			<input type="text" name="paypal_ClientID" id="paypal_ClientID" class="form-control" placeholder="ClientID"
-				value="<?php print $this->data->paypal_ClientID ?>" />
+			<input type="text" name="paypal_ClientID" id="paypal_ClientID"
+			 class="form-control" placeholder="ClientID"
+			 value="<?php print $this->data->paypal_ClientID ?>" />
 
 		</div>
 
@@ -113,8 +129,9 @@
 	<div class="form-group row">
 		<label class="col-3" for="paypal_ClientSecret">Paypal ClientSecret</label>
 		<div class="col-9">
-			<input type="text" name="paypal_ClientSecret" class="form-control" placeholder="Secret"
-				value="<?php print $this->data->paypal_ClientSecret ?>" />
+			<input type="text" name="paypal_ClientSecret"
+			 class="form-control" placeholder="Secret"
+			 value="<?php print $this->data->paypal_ClientSecret ?>" />
 
 		</div>
 

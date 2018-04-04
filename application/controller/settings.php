@@ -30,8 +30,9 @@ class settings extends Controller {
 
 			if ( currentUser::isProgrammer()) {
 				// $a['lockdown'] = (int)$this->getPost('lockdown');
-				$a['paypal_ClientID'] = $this->getPost('paypal_ClientID');
-				$a['paypal_ClientSecret'] = $this->getPost('paypal_ClientSecret');
+				$a['paypal_live'] = (int)$this->getPost('paypal_live');
+				$a['paypal_ClientID'] = (string)$this->getPost('paypal_ClientID');
+				$a['paypal_ClientSecret'] = (string)$this->getPost('paypal_ClientSecret');
 
 			}
 

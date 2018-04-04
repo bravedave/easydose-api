@@ -40,6 +40,11 @@ abstract class sys extends dvc\sys {
 
 	}
 
+	static function paypalLive() {
+		return ( self::_settings()->paypalLive());
+
+	}
+
 	static function useSubscriptions() {
 		return ( self::_settings()->useSubscriptions());
 
