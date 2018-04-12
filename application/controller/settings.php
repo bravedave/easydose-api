@@ -112,10 +112,11 @@ class settings extends Controller {
 				if ( $confirmation = $this->getPost('confirmation')) {
 					if ( 'Reset Confirmed' == $confirmation) {
 
-						$dbinfo = new dao\dbinfo;
-					  $dbinfo->reset();
-
-						Response::redirect( 'logout');
+						throw new \Exceptions\ResetDisabled;
+						// $dbinfo = new dao\dbinfo;
+					  // $dbinfo->reset();
+						//
+						// Response::redirect( 'logout');
 
 					}
 					else { throw new \Exceptions\MissingResetConfirmation; }
