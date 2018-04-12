@@ -89,6 +89,7 @@ class api extends Controller {
         "ip" => $this->Request->getRemoteIP(),
         "workstation" => $this->getPost('workstation'),
         "productid" => $this->getPost('productid'),
+        "productid_report" => $this->getPost('productid'),
         "patients" => $this->getPost('patients'),
         "patientsActive" => $this->getPost('patientsActive'),
         "os" => $this->getPost('OS'),
@@ -96,6 +97,7 @@ class api extends Controller {
         "version" => $this->getPost('version'),
         "activated" => ( $this->getPost('activated') == "yes" ? 1 : 0 ),
         "expires" => $this->getPost('expires'),
+        "expires_report" => $this->getPost('expires'),
         "guid" => $this->getPost('guid'),
         "abn" => $this->getPost('abn'),
         "email" => $this->getPost('email'),
@@ -164,26 +166,6 @@ class api extends Controller {
 
           }
 
-          // elseif ( $guidDTO) {
-          //   if ( $agreementsID = $guidDTO->agreements_id) {
-          //     if ( $agreementsDTO = $agreementsDAO->getByID( $agreementsID)) {
-          //       if ( $agreementsDTO->plan_id) {
-          //         $status = strtolower( $agreementsDTO->state);
-          //         $NextPaymentDue = date( 'Y-m-d', strtotime( $agreementsDTO->next_billing_date));
-          //         if ( $plansDTO = $plansDAO->getByPayPalID( $agreementsDTO->plan_id)) {
-          //           $license = $plansDTO->name;
-          //
-          //         }
-          //
-          //       }
-          //
-          //     }
-          //
-          //   }
-          //
-          // }
-
-          // ->add('agreementsID', $agreementsID)
           $j
             ->add('License', $license)
             ->add('Workstations', $workstations)

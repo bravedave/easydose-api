@@ -99,6 +99,7 @@
 
   <div class="col col-9">
     <?php print strings::ShortLicense( $dto->productid); ?>
+    <?php printf( ' (%s)', strings::ShortLicense( $dto->productid_report)); ?>
 
   </div>
 
@@ -155,6 +156,7 @@
 
   <div class="col col-9">
     <?php print date( \config::$DATE_FORMAT, strtotime( $dto->expires )) ?>
+    <?php printf( ' (%s)', date( \config::$DATE_FORMAT, strtotime( $dto->expires_report ))) ?>
 
   </div>
 
