@@ -13,7 +13,7 @@
 
   	?>
 
-<table class="table table-sm table-stripped">
+<table class="table table-sm table-striped">
   <colgroup>
     <col />
     <col style="width: 3rem;" />
