@@ -73,20 +73,15 @@ class invoices extends Controller {
 
                 Response::redirect( url::tostring('account/invoice/' . $invID), 'created invoice');
 
-              }
-              else { throw new \Exceptions\FailedToCreateInvoice; }
+              } else { throw new \Exceptions\FailedToCreateInvoice; }
 
-            }
-            else { throw new \Exceptions\ProductNotFound; }
+            } else { throw new \Exceptions\ProductNotFound; }
 
-          }
-          else { throw new \Exceptions\InvalidUser; }
+          } else { throw new \Exceptions\InvalidUser; }
 
-        }
-        else { throw new \Exceptions\InvalidProduct; }
+        } else { throw new \Exceptions\InvalidProduct; }
 
-      }
-      else { throw new \Exceptions\MissingUserID; }
+      } else { throw new \Exceptions\MissingUserID; }
 
     }
     elseif ( 'update-expires' == $action) {
@@ -102,11 +97,9 @@ class invoices extends Controller {
 
           \Json::ack( $action);
 
-        }
-        else { \Json::nak( $action); }
+        } else { \Json::nak( $action); }
 
-      }
-      else { \Json::nak( $action); }
+      } else { \Json::nak( $action); }
 
     }
     elseif ( 'update-state' == $action) {
@@ -126,11 +119,9 @@ class invoices extends Controller {
 
           \Json::ack( $action);
 
-        }
-        else { \Json::nak( $action); }
+        } else { \Json::nak( $action); }
 
-      }
-      else { \Json::nak( $action); }
+      } else { \Json::nak( $action); }
 
     }
 
@@ -152,14 +143,9 @@ class invoices extends Controller {
   }
 
   public function index() {
-    if ( $this->isPost()) {
-      $this->postHandler();
-
-    }
-    else {
+    $this->isPost() ?
+      $this->postHandler() :
       $this->_index();
-
-    }
 
   }
 

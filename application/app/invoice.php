@@ -122,7 +122,7 @@ class invoice {
     $tr = $headline->tr();
     $tr->td( new html\div( sprintf('Tax Invoice: <strong>%s</strong>', sys::format_invoice_number( $this->invoice->id))),
       [ 'class' => 'bx-1', 'style' => 'width: 33%;']);
-    $tr->td( new html\div( sprintf('Status: <strong>%s</strong>', ( 'approved' == $this->invoice->state ? 'paid' : 'not paid'))),
+    $tr->td( new html\div( sprintf('Status: <strong>%s</strong>', ( 'approved' == $this->invoice->state ? 'paid' : ( 'canceled' == $this->invoice->state ? 'canceled' : 'not paid')))),
       [ 'class' => 'bx-1 text-center', 'style' => 'width: 33%;']);
     $tr->td( new html\div( sprintf('Invoice Date: <strong>%s</strong>', strings::asLocalDate( $this->invoice->created))),
       [ 'class' => 'bx-1 text-right', 'style' => 'width: 33%;']);

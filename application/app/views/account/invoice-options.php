@@ -22,7 +22,7 @@
       <?php
        if (
 
-        $this->data->invoice->state != 'approved' &&
+        !in_array( $this->data->invoice->state, ['approved', 'canceled']) &&
         currentUser::id() == $this->data->invoice->user_id
 
         ) {  ?>
@@ -31,21 +31,21 @@
 
       <?php } ?>
 
-      <?php if ( currentUser::isAdmin()) {  ?>
+      <?php if ( currentUser::isAdmin() && !in_array( $this->data->invoice->state, ['canceled'])) {  ?>
         <a href="#" class="btn btn-default" id="change-expiry">change expiry</a>
 
-        <?php if ( $this->data->invoice->state != 'approved') {  ?>
+        <?php if ( !in_array( $this->data->invoice->state, ['approved', 'canceled'])) {  ?>
           <a href="#" class="btn btn-default" id="change-state">change status</a>
 
         <?php } ?>
 
       <?php } ?>
 
-      <?php if ( $this->data->invoice->state != 'approved') {  ?>
+      <?php if ( !in_array( $this->data->invoice->state, ['approved', 'canceled'])) {  ?>
         <a href="<?php url::write( sprintf( 'account/invoice/%s?send=yes', $this->data->invoice->id )) ?>" class="btn btn-default">send invoice</a>
 
       <?php } ?>
-      
+
       <?php if ( currentUser::isAdmin()) {  ?>
         <a href="<?php url::write( sprintf( 'users/view/%s', $this->data->invoice->user_id )) ?>" class="btn btn-default">account</a>
 
@@ -100,13 +100,16 @@ $(document).ready( function() {
   });
 
   $('#change-state').on( 'click', function( e) {
-      var fld = $('<select class="form-control"></select>');
+      let fld = $('<select class="form-control" />');
       $('<option></option>').appendTo( fld);
       $('<option value="approved">approved</option>').appendTo( fld);
+      $('<option value="canceled">canceled</option>').appendTo( fld);
+
+      let fg = $('<div class="form-group" />').append( fld);
 
       _brayworth_.modal({
         title : 'change invoice state',
-        text : fld,
+        text : fg,
         width : 300,
         buttons : {
           update : function() {
