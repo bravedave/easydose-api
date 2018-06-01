@@ -59,6 +59,9 @@ class invoices extends _dao {
 	}
 
 	public function getForUser( $userID = 0) {
+		$debug = FALSE;
+		// $debug = TRUE;
+
 		if ( !(int)$userID) {
 			$userID = \currentUser::id();
 
@@ -70,11 +73,12 @@ class invoices extends _dao {
 			FROM
 			 	invoices
 			WHERE
-				user_id = %s
+				state <> "canceled" AND user_id = %s
 			ORDER BY
 				expires ASC, created ASC', $userID);
 
 		if ( $res = $this->Result( $sql)) {
+			// if ( $debug) \sys::dump( $res);
 			return ( $res->dtoSet( NULL, $this->template));
 
 		}
