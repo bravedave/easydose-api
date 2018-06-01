@@ -16,6 +16,29 @@
 	*/
 class sites extends Controller {
 
+  protected function postHandler() {
+    $action = $this->getPost('action');
+
+    if ( 'delete' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\sites;
+        $dao->delete( $id);
+        \Json::ack( $action);
+
+      }
+      else {
+        \Json::nak( $action);
+
+      }
+
+    }
+    else {
+      \Json::nak( $action);
+
+    }
+
+  }
+
   public function createaccount( $id = 0) {
     /**
     * we are going to create an account from this id
@@ -135,6 +158,15 @@ class sites extends Controller {
 
       ];
 
+      // \sys::dump( $this->data);
+      // while ( $dto = $this->data->sites->dto()) {
+      //   if ( $dto->id == 77) {
+      //     \sys::dump( $dto);
+      //
+      //   }
+      //
+      // }
+
       $p = $this->page(['title' => ( $this->title = 'Sites')]);
         $p->meta[] = sprintf( '<meta http-equiv="refresh" content="300; url=%s" />', url::tostring('sites'));
   			$p
@@ -151,7 +183,9 @@ class sites extends Controller {
 
   public function index() {
     if ( currentUser::isAdmin()) {
-      $this->_index();
+      $this->isPost() ?
+        $this->postHandler() :
+        $this->_index();
 
     }
     else {

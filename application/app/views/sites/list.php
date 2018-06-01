@@ -151,6 +151,68 @@ $(document).ready( function() {
 
       window.location.href = _brayworth_.url('sites/view/' + _tr.data('id'));
 
+    })
+    .on( 'contextmenu', function(e) {
+      if ( e.shiftKey) {
+        return;
+
+      }
+
+      e.stopPropagation(); e.preventDefault();
+
+      _brayworth_.hideContexts();
+
+      let context = _brayworth_.context();
+      let updated = _brayworth_.moment( _tr.data('updated'));
+      let duration = moment.duration( _brayworth_.moment().diff( updated));
+
+      if ( duration.asMonths() > 1) {
+        context.append( $('<a href="#"><i class="fa fa-trash" />delete</a>').on( 'click', function(e) {
+          e.stopPropagation(); e.preventDefault();
+
+          context.close();
+
+          _brayworth_.modal({
+            title : 'confirm',
+            text : 'Are you Sure ?',
+            width : 300,
+            buttons : {
+              'Yes - Delete' : function() {
+                this.close();
+                hourglass.on();
+
+                _brayworth_.post({
+                  url : _brayworth_.url('sites'),
+                  data : {
+                    action : 'delete',
+                    id : _tr.data('id'),
+
+                  }
+
+                })
+                .then( function(d) {
+                  _brayworth_.growl(d);
+                  if ( 'ack' == d.response) {
+                    _tr.remove();
+
+                  }
+
+                  hourglass.off()
+
+                });
+
+              }
+
+            }
+
+          });
+
+        }));
+
+        context.open( e);
+
+      }
+
     });
 
   });
