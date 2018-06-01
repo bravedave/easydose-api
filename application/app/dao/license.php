@@ -47,8 +47,9 @@ class license extends _dao {
 
     $dao = new invoices;
     if ( $ret = $dao->getActiveLicenseForUser( $user)) {
-      // \sys::dump( $ret);
       if ( $ret->license) {
+        // \sys::dump( $ret);
+        if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting Invoiced license - found', $user));
         return ( $ret);
 
       }
