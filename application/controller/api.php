@@ -54,7 +54,7 @@ class api extends Controller {
 
       $guidDAO = new dao\guid;
       if ( $license = $guidDAO->getLicense( $guid)) { // will add guid if it doesn't exist
-        json::ack( $action)
+        \Json::ack( $action)
           ->add( 'type', $license->type)
           ->add( 'description', $license->description)
           ->add( 'License', $license->product)
