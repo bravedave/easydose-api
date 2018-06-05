@@ -123,26 +123,24 @@ class api extends Controller {
           $status = 'inactive';
           $workstations = 0;
           $NextPaymentDue = date('Y-m-d', 0);
+          $authoritive = FALSE;
 
-          if ( $guidDTO = $guidDAO->getByGUID( $a['guid'])) { // will add guid if it doesn't exist
-            if ( (int)$guidDTO->user_id) {
-              if ( $licenseDTO = $licenseDAO->getLicense( $guidDTO->user_id)) {
-                // \sys::dump( $licenseDTO, NULL, FALSE);
-                $a['productid'] = $licenseDTO->product;
-                $a['expires'] = date( 'Y-m-d', strtotime($licenseDTO->expires));
 
-                // ->add( 'type', $licenseDTO->type)
-                // ->add( 'description', $licenseDTO->description)
-                // ->add( 'state', $licenseDTO->state)
-                // ->add( 'workstations', $licenseDTO->workstations)
-                $license = $licenseDTO->product;
-                $status = $licenseDTO->state;
-                $workstations = $licenseDTO->workstations;
-                $NextPaymentDue = date( 'Y-m-d', strtotime($licenseDTO->expires));
+          if ( $licenseDTO = $guidDAO->getLicense( $a['guid'])) { // will add guid if it doesn't exist
+            $a['productid'] = $licenseDTO->product;
+            $a['expires'] = date( 'Y-m-d', strtotime($licenseDTO->expires));
+            $authoritive = $licenseDTO->authoritive;
 
-              }
+            // \sys::dump( $licenseDTO, NULL, FALSE);
 
-            }
+            // ->add( 'type', $licenseDTO->type)
+            // ->add( 'description', $licenseDTO->description)
+            // ->add( 'state', $licenseDTO->state)
+            // ->add( 'workstations', $licenseDTO->workstations)
+            $license = $licenseDTO->product;
+            $status = $licenseDTO->state;
+            $workstations = $licenseDTO->workstations;
+            $NextPaymentDue = date( 'Y-m-d', strtotime($licenseDTO->expires));
 
           }
 
@@ -173,13 +171,10 @@ class api extends Controller {
             ->add('Workstations', $workstations)
             ->add('NextPaymentDue', $NextPaymentDue)
             ->add('Subscription_Status', $status)
+            ->add('authoritive', $authoritive ? 'yes' : 'no')
             ;
 
-        }
-        else {
-          \Json::nak( $action);
-
-        }
+        } else { \Json::nak( $action); }
 
       }
       else {
@@ -321,14 +316,9 @@ class api extends Controller {
   }
 
   public function index() {
-    if ( $this->isPost()) {
-      $this->postHandler();
-
-    }
-    else {
+    $this->isPost() ?
+      $this->postHandler() :
       print 'EasyDose API handler';
-
-    }
 
   }
 
