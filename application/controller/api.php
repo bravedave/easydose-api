@@ -60,7 +60,9 @@ class api extends Controller {
           ->add( 'License', $license->product)
           ->add( 'state', $license->state)
           ->add( 'workstations', $license->workstations)
-          ->add( 'expires', $license->expires);
+          ->add( 'expires', $license->expires)
+          ->add( 'authoritive', $license->authoritive ? 'yes' : 'no')
+          ;
 
       }
       else { json::nak( $action); }

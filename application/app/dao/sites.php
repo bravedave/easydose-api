@@ -19,15 +19,32 @@ class sites extends _dao {
 			throw new Exceptions\DBNameIsNull;
 
 		$this->db->log = $this->log;
-		return ( $this->Result( sprintf( 'SELECT %s FROM %s WHERE deployment <> "Build" %s', $fields, $this->db_name(), $order )));
+		if ( \Request::get()->ServerIsLocal()) {
+			return ( $this->Result( sprintf( 'SELECT %s FROM %s %s', $fields, $this->db_name(), $order )));
+
+		}
+		else {
+			return ( $this->Result( sprintf( 'SELECT %s FROM %s WHERE deployment <> "Build" %s', $fields, $this->db_name(), $order )));
+
+		}
 
 	}
 
 	public function getAllIncludeUserID() {
-		return ( $this->Result(
-			'SELECT sites.*, guid.user_id guid_user_id
-			FROM sites LEFT JOIN guid on guid.guid = sites.guid
-			WHERE sites.deployment <> "Build" ORDER BY updated DESC'));
+		if ( \Request::get()->ServerIsLocal()) {
+			return ( $this->Result(
+				'SELECT sites.*, guid.user_id guid_user_id
+				FROM sites LEFT JOIN guid on guid.guid = sites.guid
+				ORDER BY updated DESC'));
+
+		}
+		else {
+			return ( $this->Result(
+				'SELECT sites.*, guid.user_id guid_user_id
+				FROM sites LEFT JOIN guid on guid.guid = sites.guid
+				WHERE sites.deployment <> "Build" ORDER BY updated DESC'));
+
+		}
 
 	}
 

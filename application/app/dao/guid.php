@@ -140,6 +140,7 @@ class guid extends _dao {
 				if ( $debug) \sys::logger( sprintf( 'dao\guid->getLicenseOf :: %s license', $license->state));
 				if ( 'active' == strtolower( $license->state)) {
 					if ( $debug) \sys::logger( sprintf( 'dao\guid->getLicenseOf :: return active license : %s', $license->expires));
+					$license->authoritive = $dto->use_license;
 					return ( $license);
 
 				}
@@ -152,6 +153,11 @@ class guid extends _dao {
 					3. If the GUID is less than 3 months old an easydoseFREE license
 
 				*/
+				if ( $license = $this->getGratisLicenseOf( $dto)) {
+					$license->authoritive = $dto->use_license;
+
+				}
+				
 				return ( $this->getGratisLicenseOf( $dto));
 
 			}
