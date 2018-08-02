@@ -179,11 +179,11 @@ $(document).ready( function() {
 				text : 'Are you sure ?',
 				buttons : {
 					no : function() {
-						$(this).modal('close');
+						this.modal('close');
 
 					},
 					yes : function() {
-						$(this).modal('close');
+						this.modal('close');
 						$('input[name="confirmed"]', _form).val('yes');
 						$('input[name="action"]', _form).val('delete plan');
 						_form.submit();
@@ -200,4 +200,3 @@ $(document).ready( function() {
 
 });
 </script>
-

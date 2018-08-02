@@ -112,7 +112,7 @@ $(document).ready( function() {
             });
 
             // alert( 'right o');
-            $(this).modal('close');
+            this.modal('close');
 
           }
 

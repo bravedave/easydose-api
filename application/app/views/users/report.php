@@ -74,11 +74,11 @@ $(document).ready( function() {
 					text : 'Delete record',
 					buttons : {
 						cancel : function( e) {
-							$(this).modal('close');
+							this.modal('close');
 
 						},
 						OK : function( e) {
-							$(this).modal('close');
+							this.modal('close');
 
 							$.ajax({
 								type : 'POST',
