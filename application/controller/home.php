@@ -158,8 +158,7 @@ class home extends Controller {
 			if ( currentUser::isProgrammer()) {
 				$zipfile = $this->db->zip();
 				if ( file_exists( $zipfile)) {
-					Response::zip_headers( basename($zipfile));
-					file_get_contents( $zipfile);
+					sys::serve( $zipfile);
 
 				}
 
