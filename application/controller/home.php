@@ -153,6 +153,22 @@ class home extends Controller {
 
 	}
 
+	public function dbdownload() {
+		if ( config::$DB_TYPE == 'sqlite' ) {
+			if ( currentUser::isProgrammer()) {
+				$zipfile = $this->db->zip();
+				if ( file_exists( $zipfile)) {
+					Response::zip_headers( basename($zipfile));
+					file_get_contents( $zipfile);
+
+				}
+
+			} else { $this->_index(); }
+
+		} else { $this->_index(); }
+
+	}
+
 	public function dbMigrateSQLite2MySQL() {
 		if ( currentUser::isProgrammer()) {
 

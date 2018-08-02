@@ -34,7 +34,10 @@
 				</li>
 
 				<li class="nav-item"><a class="nav-link" href="<?php url::write('account'); ?>">My Account</a></li>
-			  <li class="nav-item"><a class="nav-link" href="<?php url::write('logout') ?>">Logout</a></li>
+				<?php if ( \sys::lockdown()) {	?>
+					<li class="nav-item"><a class="nav-link" href="<?php url::write('logout') ?>">Logout</a></li>
+					
+				<?php } // if ( \sys::lockdown())	?>
 
 			</ul>
 

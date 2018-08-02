@@ -562,7 +562,7 @@ class account extends Controller {
 			            'updated' => \db::dbTimeStamp()
 
 								];
-								
+
 								$dao = new dao\invoices;
 								$dao->UpdateByID( $a, $invoice->id);
 
@@ -609,10 +609,8 @@ class account extends Controller {
 	}
 
 	public function index() {
-		if ( $this->isPost())
-			$this->postHandler();
-
-		else
+		$this->isPost() ?
+			$this->postHandler() :
 			$this->_index();
 
 	}

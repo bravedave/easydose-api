@@ -34,6 +34,12 @@
     if ( currentUser::isProgrammer()) {
       printf( $tpl, url::tostring('home/dbinfo'), 'dbinfo');
       printf( $tpl, url::tostring('home/dbreset'), 'db reset');
+
+      if ( config::$DB_TYPE == 'sqlite' ) {
+        printf( $tpl, url::tostring('home/dbdownload'), 'db download');
+
+      }
+
       printf( $tpl, url::tostring('home/phpinfo'), 'info');
       printf( $tpl, url::tostring('home/mailtest'), 'mailtest');
       print '<li><hr /></li>';
