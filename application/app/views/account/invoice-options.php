@@ -68,7 +68,7 @@ $(document).ready( function() {
         buttons : {
           update : function() {
             hourglass.on();
-            $(this).modal('close');
+            this.modal('close');
 
             _brayworth_.post({
               url : _brayworth_.url('invoices'),
@@ -114,7 +114,7 @@ $(document).ready( function() {
         buttons : {
           update : function() {
             hourglass.on();
-            $(this).modal('close');
+            this.modal('close');
 
             _brayworth_.post({
               url : _brayworth_.url('invoices'),
