@@ -25,3 +25,14 @@ div#easydoseLOGO a {
 .bx-1 { border-top: 1px solid #dee2e6; border-bottom: 1px solid #dee2e6; }
 
 ul.menu { background-color: var(--light); }
+
+@media
+	only screen and (-webkit-min-device-pixel-ratio: 1.5),
+	only screen and (min--moz-device-pixel-ratio: 1.5),
+	only screen and (-moz-min-device-pixel-ratio: 1.5),
+	only screen and (-moz-min-device-pixel-ratio: 1.5),
+	only screen and ( min-device-pixel-ratio: 1.5)
+	{
+	html.desktop { font-size: .75rem } /* this is intended for desktop's and not iPhones & Mobiles */
+
+}

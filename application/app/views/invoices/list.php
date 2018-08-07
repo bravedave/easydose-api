@@ -12,23 +12,15 @@
   // sys::dump( $this->data->invoices);
 
   	?>
-
 <table class="table table-sm table-striped">
-  <colgroup>
-    <col />
-    <col style="width: 3rem;" />
-    <col />
-    <col />
-
-  </colgroup>
-
   <thead>
     <tr>
       <td>date</td>
-      <td>id</td>
+      <td style="width: 3rem;">id</td>
       <td>state</td>
       <td>changed</td>
       <td>user</td>
+      <td>site</td>
 
     </tr>
 
@@ -42,6 +34,7 @@
       <td><?php print $dto->state ?></td>
       <td><?php print $dto->state_changed ?></td>
       <td><?php print $dto->user_name ?></td>
+      <td><?php print $dto->site ?></td>
 
     </tr>
 

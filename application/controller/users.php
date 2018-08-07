@@ -98,14 +98,9 @@ class users extends Controller {
 	}
 
 	public function index() {
-		if ( $this->isPost()) {
-			$this->postHandler();
-
-		}
-		else {
+		$this->isPost() ?
+			$this->postHandler() :
 			$this->_index();
-
-		}
 
 	}
 

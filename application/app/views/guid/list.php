@@ -10,21 +10,14 @@
 <div class="row">
   <div class="col p-0">
     <table class="table table-striped">
-      <colgroup>
-        <col class="d-none d-lg-table-cell" style="width: 40px;" />
-        <col />
-        <col />
-        <col class="d-none d-lg-table-cell" span="2" style="width: 150px;" />
-
-      </colgroup>
-
       <thead>
         <tr>
-          <td class="d-none d-lg-table-cell">id</td>
+          <td class="d-none d-lg-table-cell" style="width: 40px;">id</td>
           <td>guid</td>
-          <td class="d-none d-lg-table-cell">name</td>
-          <td>created</td>
-          <td class="d-none d-lg-table-cell">updated</td>
+          <td class="d-none d-lg-table-cell" style="width: 18em;">site</td>
+          <td class="d-none d-lg-table-cell" style="width: 14em;">name</td>
+          <td class="text-center" style="width: 8em;">created</td>
+          <td class="d-none d-lg-table-cell text-center" style="width: 8em;">updated</td>
 
         </tr>
 
@@ -37,14 +30,15 @@
             <td class="d-none d-lg-table-cell"><?php print $dto->id ?></td>
             <td><?php print $dto->guid ?>
               <div class="d-block d-lg-none">
-                <?php print $dto->name ?>
+                <?php printf('%s<br />%s', $dto->site, $dto->name); ?>
 
               </div>
 
             </td>
+            <td class="d-none d-lg-table-cell"><?php print $dto->site ?></td>
             <td class="d-none d-lg-table-cell"><?php print $dto->name ?></td>
-            <td><?php print date( \config::$DATE_FORMAT, strtotime( $dto->created)) ?></td>
-            <td class="d-none d-lg-table-cell"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->updated)) ?></td>
+            <td class="text-center"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->created)) ?></td>
+            <td class="d-none d-lg-table-cell text-center"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->updated)) ?></td>
 
           </tr>
 

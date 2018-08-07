@@ -35,6 +35,32 @@ class users extends _dao {
 
 	}
 
+	public function getAll( $fields = '*', $order = '' ) {
+		if ( is_null( $this->_db_name)) {
+			throw new Exceptions\DBNameIsNull;
+
+		}
+
+		$this->db->log = $this->log;
+		// return ( $this->Result( sprintf( 'SELECT %s FROM %s %s', $fields, $this->db_name(), $order )));
+
+		$this->Q('DROP TABLE IF EXISTS _tmpsites');
+		// $this->Q('DROP TABLE IF EXISTS _tmpsitess');
+		$this->Q('CREATE TEMPORARY TABLE _tmpsites AS SELECT s.guid guid, s.site site, g.user_id user_id, s.updated updated FROM sites s LEFT JOIN guid g on g.guid = s.guid GROUP BY s.guid ORDER BY s.updated DESC');
+		// \sys::dump( $this->Result( 'SELECT * FROM _tmpsites LIMIT 2'));
+
+		// $this->Q('CREATE TEMPORARY TABLE _tmpsitess AS SELECT s.*, g.user_id FROM _tmpsites s LEFT JOIN guid g on g.guid = s.guid');
+
+		// \sys::logger('-------------------------------------------------');
+		$sql = sprintf( 'SELECT u.*, s.site FROM users u LEFT JOIN _tmpsites s ON u.id = s.user_id %s', $order );
+		// $sql = 'SELECT u.*, s.`site` FROM users u LEFT JOIN _tmpsites s ON u.id = s.user_id';
+		// \sys::logSQL( $sql);
+		return ( $this->Result( $sql));
+		// \sys::logger('-------------------------------------------------');
+
+	}
+
+
 	function getUserByUserName( $username ) {
 		if ( (string)$username) {
 			if ( $res = $this->Result( sprintf( "SELECT * FROM users WHERE username = '%s'", $this->escape( $username))))

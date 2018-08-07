@@ -72,12 +72,15 @@ class guid extends _dao {
 
 	}
 
-	public function getAll( $fields = 'guid.*, u.name', $order = '' ) {
+	public function getAll( $fields = 'guid.*, u.name, s.site', $order = '' ) {
 		if ( is_null( $this->_db_name))
 			throw new Exceptions\DBNameIsNull;
 
 		$this->db->log = $this->log;
-		$sql = sprintf( 'SELECT %s FROM guid LEFT JOIN users u on user_id = u.id %s', $fields, $order);
+		$this->Q('DROP TABLE IF EXISTS _tmpsites');
+		$this->Q('CREATE TEMPORARY TABLE _tmpsites AS SELECT DISTINCT guid, site, updated FROM sites ORDER BY updated DESC');
+		$sql = sprintf( 'SELECT %s FROM guid LEFT JOIN users u on user_id = u.id LEFT JOIN _tmpsites s on s.guid = guid.guid %s', $fields, $order);
+		// \sys::logSQL( $sql);
 
 		return ( $this->Result( $sql));
 
@@ -157,7 +160,7 @@ class guid extends _dao {
 					$license->authoritive = $dto->use_license;
 
 				}
-				
+
 				return ( $this->getGratisLicenseOf( $dto));
 
 			}
