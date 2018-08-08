@@ -78,7 +78,7 @@ class guid extends _dao {
 
 		$this->db->log = $this->log;
 		$this->Q('DROP TABLE IF EXISTS _tmpsites');
-		$this->Q('CREATE TEMPORARY TABLE _tmpsites AS SELECT DISTINCT guid, site, updated FROM sites ORDER BY updated DESC');
+		$this->Q('CREATE TEMPORARY TABLE _tmpsites AS SELECT guid, site, updated FROM sites GROUP BY guid ORDER BY updated DESC');
 		$sql = sprintf( 'SELECT %s FROM guid LEFT JOIN users u on user_id = u.id LEFT JOIN _tmpsites s on s.guid = guid.guid %s', $fields, $order);
 		// \sys::logSQL( $sql);
 

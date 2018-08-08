@@ -359,7 +359,7 @@ $(document).ready( function() {
 
 		});
 
-  })
+  });
 
   $('#version-2-license-check').on( 'change', function() {
     var _me = $(this);
@@ -377,9 +377,9 @@ $(document).ready( function() {
     .then( function(d) {
       _brayworth_.growl(d);
 
-    })
+    });
 
-  })
+  });
 
 })
 </script>
