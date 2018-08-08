@@ -77,6 +77,7 @@ $(document).ready( function() {
 
       e.stopPropagation(); e.preventDefault();
 
+      _brayworth_.hideContexts();
       let _context = _brayworth_.context();
       _context.append( $('<a><i class="fa fa-link"></i>view</a>').attr('href',_brayworth_.url('guid/view/'+id)));
       _context.append( ( function() {
@@ -108,7 +109,7 @@ $(document).ready( function() {
 
         if ( _tr.data('license') == 1) {
             a.prepend('<i class="fa fa-check"></i>');
-            
+
         }
 
         return (a);
