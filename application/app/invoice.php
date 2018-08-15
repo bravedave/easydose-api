@@ -192,6 +192,12 @@ class invoice {
       $td = $tr->td( strings::asLocalDate( $this->license->expires));
       $td = $tr->td( $this->license->state);
 
+      if ( $this->invoice->workstation_override) {
+        $tr = $tlicense->tr();
+        $td = $tr->td( '<em>workstation override applied</em>', ['colspan' => '4']);
+
+      }
+
     }
     else {
       $tr = $tlicense->tr();

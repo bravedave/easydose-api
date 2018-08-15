@@ -173,6 +173,11 @@ class invoices extends _dao {
 
 							}
 
+							if ($dto->workstation_override) {
+								$license->workstations = $dto->workstation_override;
+
+							}
+
 							// \sys::dump( $ret);
 
 						}

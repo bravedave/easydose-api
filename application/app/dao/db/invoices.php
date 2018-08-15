@@ -20,4 +20,5 @@ $dbc->defineField( 'user_id', 'text');
 $dbc->defineField( 'created', 'text');
 $dbc->defineField( 'updated', 'text');
 $dbc->defineField( 'expires', 'text');
+$dbc->defineField( 'workstation_override', 'int');
 $dbc->check();

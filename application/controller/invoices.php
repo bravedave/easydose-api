@@ -102,6 +102,24 @@ class invoices extends Controller {
       } else { \Json::nak( $action); }
 
     }
+    elseif ( 'update-workstation_override' == $action) {
+      if ( currentUser::isAdmin()) {
+        if ( $id = (int)$this->getPost('invoice_id')) {
+          $a = [
+            'workstation_override' => $this->getPost('workstations'),
+            'updated' => \db::dbTimeStamp()
+          ];
+
+          $dao = new dao\invoices;
+          $dao->UpdateByID( $a, $id);
+
+          \Json::ack( $action);
+
+        } else { \Json::nak( $action); }
+
+      } else { \Json::nak( $action); }
+
+    }
     elseif ( 'update-state' == $action) {
       if ( currentUser::isAdmin()) {
         if ( $id = (int)$this->getPost('invoice_id')) {

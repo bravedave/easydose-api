@@ -33,6 +33,7 @@
 
       <?php if ( currentUser::isAdmin() && !in_array( $this->data->invoice->state, ['canceled'])) {  ?>
         <a href="#" class="btn btn-default" id="change-expiry">change expiry</a>
+        <a href="#" class="btn btn-default" id="override-workstations">override workstations</a>
 
         <?php if ( !in_array( $this->data->invoice->state, ['approved', 'canceled'])) {  ?>
           <a href="#" class="btn btn-default" id="change-state">change status</a>
@@ -76,6 +77,46 @@ $(document).ready( function() {
                 action : 'update-expires',
                 invoice_id : <?php print $this->data->invoice->id ?>,
                 expires : fld.val()
+
+              }
+
+            })
+            .then( function( d) {
+                _brayworth_.growl(d).then( function() {
+                  window.location.reload();
+                  hourglass.off();
+
+                });
+
+            })
+
+          }
+
+        }
+
+      })
+
+      $(this).blur();
+
+  });
+
+  $('#override-workstations').on( 'click', function( e) {
+      var fld = $('<input type="number" class="form-control" value="<?php print $this->data->invoice->workstation_override ?>" />')
+      _brayworth_.modal({
+        title : 'Workstation Override',
+        text : fld,
+        width : 300,
+        buttons : {
+          update : function() {
+            hourglass.on();
+            this.modal('close');
+
+            _brayworth_.post({
+              url : _brayworth_.url('invoices'),
+              data : {
+                action : 'update-workstation_override',
+                invoice_id : <?php print $this->data->invoice->id ?>,
+                workstations : fld.val()
 
               }
 
