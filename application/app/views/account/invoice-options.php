@@ -43,7 +43,9 @@
 
         // print $diff;
         /*
-         * allow them to change the state for up to 7 days
+         * allow them to change the state for up to 7 days,
+         * provided the state change was manual (paypal is
+         * automatic)
          */
 
         if (
