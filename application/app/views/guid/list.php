@@ -135,11 +135,11 @@ $(document).ready( function() {
 
         });
 
-<?php } // if ( \currentUser::isProgrammer()) ?>
-
         _context.close();
 
       }));
+
+<?php } // if ( \currentUser::isProgrammer()) ?>
 
       _context.open( e);
 
