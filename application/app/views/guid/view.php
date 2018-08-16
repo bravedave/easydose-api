@@ -42,7 +42,8 @@
   <div class="col col-10">
     <?php
     if ( $this->data->account) {
-      printf('<a href="%s" class="btn btn-link pl-0">%s<i class="fa fa-fw fa-link"></i></a>', url::tostring('users/view/' . $this->data->account->id), $this->data->account->name);
+      printf( '<a href="%s" class="btn btn-link pl-0">%s<i class="fa fa-fw fa-link"></i></a>', url::tostring('users/view/' . $this->data->account->id), $this->data->account->name);
+      printf( '<button class="btn btn-sm btn-outline-primary" id="detach-account">detach account</button>');
 
     }
     else {
@@ -376,6 +377,41 @@ $(document).ready( function() {
     })
     .then( function(d) {
       _brayworth_.growl(d);
+
+    });
+
+  });
+
+  $('#detach-account').on('click', function( e) {
+    e.stopPropagation(); e.preventDefault();
+
+    _brayworth_.modal({
+      title: 'confirm',
+      text: 'Are you sure ?',
+      buttons : {
+        yes : function( e) {
+          hourglass.on();
+          _brayworth_.post({
+            url : _brayworth_.url('guid'),
+            data : {
+              action : 'detach-account',
+              id : '<?php print $this->data->dto->id ?>',
+              
+            }
+
+          })
+          .then( function(d) {
+            hourglass.on();
+            _brayworth_.growl(d);
+            if ( 'ack' == d.response) {
+              setTimeout( function() { window.location.reload()}, 500);
+            }
+
+          });
+
+        }
+
+      }
 
     });
 

@@ -58,6 +58,23 @@ class guid extends Controller {
       }
 
     }
+    elseif ( 'detach-account' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\guid;
+        $dao->UpdateByID( [
+          'user_id' => 0,
+          'updated' => \db::dbTimeStamp()
+        ], $id);
+
+        \Json::ack( $action);
+
+      }
+      else {
+        \Json::nak( $action);
+
+      }
+
+    }
     else {
       Response::redirect( url::toString('guid'));
 
