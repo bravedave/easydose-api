@@ -35,7 +35,23 @@
         <a href="#" class="btn btn-default" id="change-expiry">change expiry</a>
         <a href="#" class="btn btn-default" id="override-workstations">override workstations</a>
 
-        <?php if ( !in_array( $this->data->invoice->state, ['approved', 'canceled'])) {  ?>
+        <?php
+
+        $earlier = new DateTime($this->data->invoice->state_changed);
+        $later = new DateTime();
+        $diff = $later->diff($earlier)->format("%a");
+
+        // print $diff;
+        /*
+         * allow them to change the state for up to 7 days
+         */
+
+        if (
+          !in_array( $this->data->invoice->state, ['approved', 'canceled'])
+          ||
+          ($this->data->invoice->state_change == 'manual' && $diff < 7)
+
+        ) {  ?>
           <a href="#" class="btn btn-default" id="change-state">change status</a>
 
         <?php } ?>
