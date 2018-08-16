@@ -116,6 +116,7 @@ $(document).ready( function() {
 
       })());
 
+<?php if ( \currentUser::isProgrammer()) { ?>
       _context.append('<hr />');
       _context.append($('<a href="#"><i class="fa fa-trash"></i>delete</a>').on('click', function(e) {
         e.stopPropagation(); e.preventDefault();
@@ -133,6 +134,8 @@ $(document).ready( function() {
           }
 
         });
+
+<?php } // if ( \currentUser::isProgrammer()) ?>
 
         _context.close();
 

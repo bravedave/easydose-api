@@ -150,7 +150,7 @@ class guid extends Controller {
   }
 
   public function remove( $id = 0) {
-    if ( currentUser::isAdmin()) {
+    if ( currentUser::isProgrammer()) {
       if ( (int) $id) {
         $dao = new dao\guid;
         $dao->delete( $id);
