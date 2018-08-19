@@ -43,7 +43,7 @@
 
         // print $diff;
         /*
-         * allow them to change the state for up to 7 days,
+         * allow them to change the state for up to 180 days,
          * provided the state change was manual (paypal is
          * automatic)
          */
@@ -51,7 +51,7 @@
         if (
           !in_array( $this->data->invoice->state, ['approved', 'canceled'])
           ||
-          ($this->data->invoice->state_change == 'manual' && $diff < 7)
+          ($this->data->invoice->state_change == 'manual' && $diff < 180)
 
         ) {  ?>
           <a href="#" class="btn btn-default" id="change-state">change status</a>
