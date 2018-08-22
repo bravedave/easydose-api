@@ -45,7 +45,14 @@ abstract class currentUser extends dvc\currentUser {
 
 	static public function isProgrammer() {
 		// return ( FALSE);
-		return ( self::user()->email == 'david@brayworth.com.au' );
+		if ( isset( self::user()->programmer)) {
+			return ( self::user()->programmer == 1 );
+
+		}
+
+		return ( self::isAdmin());
+
+		// return ( FALSE);
 
 	}
 

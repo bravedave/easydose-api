@@ -58,6 +58,23 @@ class guid extends Controller {
       }
 
     }
+    elseif ( 'detach-account' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\guid;
+        $dao->UpdateByID( [
+          'user_id' => 0,
+          'updated' => \db::dbTimeStamp()
+        ], $id);
+
+        \Json::ack( $action);
+
+      }
+      else {
+        \Json::nak( $action);
+
+      }
+
+    }
     else {
       Response::redirect( url::toString('guid'));
 
@@ -133,7 +150,7 @@ class guid extends Controller {
   }
 
   public function remove( $id = 0) {
-    if ( currentUser::isAdmin()) {
+    if ( currentUser::isProgrammer()) {
       if ( (int) $id) {
         $dao = new dao\guid;
         $dao->delete( $id);

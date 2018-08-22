@@ -23,6 +23,7 @@ class user extends _user {
 				$this->username = $this->dto->username;
 				$this->email = $this->dto->email;
 				$this->admin = $this->dto->admin;
+				$this->programmer = ( isset( $this->dto->programmer) ? $this->dto->programmer : $this->admin);
 
 			}
 

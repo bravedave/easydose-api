@@ -7,6 +7,9 @@
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
 
+	you will want to make user 1 a programmer (probably)
+		update users set programmer = 1 where id = 1;
+
 	*/
 
 Namespace dao;
@@ -27,6 +30,7 @@ class users extends _dao {
 		$dbc->defineField( 'abn', 'text');
 		$dbc->defineField( 'pass', 'text');
 		$dbc->defineField( 'admin', 'int');
+		$dbc->defineField( 'programmer', 'int');
 		$dbc->defineField( 'reset_guid', 'text');
 		$dbc->defineField( 'reset_guid_date', 'text');
 		$dbc->defineField( 'created', 'text');
