@@ -83,7 +83,7 @@ abstract class strings extends dvc\strings {
 	}
 
   static function asShortDateTime( $date) {
-    return ( strings::asShortDate( $date, TRUE);
+    return ( strings::asShortDate( $date, TRUE));
 
 		// if ( (string)$date == '0000-00-00')
 		// 	return ( FALSE);
