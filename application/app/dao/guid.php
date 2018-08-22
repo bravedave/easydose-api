@@ -188,7 +188,7 @@ class guid extends _dao {
 
 	public function getUserOf( \dao\dto\guid $dto) {
 		$debug = FALSE;
-		$debug = TRUE;
+		// $debug = TRUE;
 
 		if ( (int)$dto->user_id) {
 			$userDAO = new users;	// dao\users;
