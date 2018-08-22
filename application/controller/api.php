@@ -74,7 +74,7 @@ class api extends Controller {
 
   protected function checkin( $action) {
     $debug = FALSE;
-    // $debug = TRUE;
+    $debug = TRUE;
 
     $site = $this->getPost('site');
     if ( $site != '' ) {
@@ -147,16 +147,16 @@ class api extends Controller {
           if ( $sitesDTO = $res->dto()) {
             $sitesDAO->UpdateByID( $a, $sitesDTO->id );
             if ( $debug) {
-              foreach ($a as $key => $value) {
-                \sys::logger( sprintf( 'site: updated %s => %s', $key, $value ));
+              // foreach ($a as $key => $value) {
+              //   \sys::logger( sprintf( 'site: updated %s => %s', $key, $value ));
+              //
+              // }
 
-              }
-
-              \sys::logger( sprintf( 'site: updated => %s, %s', $a['site'], $a['workstation'] ));
+              \sys::logger( sprintf( 'site: updated => %s, %s (%s)', $a['site'], $a['workstation'], $a['version'] ));
 
             }
-            $j = \Json::ack( $action);
 
+            $j = \Json::ack( $action);
 
           }
           else {
@@ -191,11 +191,7 @@ class api extends Controller {
 
       }
 
-    } // if ( $site != '' )
-    else {
-      \Json::nak($action);
-
-    }
+    } else { \Json::nak($action); }
 
   }
 
