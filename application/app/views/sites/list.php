@@ -84,7 +84,7 @@ while ( $dto = $this->data->sites->dto()) {
           <td class="d-none d-lg-table-cell"><?php print $dto->version ?></td>
           <td class="text-center"><i class="fa fa-fw <?php print ( $dto->activated ? 'fa-circle text-info' : 'fa-times text-danger') ?>"></i></td>
           <td class="d-none d-md-table-cell"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->expires )) ?></td>
-          <td class="d-none d-lg-table-cell"><?php print strings::asShortDateTime( $dto->updated) ?></td>
+          <td class="d-none d-lg-table-cell text-center"><?php print strings::asShortDateTime( $dto->updated) ?></td>
 
         </tr>
 
