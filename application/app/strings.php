@@ -82,22 +82,24 @@ abstract class strings extends dvc\strings {
 
 	}
 
-  // static function asShortDateTime( $date) {
-	// 	if ( (string)$date == '0000-00-00')
-	// 		return ( FALSE);
-  //
-	// 	if ( ( $t = strtotime( $date)) !== FALSE) {
-	// 		if ( date( 'Y-m-d', $t) == date( 'Y-m-d'))
-	// 			return ( date( 'h:m', $t));
-	// 		elseif ( date( 'Y', $t) == date( 'Y'))
-	// 			return ( date( 'd-M', $t));
-	// 		else
-	// 			return ( date( config::$DATE_FORMAT, $t));
-  //
-	// 	}
-  //
-	// 	return FALSE;
-  //
-	// }
+  static function asShortDateTime( $date) {
+    return ( strings::asShortDate( $date, TRUE);
+
+		// if ( (string)$date == '0000-00-00')
+		// 	return ( FALSE);
+    //
+		// if ( ( $t = strtotime( $date)) !== FALSE) {
+		// 	if ( date( 'Y-m-d', $t) == date( 'Y-m-d'))
+		// 		return ( date( 'h:m', $t));
+		// 	elseif ( date( 'Y', $t) == date( 'Y'))
+		// 		return ( date( 'd-M', $t));
+		// 	else
+		// 		return ( date( config::$DATE_FORMAT, $t));
+    //
+		// }
+    //
+		// return FALSE;
+
+	}
 
 }
