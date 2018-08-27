@@ -115,40 +115,40 @@ class sites extends Controller {
 
 	}
 
-  public function view( $id = 0) {
-    if ( currentUser::isAdmin()) {
-      if ( (int)$id) {
-        $dao = new dao\sites;
-        if ( $site = $dao->getByID( $id)) {
-          $this->data = (object)[
-            'site' => $site,
-            'guid' => FALSE,
-            'account' => FALSE
-          ];
+	public function view( $id = 0) {
+		if ( currentUser::isAdmin()) {
+			if ( (int)$id) {
+				$dao = new dao\sites;
+				if ( $site = $dao->getByID( $id)) {
+					$this->data = (object)[
+						'site' => $site,
+						'guid' => FALSE,
+						'account' => FALSE
+					];
 
-          if ( $this->data->site->guid) {
-            $dao = new dao\guid;
-            if ($this->data->guid = $dao->getByGUID( $this->data->site->guid)) {
-              $this->data->account = $dao->getUserOf( $this->data->guid);
+					if ( $this->data->site->guid) {
+						$dao = new dao\guid;
+						if ($this->data->guid = $dao->getByGUID( $this->data->site->guid)) {
+							$this->data->account = $dao->getUserOf( $this->data->guid);
 
-            }
+						}
 
-          }
+					}
 
-          $this->render([
+					$this->render([
 						'title' => $this->title = 'Site',
 						'primary' => 'view',
 						'secondary' => 'main-index']);
 
-        }
-        else { Respose::redirect( url::toString( 'sites', 'site not found')); }
+				}
+				else { Response::redirect( url::toString( 'sites', 'site not found')); }
 
-      }
-      else { $this->index(); }
+			}
+			else { $this->index(); }
 
-    }
+		}
 
-  }
+	}
 
   protected function _index() {
     if ( currentUser::isAdmin()) {
