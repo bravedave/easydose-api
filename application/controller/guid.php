@@ -82,47 +82,51 @@ class guid extends Controller {
 
   }
 
-  public function view( $id) {
-    if ( currentUser::isAdmin()) {
+	public function view( $id) {
+		if ( currentUser::isAdmin()) {
 
-      if ( (int)$id < 1)
-        response::Redirect( url::tostring( 'guid'));
+			if ( (int)$id < 1) {
+				response::Redirect( url::tostring( 'guid'));
 
-      $guidDAO = new dao\guid;
-      if ( !$dto = $guidDAO->getByID( $id))
-        response::Redirect( url::tostring( 'guid'), 'not found');
+			}
 
-      $this->data = (object)[
-        'dto' => $dto,
-        'account' => FALSE,
-        'sites' => FALSE,
-        'license' => $guidDAO->getLicenseOf( $dto)];
+			$guidDAO = new dao\guid;
+			if ( !$dto = $guidDAO->getByID( $id)) {
+				Response::Redirect( url::tostring( 'guid'), 'not found');
 
-      $this->title = 'pharmacy database';
-      if ( $dto->user_id) {
-        $usersDAO = new dao\users;
-        if ($this->data->account = $usersDAO->getByID( $dto->user_id)) {
-          $this->title = sprintf('guid: %s', $this->data->account->name);
+			}
 
-        }
+			$this->data = (object)[
+				'dto' => $dto,
+				'account' => FALSE,
+				'sites' => FALSE,
+				'license' => $guidDAO->getLicenseOf( $dto)];
 
-      }
+			$this->title = 'pharmacy database';
+			if ( $dto->user_id) {
+				$usersDAO = new dao\users;
+				if ($this->data->account = $usersDAO->getByID( $dto->user_id)) {
+					$this->title = sprintf('guid: %s', $this->data->account->name);
 
-      $sitesDAO = new dao\sites;
-      $this->data->sites = $sitesDAO->getForGUID( $dto->guid);
+				}
 
-      $this->render([
-        'title' => $this->title,
-        'primary' => 'view',
-        'secondary' => 'main-index']);
+			}
 
-    }
-    else {
-      response::Redirect();
+			$sitesDAO = new dao\sites;
+			$this->data->sites = $sitesDAO->getForGUID( $dto->guid);
 
-    }
+			$this->render([
+				'title' => $this->title,
+				'primary' => 'view',
+				'secondary' => 'main-index']);
 
-  }
+		}
+		else {
+			response::Redirect();
+
+		}
+
+	}
 
   protected function _index() {
     if ( currentUser::isAdmin()) {

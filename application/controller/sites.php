@@ -101,19 +101,19 @@ class sites extends Controller {
 
             }
 
-          }
-          else { throw new \Exceptions\InvalidEmailAddress; }
+				}
+				else { throw new \Exceptions\InvalidEmailAddress; }
 
-        }
-        else { Respose::redirect( url::toString( 'sites', 'site not found')); }
+			}
+			else { Response::redirect( url::toString( 'sites', 'site not found')); }
 
-      }
-      else { Respose::redirect( url::toString( 'sites', 'invalid site id')); }
+		}
+		else { Response::redirect( url::toString( 'sites', 'invalid site id')); }
 
-    }
-    else { throw new \Exceptions\AccessViolation; }
+	}
+	else { throw new \Exceptions\AccessViolation; }
 
-  }
+	}
 
   public function view( $id = 0) {
     if ( currentUser::isAdmin()) {
