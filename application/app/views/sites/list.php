@@ -26,17 +26,17 @@ i[title="download as CSV"] {margin-top: -18px;}
     <table class="table table-striped table-sm small" sites-list>
       <thead>
         <tr>
-          <td>State</td>
+          <td role="sort-header" data-key="state">State</td>
           <td role="sort-header" data-key="site">Site</td>
           <td class="d-none d-lg-table-cell">Tel.</td>
           <td class="d-none d-lg-table-cell text-center"><i class="fa fa-user"></i></td>
           <td class="d-none d-lg-table-cell text-center">@</td>
           <td class="d-none d-lg-table-cell text-center">ABN</td>
           <td class="d-none d-xl-table-cell">IP</td>
-          <td>Product</td>
+          <td role="sort-header" data-key="product">Product</td>
           <td class="d-none d-md-table-cell">Active/<br />Patients</td>
           <td class="d-none d-xl-table-cell">OS</td>
-          <td class="d-none d-xl-table-cell">Workstation</td>
+          <td class="d-none d-xl-table-cell" role="sort-header" data-key="workstation">Workstation</td>
           <td class="d-none d-xl-table-cell">Deploy</td>
           <td class="d-none d-lg-table-cell" role="sort-header" data-key="version">Version</td>
           <td class="text-center">Act</td>
@@ -61,7 +61,10 @@ while ( $dto = $this->data->sites->dto()) {
   ?>
         <tr
           data-id="<?php print $dto->id ?>"
+          data-state="<?php print $dto->state ?>"
           data-site="<?php print $dto->site ?>"
+          data-product="<?php print strings::ShortLicense( $dto->productid) ?>"
+          data-workstation="<?php print $dto->workstation ?>"
           data-version="<?php print $dto->version ?>"
           data-expires="<?php print $dto->expires ?>"
           data-updated="<?php print $dto->updated ?>"
