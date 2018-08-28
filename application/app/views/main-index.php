@@ -33,7 +33,10 @@
 
     if ( currentUser::isProgrammer()) {
       printf( $tpl, url::tostring('home/dbinfo'), 'dbinfo');
-      printf( $tpl, url::tostring('home/dbreset'), 'db reset');
+      if ( \config::show_db_reset) {
+        printf( $tpl, url::tostring('home/dbreset'), 'db reset');
+
+      }
 
       if ( config::$DB_TYPE == 'sqlite' ) {
         printf( $tpl, url::tostring('home/dbdownload'), 'db download');

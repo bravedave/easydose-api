@@ -45,6 +45,8 @@ abstract class config extends _config {
 
 	const products = [ 'easydose5', 'easydose10', 'easydoseOPEN'];
 
+	const show_db_reset = FALSE;
+	
 	const tax_rate_devisor = 11;
 
 	const use_inline_logon = TRUE;
