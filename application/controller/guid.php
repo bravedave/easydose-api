@@ -58,6 +58,19 @@ class guid extends Controller {
       }
 
     }
+    elseif ( 'development-mark' == $action) {
+      if ( $id = (int)$this->getPost('id')) {
+        $dao = new dao\guid;
+        $dao->UpdateByID( ['development' => (int)$this->getPost('value')], $id);
+        \Json::ack( $action);
+
+      }
+      else {
+        \Json::nak( $action);
+
+      }
+
+    }
     elseif ( 'detach-account' == $action) {
       if ( $id = (int)$this->getPost('id')) {
         $dao = new dao\guid;

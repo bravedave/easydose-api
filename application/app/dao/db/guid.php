@@ -35,6 +35,7 @@ $dbc->defineField( 'use_license', 'int');
 $dbc->defineField( 'grace_product', 'text');
 $dbc->defineField( 'grace_workstations', 'int');
 $dbc->defineField( 'grace_expires', 'text');
+$dbc->defineField( 'development', 'int');
 
 $dbc->check();
 

@@ -7,27 +7,64 @@
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
 	*/ ?>
+<style>
+i[title="download as CSV"] {margin-top: -18px;}
+</style>
+<div class="row">
+  <div class="col-md-8">
+      <input type="search" placeholder="search..." class="form-control" autofocus
+        name="<?php print $sid = uniqid( 'ed') ?>"
+        id="<?php print $sid ?>"
+        />
+
+  </div>
+
+  <div class="col-md-4 d-none d-md-block">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" checked
+        name="<?php print $chkid = uniqid( 'ed') ?>"
+        id="<?php print $chkid ?>"
+        />
+      <label class="form-check-label" for="<?php print $chkid ?>">
+        hide development databases
+
+      </label>
+
+    </div>
+
+  </div>
+
+</div>
+
 <div class="row">
   <div class="col p-0">
-    <table class="table table-striped">
+    <table class="table" guid-list>
       <thead>
         <tr>
           <td class="d-none d-lg-table-cell" style="width: 40px;">id</td>
           <td>guid</td>
-          <td class="d-none d-lg-table-cell" style="width: 18em;">name</td>
+          <td class="d-none d-lg-table-cell" style="width: 18em;">proprietor</td>
           <td class="text-center" style="width: 5em;">use license</td>
           <td class="text-center" style="width: 8em;">created</td>
           <td class="d-none d-lg-table-cell text-center" style="width: 8em;">updated</td>
+          <td class="d-none d-lg-table-cell text-center" style="width: 8em;">expires</td>
 
         </tr>
 
       </thead>
 
       <tbody>
-        <?php while ( $dto = $this->data->res->dto()) {  ?>
+        <?php while ( $dto = $this->data->res->dto()) {
+          $expires = '';
+          if ( $t = strtotime( $dto->expires)) {
+            $expires = date( \config::$DATE_FORMAT, strtotime( $dto->expires));
+
+          }  ?>
           <tr
             data-id="<?php print $dto->id ?>"
             data-license="<?php print (int)$dto->use_license ?>"
+            data-dev="<?php print (int)$dto->development ?>"
+            class="<?php if ( (int)$dto->development) print 'd-none'; ?>"
             row-guid>
             <td class="d-none d-lg-table-cell"><?php print $dto->id ?></td>
             <td><?php print $dto->guid ?>
@@ -44,6 +81,7 @@
               } ?></td>
             <td class="text-center"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->created)) ?></td>
             <td class="d-none d-lg-table-cell text-center"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->updated)) ?></td>
+            <td class="d-none d-lg-table-cell text-center"><?php print $expires; ?></td>
 
           </tr>
 
@@ -61,6 +99,45 @@
 
 <script>
 $(document).ready( function() {
+  let filter = function(e) {
+    let dev = $('#<?php print $chkid ?>').prop('checked');
+    let _me = $('#<?php print $sid ?>');
+    let t = _me.val();
+
+    $('tr[row-guid]').each( function( i, tr) {
+      var _tr = $(tr);
+
+      if ( dev && _tr.data('dev') == '1') {
+        _tr.addClass('d-none');
+
+      }
+      else {
+        if ( t == '') {
+          _tr.removeClass('d-none');
+
+        }
+        else {
+          var rex = new RegExp(t,'i')
+          // console.log( t, _tr.text())
+          if ( rex.test( _tr.text())) {
+            _tr.removeClass('d-none');
+          }
+          else {
+            _tr.addClass('d-none');
+
+          }
+
+        }
+
+      }
+
+    })
+
+  }
+
+  $('#<?php print $sid ?>').on( 'keyup', filter)
+  $('#<?php print $chkid ?>').on( 'change', filter);
+
   $('tr[row-guid]').each( function( i, tr) {
     var _tr = $(tr);
     var id = _tr.data('id');
@@ -147,5 +224,16 @@ $(document).ready( function() {
 
   });
 
-})
+  /*--[ a CSV download icon ]--*/
+  let guidTable = $('table[guid-list]');
+  if ( guidTable.length == 1) {
+    $('<i class="fa fa-fw fa-table noprint pointer pull-right" title="download as CSV" />')
+    .on( 'click', function( e) {
+      _ed_.csv.call( guidTable, 'guid-list.csv');
+    })
+    .insertBefore( guidTable);
+
+  }
+
+});
 </script>

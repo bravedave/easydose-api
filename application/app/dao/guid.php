@@ -72,16 +72,33 @@ class guid extends _dao {
 
 	}
 
-	public function getAll( $fields = 'guid.*, u.name, s.site', $order = '' ) {
+	public function getAll( $fields = 'guid.*, u.name, s.site, s.expires', $order = '' ) {
 		if ( is_null( $this->_db_name))
 			throw new Exceptions\DBNameIsNull;
 
 		$this->db->log = $this->log;
 		$this->Q('DROP TABLE IF EXISTS _tmpsites');
-		$this->Q('CREATE TEMPORARY TABLE _tmpsites AS SELECT guid, site, updated FROM sites GROUP BY guid ORDER BY updated DESC');
-		$sql = sprintf( 'SELECT %s FROM guid LEFT JOIN users u on user_id = u.id LEFT JOIN _tmpsites s on s.guid = guid.guid %s', $fields, $order);
+		$this->Q('CREATE TEMPORARY TABLE _tmpsites(`id` INTEGER PRIMARY KEY AUTOINCREMENT, `guid` TEXT, `site` TEXT, `updated` TEXT, `expires` TEXT)');
+
+		$this->Q('INSERT INTO _tmpsites(guid, site, updated) SELECT guid, site, updated FROM sites GROUP BY guid ORDER BY updated DESC');
+		// $this->Q('CREATE TEMPORARY TABLE _tmpsites AS SELECT guid, site, updated FROM sites GROUP BY guid ORDER BY updated DESC');
+		// $this->Q('ALTER TABLE _tmpsites ADD COLUMN `id` INTEGER PRIMARY KEY AUTOINCREMENT');
+		// $this->Q('ALTER TABLE _tmpsites ADD COLUMN `expires` TEXT');
 		// \sys::logSQL( $sql);
 
+		if ( $res = $this->Result( 'SELECT id, guid FROM _tmpsites')) {
+			$res->dtoSet( function( $dto) {
+				if ( $license = $this->getLicense( $dto->guid)) {
+					$this->db->Update('_tmpsites',['expires' => $license->expires], sprintf( 'WHERE `id` = %s', $dto->id));
+
+				}
+				// \sys::dump( $license);
+
+			});
+
+		}
+
+		$sql = sprintf( 'SELECT %s FROM guid LEFT JOIN users u on user_id = u.id LEFT JOIN _tmpsites s on s.guid = guid.guid %s', $fields, $order);
 		return ( $this->Result( $sql));
 
 	}

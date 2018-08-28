@@ -129,8 +129,22 @@
     <label class="form-check-label">
       <input type="checkbox" class="form-check-input"
         id="version-2-license-check"
-        name="<?php uniqid('easydose') ?>" <?php if ( $this->data->dto->use_license) print 'checked'; ?> />
+        name="<?php print uniqid('easydose') ?>" <?php if ( $this->data->dto->use_license) print 'checked'; ?> />
       Use this site for license (version 2)
+
+    </label>
+
+  </div>
+
+</div>
+
+<div class="row py-1">
+  <div class="col offset-2 col-10 form-check">
+    <label class="form-check-label">
+      <input type="checkbox" class="form-check-input"
+        id="development-check"
+        name="<?php print uniqid('easydose') ?>" <?php if ( $this->data->dto->development) print 'checked'; ?> />
+      Developement Database
 
     </label>
 
@@ -382,6 +396,26 @@ $(document).ready( function() {
 
   });
 
+  $('#development-check').on( 'change', function() {
+    var _me = $(this);
+
+    _brayworth_.post({
+      url : _brayworth_.url('guid'),
+      data : {
+          action : 'development-mark',
+          value : _me.prop('checked') ? 1 : 0,
+          id : <?php print $this->data->dto->id; ?>,
+
+      }
+
+    })
+    .then( function(d) {
+      _brayworth_.growl(d);
+
+    });
+
+  });
+
   $('#detach-account').on('click', function( e) {
     e.stopPropagation(); e.preventDefault();
 
@@ -396,7 +430,7 @@ $(document).ready( function() {
             data : {
               action : 'detach-account',
               id : '<?php print $this->data->dto->id ?>',
-              
+
             }
 
           })
