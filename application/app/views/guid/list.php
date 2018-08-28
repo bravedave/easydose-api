@@ -41,13 +41,13 @@ i[title="download as CSV"] {margin-top: -18px;}
     <table class="table" guid-list>
       <thead>
         <tr>
-          <td class="d-none d-lg-table-cell" style="width: 40px;">id</td>
-          <td>guid</td>
-          <td class="d-none d-lg-table-cell" style="width: 18em;">proprietor</td>
-          <td class="text-center" style="width: 5em;">use license</td>
-          <td class="text-center" style="width: 8em;">created</td>
-          <td class="d-none d-lg-table-cell text-center" style="width: 8em;">updated</td>
-          <td class="d-none d-lg-table-cell text-center" style="width: 8em;">expires</td>
+          <td class="d-none d-lg-table-cell" style="width: 40px;" role="sort-header" data-key="id" data-sorttype="numeric">id</td>
+          <td role="sort-header" data-key="guid">guid</td>
+          <td class="d-none d-lg-table-cell" style="width: 18em;" role="sort-header" data-key="name">proprietor</td>
+          <td class="text-center" style="width: 5em;" role="sort-header" data-key="license" data-sorttype="numeric">use license</td>
+          <td class="text-center" style="width: 8em;" role="sort-header" data-key="created">created</td>
+          <td class="d-none d-lg-table-cell text-center" style="width: 8em;" role="sort-header" data-key="updated">updated</td>
+          <td class="d-none d-lg-table-cell text-center" style="width: 8em;" role="sort-header" data-key="expires">expires</td>
 
         </tr>
 
@@ -62,7 +62,12 @@ i[title="download as CSV"] {margin-top: -18px;}
           }  ?>
           <tr
             data-id="<?php print $dto->id ?>"
+            data-guid="<?php print $dto->guid ?>"
+            data-name="<?php print $dto->name ?>"
             data-license="<?php print (int)$dto->use_license ?>"
+            data-created="<?php print $dto->created ?>"
+            data-updated="<?php print $dto->updated ?>"
+            data-expires="<?php print $dto->expires ?>"
             data-dev="<?php print (int)$dto->development ?>"
             class="<?php if ( (int)$dto->development) print 'd-none'; ?>"
             row-guid>
