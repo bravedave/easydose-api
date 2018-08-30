@@ -139,9 +139,9 @@ $(document).ready( function() {
 
       }
 
-    })
+    });
 
-  })
+  });
 
   $('tr[site]').each( function( i, tr) {
     var _tr = $(tr);

@@ -58,11 +58,12 @@ class invoices extends _dao {
 		// 		LEFT JOIN
 		// 	 		users u ON u.id = i.user_id %s', $fields, $order);
 		$_sql = sprintf( 'SELECT %s
-			 FROM invoices i
-			  	LEFT JOIN
-					 	users u ON u.id = i.user_id
-					LEFT JOIN
-					 	_tmpsitess s ON s.user_id = i.user_id %s', $fields, $order);
+	 		FROM invoices i
+	  		LEFT JOIN
+			 		users u ON u.id = i.user_id
+				LEFT JOIN
+				 	_tmpsitess s ON s.user_id = i.user_id %s
+			ORDER BY i.id DESC', $fields, $order);
 
 		// \sys::logSQL( $_sql);
 
