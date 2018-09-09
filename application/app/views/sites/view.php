@@ -112,7 +112,7 @@
   </div>
 
   <div class="col col-9">
-    <?php print sprintf( '%s/%s', $dto->patients, $dto->patientsActive) ?>
+    <?php print sprintf( '%s/%s', $dto->patientsActive, $dto->patients) ?>
 
   </div>
 
