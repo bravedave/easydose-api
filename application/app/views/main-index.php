@@ -38,11 +38,14 @@
 
       }
 
-      if ( config::$DB_TYPE == 'sqlite' ) {
-        printf( $tpl, url::tostring('home/dbdownload'), 'db download');
+    }
 
-      }
+    if ( config::$DB_TYPE == 'sqlite' ) {
+      printf( $tpl, url::tostring('home/dbdownload'), 'db download');
 
+    }
+
+    if ( currentUser::isProgrammer()) {
       printf( $tpl, url::tostring('home/phpinfo'), 'info');
       printf( $tpl, url::tostring('home/mailtest'), 'mailtest');
       print '<li><hr /></li>';

@@ -94,24 +94,42 @@ class sites extends Controller {
                   Response::redirect( url::tostring('users/view/' . $id), 'created user');
 
                 }
-                else { throw new \Exceptions\InvalidGUID; }
+                else {
+                  throw new \Exceptions\InvalidGUID; 
+
+                }
 
               }
-              else { throw new \Exceptions\InvalidGUID; }
+              else {
+                throw new \Exceptions\InvalidGUID;
+
+              }
 
             }
 
-				}
-				else { throw new \Exceptions\InvalidEmailAddress; }
+          }
+          else {
+            throw new \Exceptions\InvalidEmailAddress;
 
-			}
-			else { Response::redirect( url::toString( 'sites', 'site not found')); }
+          }
 
-		}
-		else { Response::redirect( url::toString( 'sites', 'invalid site id')); }
+        }
+        else {
+          Response::redirect( url::toString( 'sites', 'site not found'));
 
-	}
-	else { throw new \Exceptions\AccessViolation; }
+        }
+
+      }
+      else {
+        Response::redirect( url::toString( 'sites', 'invalid site id'));
+
+      }
+
+    }
+    else {
+      throw new \Exceptions\AccessViolation;
+
+    }
 
 	}
 
