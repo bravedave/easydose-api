@@ -45,10 +45,7 @@
 
 		</div>
 
-		<?php if ( $this->data->readonly) {
-			/* create a tab panel layout
-			*/
-			?>
+		<?php if ( $this->data->readonly) { /* create a tab panel layout */ ?>
 
 			<ul class="nav nav-tabs">
 				<li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#license">License</a></li>
@@ -106,20 +103,21 @@
 
 				<div id="detail" class="tab-pane fade in">
 
-				<?php } ?>
+				<?php }	?>
 
-				<div class="row py-1">
+				<div class="row form-group mt-1">
 					<div class="col-3">Business Name</div>
 					<div class="col-9">
-						<input type="text" name="business_name" class="form-control" placeholder="business name"
-						value="<?php print $this->data->dto->business_name ?>"
-						<?php if ( $this->data->readonly) print 'readonly'; ?> />
+						<input type="text" name="business_name" class="form-control"
+							placeholder="<?php print $this->data->latestSite ? $this->data->latestSite->site : 'business name' ?>"
+							value="<?php print $this->data->dto->business_name ?>"
+							<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
 					</div>
 
 				</div>
 
-				<div class="row py-1">
+				<div class="row form-group">
 					<div class="col-3">Address</div>
 					<div class="col-9">
 						<input type="text" name="street" class="form-control" placeholder="street"
@@ -130,7 +128,7 @@
 
 				</div>
 
-				<div class="row py-1">
+				<div class="row form-group">
 					<div class="offset-3 col-9">
 						<input type="text" name="town" class="form-control" placeholder="town"
 						autocomplete="address-level2" value="<?php print $this->data->dto->town ?>"
@@ -140,7 +138,7 @@
 
 				</div>
 
-				<div class="row py-1">
+				<div class="row form-group">
 					<div class="offset-3 col-5">
 						<input type="text" name="state" class="form-control" placeholder="state"
 						autocomplete="address-level3" value="<?php print $this->data->dto->state ?>"
@@ -157,7 +155,7 @@
 
 				</div>
 
-				<div class="row py-1">
+				<div class="row form-group">
 					<div class="col-3">ABN</div>
 					<div class="col-9">
 						<input type="text" name="abn" class="form-control"
@@ -169,13 +167,16 @@
 				</div>
 
 				<div class="row form-group">
-					<div class="offset-3 col-8 form-check">
-						<label class="form-check-label">
-							<input type="checkbox" name="admin" class="form-check-input"
-							<?php if ( $this->data->dto->admin) print "checked" ?> value="1"
-							<?php if ( $this->data->readonly) print 'disabled'; ?> />
-							Administrator
-						</label>
+					<div class="offset-3 col-8">
+						<div class="form-check">
+							<input type="checkbox" name="admin" class="form-check-input" id="<?php print $uid = uniqid('ed'); ?>"
+								<?php if ( $this->data->dto->admin) print "checked" ?> value="1"
+								<?php if ( $this->data->readonly) print 'disabled'; ?> />
+								<label class="form-check-label" for="<?php print $uid ?>">
+									Administrator
+								</label>
+
+						</div>
 
 					</div>
 
@@ -199,7 +200,7 @@
 
 			</div><!-- div class="tab-content" -->
 
-		<?php } ?>
+		<?php	} ?>
 
 		<div class="row form-group">
 			<div class="col-8 offset-3">

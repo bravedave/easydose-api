@@ -138,6 +138,7 @@ class users extends Controller {
 			}
 
 			$this->data->readonly = $readonly;
+			$latestSite = FALSE;
 			if ( $readonly) {
 				$dao = new dao\license;
 				$this->data->license = $dao->getLicense( $id);
@@ -152,6 +153,19 @@ class users extends Controller {
 					if ( $res = $dao->getForGUID( $guid->guid)) {
 						while ( $site = $res->dto()) {
 							$this->data->sites[] = $site;
+							if ( $latestSite) {
+								if ( strtotime($site->updated) > strtotime($latestSite->updated)) {
+									$latestSite = $site;
+
+								}
+
+							}
+							else {
+								$latestSite = $site;
+
+							}
+
+							// \sys::logger( $site->updated);
 
 						}
 
@@ -160,6 +174,8 @@ class users extends Controller {
 				}
 
 			}
+
+			$this->data->latestSite = $latestSite;
 
 			$this->render([
 				'title' => $this->title = 'User',
