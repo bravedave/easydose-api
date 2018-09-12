@@ -31,20 +31,33 @@ class sites extends _dao {
 	}
 
 	public function getAllIncludeUserID() {
+		// if ( FALSE) {
 		if ( \Request::get()->ServerIsLocal()) {
-			return ( $this->Result(
-				'SELECT sites.*, guid.user_id guid_user_id
-				FROM sites LEFT JOIN guid on guid.guid = sites.guid
-				ORDER BY updated DESC'));
+			$sql = 'SELECT
+					sites.*,
+					guid.user_id guid_user_id
+				FROM sites
+					LEFT JOIN guid on guid.guid = sites.guid
+				ORDER BY
+					sites.updated DESC';
 
 		}
 		else {
-			return ( $this->Result(
-				'SELECT sites.*, guid.user_id guid_user_id
-				FROM sites LEFT JOIN guid on guid.guid = sites.guid
-				WHERE sites.deployment <> "Build" ORDER BY updated DESC'));
+			$sql = 'SELECT
+			 		sites.*, guid.user_id guid_user_id
+				FROM sites
+					LEFT JOIN guid on guid.guid = sites.guid
+				WHERE
+					sites.deployment <> "Build"
+					AND guid.development = 0
+				ORDER BY
+				 	sites.updated DESC';
 
 		}
+
+		\sys::logger( $sql);
+
+		return ( $this->Result( $sql));
 
 	}
 
