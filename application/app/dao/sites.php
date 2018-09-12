@@ -55,7 +55,7 @@ class sites extends _dao {
 
 		}
 
-		\sys::logger( $sql);
+		// \sys::logger( $sql);
 
 		return ( $this->Result( $sql));
 
