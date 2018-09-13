@@ -169,7 +169,7 @@ $(document).ready( function() {
       let updated = _brayworth_.moment( _tr.data('updated'));
       let duration = moment.duration( _brayworth_.moment().diff( updated));
 
-      if ( duration.asDays() > 14) {
+      if ( duration.asDays() > 7) {
         context.append( $('<a href="#"><i class="fa fa-trash" />delete</a>').on( 'click', function(e) {
           e.stopPropagation(); e.preventDefault();
 
