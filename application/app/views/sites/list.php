@@ -169,7 +169,7 @@ $(document).ready( function() {
       let updated = _brayworth_.moment( _tr.data('updated'));
       let duration = moment.duration( _brayworth_.moment().diff( updated));
 
-      if ( duration.asDays() > 3) {
+      if ( duration.asDays() > 3 || _tr.data('site') == 'EasyDose Unkown Business') {
         context.append( $('<a href="#"><i class="fa fa-trash" />delete</a>').on( 'click', function(e) {
           e.stopPropagation(); e.preventDefault();
 
