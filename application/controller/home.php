@@ -65,10 +65,31 @@ class home extends Controller {
 	}
 
 	protected function authorize() {
-		if ( $this->isPost())
+		if ( $this->isPost()) {
 			$this->_authorize();
-		else
-			parent::authorize();
+		}
+		else {
+			$guid = $this->getParam( 'guid');
+			if ( $guid) {
+				$dao = new dao\guid;
+				if ( $dto = $dao->getUserOf( $guid)) {
+					\dvc\session::edit();
+					\dvc\session::set('uid', $dto->id);
+					\dvc\session::close();
+
+				}
+				else {
+					parent::authorize();
+
+				}
+
+			}
+			else {
+				parent::authorize();
+
+			}
+
+		}
 
 	}
 
