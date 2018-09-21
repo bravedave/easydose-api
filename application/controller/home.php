@@ -72,10 +72,17 @@ class home extends Controller {
 			$guid = $this->getParam( 'guid');
 			if ( $guid) {
 				$dao = new dao\guid;
-				if ( $dto = $dao->getUserOf( $guid)) {
-					\dvc\session::edit();
-					\dvc\session::set('uid', $dto->id);
-					\dvc\session::close();
+				if ( $dto = $dao->getByGUID( $guid)) {
+					if ( $u = $dao->getUserOf( $dto)) {
+						\dvc\session::edit();
+						\dvc\session::set('uid', $u->id);
+						\dvc\session::close();
+
+					}
+					else {
+						parent::authorize();
+
+					}
 
 				}
 				else {
