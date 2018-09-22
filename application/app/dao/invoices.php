@@ -81,14 +81,14 @@ class invoices extends _dao {
 		}
 
 		$sql = sprintf(
-			'SELECT
+			"SELECT
 				*
 			FROM
 			 	invoices
 			WHERE
-				state <> "canceled" AND user_id = %s
+				 ifnull(state,'') <> 'canceled' AND user_id = %s
 			ORDER BY
-				expires ASC, created ASC', $userID);
+				expires ASC, created ASC", $userID);
 
 		if ( $res = $this->Result( $sql)) {
 			// if ( $debug) \sys::dump( $res);
