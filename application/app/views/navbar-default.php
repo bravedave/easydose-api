@@ -8,10 +8,11 @@
 			http://creativecommons.org/licenses/by/4.0/
 		*/	?>
 	<nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top d-print-none py-0" role="navigation" >
-		<div class="navbar-brand">
-			<?php print $this->data->title ?>
 
-		</div>
+		<?php if ( \currentUser::isAdmin()) {
+			printf( '<div class="navbar-brand">%s</div>', $this->data->title);
+
+		}	?>
 
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 		 	data-target="#navbarToggler"
@@ -38,7 +39,7 @@
 						<li class="nav-item">
 							<a class="nav-link" href="<?php url::write('account'); ?>">
 								<i class="fa fa-fw fa-home"></i>Home
-								
+
 							</a>
 
 						</li>
