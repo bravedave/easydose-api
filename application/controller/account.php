@@ -451,19 +451,20 @@ class account extends Controller {
 		// $debug = TRUE;
 
 		$daoPlans = new dao\plans;
-		$daoProducts = new dao\products;
+		// $daoProducts = new dao\products;
 		$daoAgreements = new dao\agreements;
 		$daoInvoices = new dao\invoices;
 		$daoGuid = new dao\guid;
 		$daoLicense = new dao\license;
 	 	$users = new dao\users;
 
+		// 'products' => $daoProducts->getDtoSet(),
+		// 'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),
+
 		$this->data = (object)[
 			'account' => $users->getByID( currentUser::id()),
 			'plans' => $daoPlans->getActivePlans(),
 			'plansWKS' => $daoPlans->getActivePlans( $type = "WKS"),
-			'products' => $daoProducts->getDtoSet(),
-			'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),
 			'guids' => $daoGuid->getForUser(),
 			'invoices' => $daoInvoices->getForUser(),
 			'agreementsForUser' => $daoAgreements->getAgreementsForUser( 0, $active = TRUE, $refresh = TRUE),
@@ -472,23 +473,23 @@ class account extends Controller {
 
 		$this->data->license = $daoLicense->getLicense();
 
-		// sys::dump( $this->data);
-
-		$p = new page( $this->title = 'My Account');
-			$p
-				->header()
-				->title();
+		// sys::dump( [
+		// 	$this->data->account,
+		// 	$this->data->invoices]);
 
 		if ( currentUser::isAdmin()) {
-			$p->primary();
-			$this->load('view');
-			$p->secondary();
-			$this->load('main-index');
+			$this->render([
+				'title' => $this->title = 'My Account',
+				'primary' => 'view',
+				'secondary' => 'main-index'
+			]);
 
 		}
 		else {
-			$p->content();
-			$this->load('view');
+			$this->render([
+				'title' => $this->title = 'My Account',
+				'content' => 'view']);
+
 		}
 
 	}

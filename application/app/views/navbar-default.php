@@ -1,15 +1,12 @@
 <?php
-/*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
+	/*
+		David Bray
+		BrayWorth Pty Ltd
+		e. david@brayworth.com.au
 
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-
-	DO NOT change this file
-	Copy it to <application>/app/views/ and modify it there
-	*/	?>
+		This work is licensed under a Creative Commons Attribution 4.0 International Public License.
+			http://creativecommons.org/licenses/by/4.0/
+		*/	?>
 	<nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top d-print-none py-0" role="navigation" >
 		<div class="navbar-brand">
 			<?php print $this->data->title ?>
@@ -28,16 +25,37 @@
 
 		<div class="collapse navbar-collapse" id="navbarToggler">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-					<?php printf( '<a href="%s" class="nav-link"><i class="fa fa-fw fa-home"></i>Home</a>', \url::$URL);	?>
-
-				</li>
-
-				<li class="nav-item"><a class="nav-link" href="<?php url::write('account'); ?>">My Account</a></li>
 				<?php if ( \sys::lockdown()) {	?>
-					<li class="nav-item"><a class="nav-link" href="<?php url::write('logout') ?>">Logout</a></li>
+					<?php if ( \currentUser::isAdmin()) {	?>
+						<li class="nav-item">
+							<?php printf( '<a href="%s" class="nav-link"><i class="fa fa-fw fa-home"></i>Home</a>', \url::$URL);	?>
 
-				<?php } // if ( \sys::lockdown())	?>
+						</li>
+
+						<li class="nav-item"><a class="nav-link" href="<?php url::write('account'); ?>">My Account</a></li>
+
+					<?php } else {	?>
+						<li class="nav-item">
+							<a class="nav-link" href="<?php url::write('account'); ?>">
+								<i class="fa fa-fw fa-home"></i>Home
+								
+							</a>
+
+						</li>
+
+					<?php	}	// if ( \currentUser::isAdmin())	?>
+
+						<li class="nav-item"><a class="nav-link" href="<?php url::write('logout') ?>">Logout</a></li>
+
+				<?php } else {	?>
+					<li class="nav-item">
+						<?php printf( '<a href="%s" class="nav-link"><i class="fa fa-fw fa-home"></i>Home</a>', \url::$URL);	?>
+
+					</li>
+
+					<li class="nav-item"><a class="nav-link" href="<?php url::write('account'); ?>">My Account</a></li>
+
+				<?php	}	// if ( \sys::lockdown())	?>
 
 			</ul>
 

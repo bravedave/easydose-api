@@ -14,15 +14,13 @@
   if ( $this->data->invoices) {
   	?>
 <div class="row py-1 mt-2">
-  <div class="col col-12 col-lg-2">
-    <i class="fa fa-fw fa-caret-right pointer pull-right" id="show-user-invoices"></i>
+  <div class="col-12 col-lg-2">
     Invoices
 
 	</div>
 
-  <div class="col col-12 col-lg-10">
-    <span id="show-user-invoices-table-ellipses" class="pointer">...</span>
-		<table class="table table-striped table-sm d-none" id="show-user-invoices-table">
+  <div class="col-12 col-lg-8">
+		<table class="table table-sm" id="user-invoices-table">
       <thead>
         <tr>
           <td>date</td>
@@ -38,7 +36,7 @@
           <tr invoice data-id="<?php print $dto->id ?>">
             <td><?php print strings::asShortDate( $dto->created) ?></td>
             <td><?php print $dto->id ?></td>
-            <td><?php print $dto->state ?></td>
+            <td><?php print $dto->state ? $dto->state : 'created' ?></td>
 
           </tr>
 
@@ -53,24 +51,7 @@
 </div>
 <script>
 $(document).ready( function() {
-	$('#show-user-invoices, #show-user-invoices-table-ellipses').on( 'click', function(e) {
-		var t = $('#show-user-invoices-table');
-		if ( t.hasClass( 'd-none')) {
-			t.removeClass( 'd-none');
-			$('#show-user-invoices-table-ellipses').addClass( 'd-none');
-			$('#show-user-invoices').removeClass('fa-caret-right').addClass('fa-caret-down');
-
-		}
-		else {
-			t.addClass( 'd-none');
-			$('#show-user-invoices-table-ellipses').removeClass( 'd-none');
-			$('#show-user-invoices').removeClass('fa-caret-down').addClass('fa-caret-right');
-
-		}
-
-	});
-
-  $('tr[invoice]', '#show-user-invoices-table').each( function( i, tr) {
+  $('tr[invoice]', '#user-invoices-table').each( function( i, tr) {
     var _tr = $(tr);
     var id = _tr.data('id');
 

@@ -14,39 +14,6 @@
 	 	Ordinary Authenticated user - non admin
 
 	*/	?>
-<div class="row pb-1 pt-4">
-	<div class="col col-12 col-lg-2">
-		<h3 class="m-0">
-			License - Buy
-		</h3>
-		<div class="small">
-			Buy a product license for a 1 year period
-
-		</div>
-
-	</div>
-
-	<div class="col col-12 col-lg-10">
-		<table class="table table-striped table-sm">
-			<tbody>
-<?php			foreach ( $this->data->products as $dto) {
-						// sys::dump( $product);	?>
-				<tr>
-					<td><?php printf( '%s<br />%s', $dto->name, $dto->description); ?></td>
-					<td><?php print $dto->rate ?></td>
-					<td><?php print $dto->term ?></td>
-
-				</tr>
-<?php			}	// foreach ( $this->data->products as product)	?>
-
-			</tbody>
-
-		</table>
-
-	</div>
-
-</div>
-
 <div class="row py-1">
 	<div class="offset-lg-2 col-10">
 		<a href="<?php url::write('account/createinvoice/') ?>" class="btn btn-outline-secondary">buy a product</a>

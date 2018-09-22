@@ -15,13 +15,13 @@
 
 	*/ ?>
 <div class="row py-1 mt-4">
-  <div class="col col-12 col-lg-2">
+  <div class="col-12 col-lg-2">
     <strong>License</strong>
 
   </div>
 
-  <div class="col col-12 col-lg-10">
-    <table class="table table-striped table-sm">
+  <div class="col-12 col-lg-8">
+    <table class="table table-sm">
       <colgroup>
 					<col />
 					<col />

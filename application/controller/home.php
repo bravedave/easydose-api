@@ -70,13 +70,16 @@ class home extends Controller {
 		}
 		else {
 			$guid = $this->getParam( 'guid');
-			if ( $guid) {
+			$action = $this->getParam( 'action');
+			if ( $guid && $action == 'logon') {
 				$dao = new dao\guid;
 				if ( $dto = $dao->getByGUID( $guid)) {
 					if ( $u = $dao->getUserOf( $dto)) {
 						\dvc\session::edit();
 						\dvc\session::set('uid', $u->id);
 						\dvc\session::close();
+
+						Response::redirect();
 
 					}
 					else {
@@ -127,9 +130,10 @@ class home extends Controller {
 
 		}
 		else {
-			$this->render([
-				'title' => $this->title = sys::name(),
-				'content' => 'readme']);
+			Response::redirect('account');
+			// $this->render([
+			// 	'title' => $this->title = sys::name(),
+			// 	'content' => 'readme']);
 
 		}
 

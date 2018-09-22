@@ -18,7 +18,11 @@
 	$this->load('account');
  	$this->load('license');
  	$this->load('invoices');
- 	$this->load('guids');
+ 	if ( currentUser::isAdmin()) {
+		$this->load('guids');
+
+	}
+
 	if ( count( $this->data->agreementsForUser)) {
 		/*
 		*	Subscription Model
