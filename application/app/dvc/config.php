@@ -15,17 +15,17 @@
 
 	*/
 
-NameSpace dvc;
+namespace dvc;
 
 abstract class config extends _config {
 	static $DB_TYPE = 'sqlite';
 	static $DATE_FORMAT = 'd/m/Y';
 
-	static $EMAIL_ERRORS_TO_SUPPORT = TRUE;	// when a trappable error occurs, email it to support email
+	static $EMAIL_ERRORS_TO_SUPPORT = true;	// when a trappable error occurs, email it to support email
 
 	static $PAGE_TEMPLATE = '\page';
 	//~ static $paypalSandbox = TRUE;
-	static $paypalSandbox = FALSE;
+	static $paypalSandbox = false;
 
 
 	static $SUPPORT_NAME = 'My.EasyDose Webmaster';
@@ -37,7 +37,7 @@ abstract class config extends _config {
 
 	static $WEBNAME = 'My.EasyDose';
 
-	const allow_password_recovery = TRUE;
+	const allow_password_recovery = true;
 
 	const country_code = 'AU';
 
@@ -45,11 +45,11 @@ abstract class config extends _config {
 
 	const products = [ 'easydose5', 'easydose10', 'easydoseOPEN'];
 
-	const show_db_reset = FALSE;
-	
+	const show_db_reset = false;
+
 	const tax_rate_devisor = 11;
 
-	const use_inline_logon = TRUE;
+	const use_inline_logon = true;
 
 	/*
 	 *	Caching using APCu, Interfaced through https://www.scrapbook.cash/
@@ -63,5 +63,3 @@ abstract class config extends _config {
 	// static $DB_CACHE_DEBUG = TRUE;
 
 }
-
-pages\bootstrap::$BootStrap_Version = '4';
