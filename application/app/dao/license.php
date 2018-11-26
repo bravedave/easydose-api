@@ -16,10 +16,10 @@ Namespace dao;
 
 class license extends _dao {
   public function getLicense( $user = 0) {
-    $debug = FALSE;
-		// $debug = TRUE;
+    $debug = false;
+		// $debug = true;
 
-		if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting license', $user));
+    if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting license', $user));
 
     $dao = new agreements;
     if ( $ret = $dao->getActiveAgreementForUser( $user)) {
@@ -31,19 +31,18 @@ class license extends _dao {
 
     }
 
-    if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting product license', $user));
 
     $dao = new products;
     if ( $ret = $dao->getActiveProductForUser( $user)) {
       // \sys::dump( $ret);
       if ( $ret->license) {
+        if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: got product license', $user));
         return ( $ret);
 
       }
 
     }
 
-    if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting Invoiced license', $user));
 
     $dao = new invoices;
     if ( $ret = $dao->getActiveLicenseForUser( $user)) {
@@ -56,11 +55,11 @@ class license extends _dao {
 
     }
 
-    if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting Gratis license', $user));
 
     $dao = new guid;
     if ( $dtoSet = $dao->getForUser( $user)) {
       if ( count( $dtoSet)) {
+        if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: got Gratis license', $user));
         if ( $ret = $dao->getGratisLicenseOf( $dtoSet[0])) {
           return ( $ret);
 

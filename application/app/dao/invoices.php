@@ -72,8 +72,8 @@ class invoices extends _dao {
 	}
 
 	public function getForUser( $userID = 0) {
-		$debug = FALSE;
-		// $debug = TRUE;
+		$debug = false;
+		// $debug = true;
 
 		if ( !(int)$userID) {
 			$userID = \currentUser::id();
@@ -88,7 +88,10 @@ class invoices extends _dao {
 			WHERE
 				 ifnull(state,'') <> 'canceled' AND user_id = %s
 			ORDER BY
-				expires ASC, created ASC", $userID);
+				CASE ifnull( expires, '')
+					WHEN '' THEN '9999-99-99'
+					ELSE expires
+				END ASC, created ASC", $userID);
 
 		if ( $res = $this->Result( $sql)) {
 			// if ( $debug) \sys::dump( $res);
@@ -101,15 +104,15 @@ class invoices extends _dao {
 	}
 
 	public function getActiveLicenseForUser( $userID = 0) {
-		$debug = FALSE;
-		// $debug = TRUE;
+		$debug = false;
+		// $debug = true;
 
-		$license = FALSE;
+		$license = false;
 
 		if ( $dtoSet = $this->getForUser( $userID)) {
 			/* look up and return the first active license
 			*/
-			$lastExpire = FALSE;
+			$lastExpire = false;
 
 			$dao = new guid;
 			if ( $dtoSetGUID = $dao->getForUser( $userID)) {
@@ -131,15 +134,18 @@ class invoices extends _dao {
 
 				$lastExpire = $dto->expires;
 
-				if ( $debug) \sys::logger( sprintf( 'dao\invoices->getActiveLicenseForUser : %s', $dto->expires));
 				if ( $dto->state == 'approved' && $dto->expires >= date( 'Y-m-d')) {
 					if ( $ret = $this->getInvoice( $dto)) {
 						if ( $license) {
 							// there is an active license this is an extension
 							$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
+							if ( $debug) \sys::logger( sprintf( 'dao\invoices->getActiveLicenseForUser : %s: %s - extending', $dto->id, $license->expires));
 
 						}
 						else {
+
+							if ( $debug) \sys::logger( sprintf( 'dao\invoices->getActiveLicenseForUser : %s : %s', $dto->id, $dto->expires));
+
 							$license = new dto\license;
 							$license->type = 'LICENSE';
 							$license->expires = $dto->expires;
