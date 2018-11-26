@@ -8,21 +8,18 @@
 		http://creativecommons.org/licenses/by/4.0/
 
 	*/	?>
-	<h6 class="m-0">
-		invoices
-
-	</h6>
+	<h6 class="m-0">invoices</h6>
 
 <?php
 	if ( $this->data->invoices ) { ?>
 
-	<table class="table table-striped table-sm">
+	<table class="table table-sm">
 		<colgroup>
 			<col span="3" style="width: 33%;" />
 
 		</colgroup>
 
-		<thead>
+		<thead class="small">
 			<tr>
 				<td>id</td>
 				<td>state</td>
@@ -36,16 +33,28 @@
 		<tbody>
 			<?php foreach ($this->data->invoices as $dto) {  ?>
 				<tr data-id="<?php print $dto->id ?>" invoice>
-					<td><?php print $dto->id ?></td>
-					<td><?php print $dto->state ?></td>
-					<td><?php print strings::asLocalDate( $dto->created) ?></td>
-					<td><?php print strings::asLocalDate( $dto->expires) ?></td>
+					<td><?= $dto->id ?></td>
+					<td><?= $dto->state ?></td>
+					<td><?= strings::asLocalDate( $dto->created) ?></td>
+					<td><?= strings::asLocalDate( $dto->expires) ?></td>
 
 				</tr>
 
 			<?php }	// foreach ($this->data->invoices as $dto)  ?>
 
 		</tbody>
+
+		<?php if ( $this->data->license ) { ?>
+			<tfoot>
+				<tr>
+					<td class="text-right" colspan="3">license expires:</td>
+					<td><?= strings::asLocalDate( $this->data->license->expires) ?></td>
+
+				</tr>
+
+			</tfoot>
+
+		<?php }	// if ( $this->data->license ) ?>
 
 	</table>
 
