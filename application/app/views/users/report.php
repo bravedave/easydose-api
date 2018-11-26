@@ -13,8 +13,8 @@ i[title="download as CSV"] {margin-top: -18px;}
 </style>
 <div class="row">
   <div class="col-md-6">
-      <input type="search" name="<?php print $sid = uniqid( 'ed') ?>"
-        id="<?php print $sid ?>" placeholder="search..." class="form-control"
+      <input type="search" name="<?= $sid = uniqid( 'ed') ?>"
+        id="<?= $sid ?>" placeholder="search..." class="form-control"
         autofocus />
 
   </div>
@@ -23,12 +23,12 @@ i[title="download as CSV"] {margin-top: -18px;}
 
 <div class="row">
 	<div class="col">
-		<table class="table table-sm" id="<?php print $tblID = uniqid( 'ed') ?>">
-			<thead>
+		<table class="table table-sm" id="<?= $tblID = uniqid( 'ed') ?>">
+			<thead class="small">
 				<tr>
 					<td role="sort-header" data-key="name">Proprietor</td>
-					<td role="sort-header" data-key="username">UserName</td>
-					<td role="sort-header" data-key="email">Email</td>
+					<td role="sort-header" data-key="username" class="d-none d-sm-table-cell">UserName</td>
+					<td role="sort-header" data-key="email" class="d-none d-md-table-cell">Email</td>
 					<td class="text-center" role="sort-header" data-key="admin" data-sorttype="numeric">Admin</td>
 				</tr>
 			</thead>
@@ -37,25 +37,19 @@ i[title="download as CSV"] {margin-top: -18px;}
 				<?php	if ( $this->data) {
 					while ( $dto = $this->data->dto()) {	?>
 						<tr data-role="item"
-							data-id="<?php print $dto->id ?>"
-							data-name="<?php print $dto->name ?>"
-							data-username="<?php print $dto->username ?>"
-							data-email="<?php print $dto->email ?>"
-							data-admin="<?php print (int)$dto->admin ?>"
+							data-id="<?= $dto->id ?>"
+							data-name="<?= $dto->name ?>"
+							data-username="<?= $dto->username ?>"
+							data-email="<?= $dto->email ?>"
+							data-admin="<?= (int)$dto->admin ?>"
 							>
-							<td><?php
-							print $dto->name;
-							printf( '<div class="text-muted small">%s</div>', $dto->site );
-							?></td>
-							<td>
-								<div class="text-truncate" style="width: 12rem">
-									<?php print $dto->username ?>
-
-								</div>
+							<td><?= sprintf( '%s<div class="text-muted small">%s</div>', $dto->name, $dto->site ) ?></td>
+							<td class="d-none d-sm-table-cell">
+								<div class="text-truncate" style="width: 12rem"><?= $dto->username ?></div>
 
 							</td>
-							<td><?php print $dto->email ?></td>
-							<td class="text-center"><?php print ( $dto->admin ? strings::html_tick : '&nbsp;' ) ?></td>
+							<td class="d-none d-md-table-cell"><?= $dto->email ?></td>
+							<td class="text-center"><?= ( $dto->admin ? strings::html_tick : '&nbsp;' ) ?></td>
 
 						</tr>
 
@@ -72,7 +66,7 @@ i[title="download as CSV"] {margin-top: -18px;}
 </div>
 <script>
 $(document).ready( function() {
-	$('#<?php print $sid ?>').on( 'keyup', function(e) {
+	$('#<?= $sid ?>').on( 'keyup', function(e) {
 		var _me = $(this);
 		var t = _me.val();
 
@@ -176,7 +170,7 @@ $(document).ready( function() {
 
 		}
 
-	})( $("#<?php print $tblID ?>"));
+	})( $("#<?= $tblID ?>"));
 
 })
 </script>

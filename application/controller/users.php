@@ -104,7 +104,7 @@ class users extends Controller {
 
 	}
 
-	protected function _edit( $id = 0, $readonly = FALSE) {
+	protected function _edit( $id = 0, $readonly = false) {
 		if ( currentUser::isAdmin()) {
 			$this->data = (object)[
 				'dto' => (object)[
@@ -118,7 +118,8 @@ class users extends Controller {
 					'state' => '',
 					'postcode' => '',
 					'abn' => '',
-					'admin' => 0]];
+					'admin' => 0],
+				'license' => false];
 
 					// $dbc->defineField( 'pass', 'text');
 					// $dbc->defineField( 'admin', 'int');
@@ -138,12 +139,15 @@ class users extends Controller {
 			}
 
 			$this->data->readonly = $readonly;
-			$latestSite = FALSE;
+			$latestSite = false;
 			if ( $readonly) {
 				$dao = new dao\license;
 				$this->data->license = $dao->getLicense( $id);
+				
 				$dao = new dao\invoices;
 				$this->data->invoices = $dao->getForUser( $id);
+				$this->data->license = $dao->getActiveLicenseForUser( $id);
+
 				$dao = new dao\guid;
 				$this->data->guid = $dao->getForUser( $id);
 
@@ -188,7 +192,7 @@ class users extends Controller {
 
 	public function view( $id = 0) {
 		if ( currentUser::isAdmin()) {
-			$this->_edit( $id, $readonly = TRUE);
+			$this->_edit( $id, $readonly = true);
 
 		}
 

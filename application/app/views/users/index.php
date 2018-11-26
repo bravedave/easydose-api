@@ -9,12 +9,15 @@
 
 	*/	?>
 <ul class="menu">
-  <li><h4>users</h4></li>
+  <?php if ( isset( $this->data->dto) && $this->data->dto->id) {  ?>
+    <li><a href="<?php url::write('users/view/' . $this->data->dto->id) ?>"><h4>user #<?= $this->data->dto->id ?></h4></a></li>
+  <?php }
+  else {  ?>
+    <li><h4>users</h4></li>
+  <?php } // if ( $this->data->dto->id)  ?>
   <li><a href="<?php url::write('users') ?>">list</a></li>
   <li><a href="<?php url::write('users/edit') ?>">new</a></li>
 
 </ul>
 <?php
   $this->load('main-index');
-
-  
