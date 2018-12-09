@@ -8,7 +8,7 @@
       http://creativecommons.org/licenses/by/4.0/
 
    */
-class page extends dvc\pages\bootstrap {
+class page extends dvc\pages\bootstrap4 {
    function __construct( $title = '' ) {
       self::$momentJS = true;
 
