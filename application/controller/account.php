@@ -467,12 +467,13 @@ class account extends Controller {
 			'plansWKS' => $daoPlans->getActivePlans( $type = "WKS"),
 			'guids' => $daoGuid->getForUser(),
 			'invoices' => $daoInvoices->getForUser(),
-			'agreementsForUser' => $daoAgreements->getAgreementsForUser( 0, $active = TRUE, $refresh = TRUE),
-			'license' => FALSE
+			'agreementsForUser' => $daoAgreements->getAgreementsForUser( 0, $active = true, $refresh = true),
+			'license' => false
 			];
 
 		$this->data->license = $daoLicense->getLicense();
 
+		// sys::dump( $this->data->license);
 		// sys::dump( [
 		// 	$this->data->account,
 		// 	$this->data->invoices]);

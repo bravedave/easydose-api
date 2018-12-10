@@ -15,7 +15,21 @@ class users extends Controller {
 		$action = $this->getPost('action');
 		//~ sys::dump( $this->getPost());
 
-		if ( $action == 'save/update') {
+		if ( $action == 'delete') {
+
+			if ( $id = (int)$this->getPost('id')) {
+				$dao = new dao\users;
+				$dao->delete( $id);
+				\Json::ack( 'deleted user');
+
+			}
+			else {
+				\Json::nak( 'invalid id');
+
+			}
+
+		}
+		elseif ( $action == 'save/update') {
 			$dao = new dao\users;
 			$id = (int)$this->getPost('id');
 
@@ -59,18 +73,23 @@ class users extends Controller {
 			}
 
 		}
-		elseif ( $action == 'delete') {
+		elseif ( $action == 'switch') {
 
-			if ( $id = (int)$this->getPost('id')) {
-				$dao = new dao\users;
-				$dao->delete( $id);
-				\Json::ack( 'deleted user');
+			if ( $guid = $this->getPost('guid')) {
+				$dao = new dao\guid;
+				if ( $dto = $dao->getByGUID( $guid)) {
+					if ( $u = $dao->getUserOf( $dto)) {
+						\dvc\session::edit();
+						\dvc\session::set('uid', $u->id);
+						\dvc\session::close();
 
-			}
-			else {
-				\Json::nak( 'invalid id');
+						\Json::ack( $action);
 
-			}
+					} else { \Json::nak( $action); }
+
+				} else { \Json::nak( sprintf( '%s : guid not found', $action)); }
+
+			} else { \Json::nak( sprintf( '%s : missing guid', $action)); }
 
 		}
 
@@ -118,7 +137,8 @@ class users extends Controller {
 					'state' => '',
 					'postcode' => '',
 					'abn' => '',
-					'admin' => 0],
+					'admin' => 0
+				],
 				'license' => false];
 
 					// $dbc->defineField( 'pass', 'text');
@@ -143,7 +163,7 @@ class users extends Controller {
 			if ( $readonly) {
 				$dao = new dao\license;
 				$this->data->license = $dao->getLicense( $id);
-				
+
 				$dao = new dao\invoices;
 				$this->data->invoices = $dao->getForUser( $id);
 				$this->data->license = $dao->getActiveLicenseForUser( $id);

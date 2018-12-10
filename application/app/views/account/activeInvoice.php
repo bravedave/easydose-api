@@ -15,6 +15,7 @@
 
 	*/
   $inv = $this->data->license->license;
+  // sys::dump( $inv);
   ?>
 <div class="row py-1 mt-2">
   <div class="col-12 col-lg-2">
@@ -23,86 +24,70 @@
   </div>
   <div class="col-12 col-lg-10">
     <span id="show-activeInvoices-table-ellipses" class="pointer">...</span>
-    <table class="table table-striped table-sm d-none" id="show-activeInvoices-table">
+    <div id="show-activeInvoices-table" class="d-none">
+      <table class="table table-striped table-sm m-0">
+        <colgroup>
+          <col span="5" style="width: 20%;"/>
 
-      <tbody>
-        <tr>
-          <td class="p-0">
-            <table class="table table-striped table-sm m-0">
-              <colgroup>
-                  <col span="5" style="width: 20%;"/>
+        </colgroup>
 
-              </colgroup>
+        <thead>
+          <tr>
+            <td>#</td>
+            <td class="text-center">state</td>
+            <td class="text-center">created</td>
+            <td class="text-center">expires</td>
+            <td class="text-right">effective</td>
 
-              <thead>
-                <tr>
-                  <td>#</td>
-                  <td class="text-center">state</td>
-                  <td class="text-center">created</td>
-                  <td class="text-center">expires</td>
-                  <td class="text-right">effective</td>
+          </tr>
 
-                </tr>
+        </thead>
 
-              </thead>
+        <tbody>
+          <tr>
+            <td><?php print $inv->id ?></td>
+            <td class="text-center"><?php print $inv->state ?></td>
+            <td class="text-center"><?php print strings::asLocalDate( $inv->created) ?></td>
+            <td class="text-center"><?php print strings::asLocalDate( $inv->expires) ?></td>
+            <td class="text-right"><?php print strings::asLocalDate( $inv->effective) ?></td>
 
-              <tbody>
-                <tr>
-                  <td><?php print $inv->id ?></td>
-                  <td class="text-center"><?php print $inv->state ?></td>
-                  <td class="text-center"><?php print strings::asLocalDate( $inv->created) ?></td>
-                  <td class="text-center"><?php print strings::asLocalDate( $inv->expires) ?></td>
-                  <td class="text-right"><?php print strings::asLocalDate( $inv->effective) ?></td>
+          </tr>
 
-                </tr>
+        </tbody>
 
-              </tbody>
+      </table>
 
-            </table>
+      <table class="table table-striped table-sm m-0">
+        <tbody>
+          <?php foreach ( $inv->lines as $line) { ?>
+            <tr>
+              <td><?php printf( '%s<br />%s', $line->description, $line->name) ?></td>
+              <td class="text-right"><?php print $line->rate ?></td>
+              <td><?php print $line->term ?></td>
 
-          </td>
+            </tr>
 
-        </tr>
+          <?php } ?>
 
-        <tr>
-          <td class="p-0">
-            <table class="table table-striped table-sm m-0">
-              <tbody>
-                <?php foreach ( $inv->lines as $line) { ?>
-                  <tr>
-                    <td><?php printf( '%s<br />%s', $line->description, $line->name) ?></td>
-                    <td class="text-right"><?php print $line->rate ?></td>
-                    <td><?php print $line->term ?></td>
+          <tr>
+            <td>Total</td>
+            <td class="text-right"><?php print $inv->total ?></td>
+            <td>&nbsp;</td>
 
-                  </tr>
+          </tr>
 
-                <?php } ?>
+          <tr>
+            <td>total includes GST</td>
+            <td class="text-right"><?php print $inv->tax ?></td>
+            <td>&nbsp;</td>
 
-                <tr>
-                  <td>Total</td>
-                  <td class="text-right"><?php print $inv->total ?></td>
-                  <td>&nbsp;</td>
+          </tr>
 
-                </tr>
+        </tbody>
 
-                <tr>
-                  <td>total includes GST</td>
-                  <td class="text-right"><?php print $inv->tax ?></td>
-                  <td>&nbsp;</td>
+      </table>
 
-                </tr>
-
-              </tbody>
-
-            </table>
-
-          </td>
-
-        </tr>
-
-      </tbody>
-
-    </table>
+    </div>
 
   </div>
 

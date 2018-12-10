@@ -125,28 +125,36 @@
 </div>
 
 <div class="row py-1">
-  <div class="col offset-2 col-10 form-check">
-    <label class="form-check-label">
+  <div class="col offset-2 col-10">
+    <div class="form-check">
       <input type="checkbox" class="form-check-input"
-        id="version-2-license-check"
-        name="<?php print uniqid('easydose') ?>" <?php if ( $this->data->dto->use_license) print 'checked'; ?> />
-      Use this site for license (version 2)
+      id="version-2-license-check"
+      name="<?= uniqid('easydose') ?>"
+      <?php if ( $this->data->dto->use_license) print 'checked'; ?> />
 
-    </label>
+      <label class="form-check-label">
+        Use this site for license (version 2)
+
+      </label>
+
+    </div>
 
   </div>
 
 </div>
 
 <div class="row py-1">
-  <div class="col offset-2 col-10 form-check">
-    <label class="form-check-label">
+  <div class="col offset-2 col-10">
+    <div class="form-check">
       <input type="checkbox" class="form-check-input"
-        id="development-check"
-        name="<?php print uniqid('easydose') ?>" <?php if ( $this->data->dto->development) print 'checked'; ?> />
-      Developement Database
+      id="development-check"
+      name="<?php print uniqid('easydose') ?>" <?php if ( $this->data->dto->development) print 'checked'; ?> />
+      <label class="form-check-label">
+        Developement Database
 
-    </label>
+      </label>
+
+    </div>
 
   </div>
 

@@ -32,16 +32,16 @@ class license extends _dao {
     }
 
 
-    $dao = new products;
-    if ( $ret = $dao->getActiveProductForUser( $user)) {
-      // \sys::dump( $ret);
-      if ( $ret->license) {
-        if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: got product license', $user));
-        return ( $ret);
-
-      }
-
-    }
+    // $dao = new products;
+    // if ( $ret = $dao->getActiveProductForUser( $user)) {
+    //   // \sys::dump( $ret);
+    //   if ( $ret->license) {
+    //     if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: got product license', $user));
+    //     return ( $ret);
+    //
+    //   }
+    //
+    // }
 
 
     $dao = new invoices;

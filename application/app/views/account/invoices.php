@@ -9,9 +9,9 @@
 
 	*/
 
-  // sys::dump( $this->data->invoices);
-
   if ( $this->data->invoices) {
+
+    // sys::dump( $this->data->invoices);
   	?>
 <div class="row py-1 mt-2">
   <div class="col-12 col-lg-2">
@@ -26,6 +26,7 @@
           <td>date</td>
           <td>id</td>
           <td>state</td>
+          <td>expires</td>
 
         </tr>
 
@@ -37,6 +38,7 @@
             <td><?php print strings::asShortDate( $dto->created) ?></td>
             <td><?php print $dto->id ?></td>
             <td><?php print $dto->state ? $dto->state : 'created' ?></td>
+            <td><?php print strings::asShortDate( $dto->expires) ?></td>
 
           </tr>
 

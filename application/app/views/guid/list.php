@@ -200,6 +200,39 @@ $(document).ready( function() {
 
 <?php if ( \currentUser::isProgrammer()) { ?>
       _context.append('<hr />');
+      _context.append($('<a href="#"><i class="fa fa-exchange"></i>switch to user</a>').on('click', function(e) {
+        e.stopPropagation(); e.preventDefault();
+
+        // console.log({
+        //   action : 'switch',
+        //   guid : _tr.data('guid')
+        //
+        // });
+
+        _brayworth_.post({
+          url : _brayworth_.url('users'),
+          data : {
+            action : 'switch',
+            guid : _tr.data('guid')
+
+          }
+
+        }).then ( function( d) {
+          if ( 'ack' == d.response) {
+            window.location.href = _brayworth_.url();
+
+          }
+          else {
+            _brayworth_.growl(d);
+
+          }
+
+        });
+
+        _context.close();
+
+      }));
+
       _context.append($('<a href="#"><i class="fa fa-trash"></i>delete</a>').on('click', function(e) {
         e.stopPropagation(); e.preventDefault();
 

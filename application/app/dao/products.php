@@ -51,6 +51,9 @@ class products extends _dao {
 	}
 
 	public function getActiveProductForUser( $userID = 0) {
+		$debug = false;
+		// $debug = true;
+
 		$ret = new dto\license;
 
 		if ( !(int)$userID) {
@@ -82,7 +85,9 @@ class products extends _dao {
 		$_w = $_where;
 		$_w[] = 'pay.`name` NOT LIKE "WKS%"';
 		$sql = sprintf('%s WHERE %s', $_sql, implode( ' AND ', $_w));
-		// print $sql;
+
+		if ( $debug) \sys::logSQL( $sql);
+
 		if ( $res = $this->Result( $sql)) {
 			if ( $ret->license = $res->dto()) {
 				$ret->type = 'LICENSE';
@@ -90,6 +95,7 @@ class products extends _dao {
 				$ret->description = $ret->license->description;
 				$ret->workstations = 1;
 				$ret->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $ret->license->created)));
+				$ret->license->expires = $ret->expires;	// not happy with this ...
 				$ret->state = 'active';
 
 			}
@@ -115,7 +121,7 @@ class products extends _dao {
 
 		}
 
-		// \sys::dump( $ret);
+		if ( $debug) \sys::dump( $ret);
 		return ( $ret);
 
 	}
