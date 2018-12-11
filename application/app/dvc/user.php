@@ -11,7 +11,10 @@ NameSpace dvc;
 
 class user extends _user {
 	var $id = 0;
-	protected $dto = FALSE;
+	var $admin = false;
+	var $programmer = false;
+	
+	protected $dto = false;
 
 	public function __construct() {
 		if ( ( $id = (int)session::get('uid')) > 0 ) {
