@@ -254,7 +254,7 @@ class users extends Controller {
 		$this->data = $dao->getUserLicenses();
 
 		$this->render([
-			'title' => $this->title = 'User',
+			'title' => $this->title = 'Users - Due',
 			'primary' => 'due',
 			'secondary' => 'index'
 
