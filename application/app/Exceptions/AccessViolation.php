@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class AccessViolation extends Exception {
 	protected $_text = 'Access Violation';

@@ -95,7 +95,7 @@ class sites extends Controller {
 
                 }
                 else {
-                  throw new \Exceptions\InvalidGUID; 
+                  throw new \Exceptions\InvalidGUID;
 
                 }
 
@@ -185,7 +185,7 @@ class sites extends Controller {
       //
       // }
 
-      $p = $this->page(['title' => ( $this->title = 'Sites')]);
+      $p = $this->page(['title' => $this->title = 'Sites']);
         $p->meta[] = sprintf( '<meta http-equiv="refresh" content="300; url=%s" />', url::tostring('sites'));
   			$p
   				->header()

@@ -9,13 +9,13 @@
 
 	*/	?>
 	<form method="post" data-role="user-form" action="<?php url::write('users') ?>">
-		<input type="hidden" name="id" value="<?php print $this->data->dto->id ?>" />
+		<input type="hidden" name="id" value="<?= $this->data->dto->id ?>" />
 
 		<div class="form-group row">
 			<div class="col-3">UserName</div>
 			<div class="col-8">
 				<input type="text" name="username" class="form-control" placeholder="username"
-				value="<?php print $this->data->dto->username ?>" required
+				value="<?= $this->data->dto->username ?>" required
 				<?php if ( $this->data->dto->id) print 'disabled'; ?>
 				<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
@@ -27,7 +27,7 @@
 			<div class="col-3">Name</div>
 			<div class="col-8">
 				<input type="text" name="name" class="form-control" placeholder="name" required
-				autofocus autocomplete="name" value="<?php print $this->data->dto->name ?>"
+				autofocus autocomplete="name" value="<?= $this->data->dto->name ?>"
 				<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
 			</div>
@@ -38,7 +38,7 @@
 			<div class="col col-3">Email</div>
 			<div class="col col-8">
 				<input type="email" name="email" class="form-control" placeholder="@" autocomplete="email"
-					value="<?php print $this->data->dto->email ?>" required
+					value="<?= $this->data->dto->email ?>" required
 					<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
 			</div>
@@ -109,8 +109,8 @@
 					<div class="col-3">Business Name</div>
 					<div class="col-9">
 						<input type="text" name="business_name" class="form-control"
-							placeholder="<?php print $this->data->latestSite ? $this->data->latestSite->site : 'business name' ?>"
-							value="<?php print $this->data->dto->business_name ?>"
+							placeholder="<?= $this->data->latestSite ? $this->data->latestSite->site : 'business name' ?>"
+							value="<?= $this->data->dto->business_name ?>"
 							<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
 					</div>
@@ -121,7 +121,7 @@
 					<div class="col-3">Address</div>
 					<div class="col-9">
 						<input type="text" name="street" class="form-control" placeholder="street"
-						autocomplete="address-line1" value="<?php print $this->data->dto->street ?>"
+						autocomplete="address-line1" value="<?= $this->data->dto->street ?>"
 						<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
 					</div>
@@ -131,7 +131,7 @@
 				<div class="row form-group">
 					<div class="offset-3 col-9">
 						<input type="text" name="town" class="form-control" placeholder="town"
-						autocomplete="address-level2" value="<?php print $this->data->dto->town ?>"
+						autocomplete="address-level2" value="<?= $this->data->dto->town ?>"
 						<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
 					</div>
@@ -141,14 +141,14 @@
 				<div class="row form-group">
 					<div class="offset-3 col-5">
 						<input type="text" name="state" class="form-control" placeholder="state"
-						autocomplete="address-level3" value="<?php print $this->data->dto->state ?>"
+						autocomplete="address-level3" value="<?= $this->data->dto->state ?>"
 						<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
 					</div>
 
 					<div class="col-4">
 						<input type="text" name="postcode" class="form-control" placeholder="postcode"
-						autocomplete="postal-code" value="<?php print $this->data->dto->postcode ?>"
+						autocomplete="postal-code" value="<?= $this->data->dto->postcode ?>"
 						<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
 					</div>
@@ -159,7 +159,7 @@
 					<div class="col-3">ABN</div>
 					<div class="col-9">
 						<input type="text" name="abn" class="form-control"
-						placeholder="ABN" value="<?php print $this->data->dto->abn ?>"
+						placeholder="ABN" value="<?= $this->data->dto->abn ?>"
 						<?php if ( $this->data->readonly) print 'readonly'; ?> />
 
 					</div>
@@ -169,10 +169,10 @@
 				<div class="row form-group">
 					<div class="offset-3 col-8">
 						<div class="form-check">
-							<input type="checkbox" name="admin" class="form-check-input" id="<?php print $uid = uniqid('ed'); ?>"
+							<input type="checkbox" name="admin" class="form-check-input" id="<?= $uid = uniqid('ed'); ?>"
 								<?php if ( $this->data->dto->admin) print "checked" ?> value="1"
 								<?php if ( $this->data->readonly) print 'disabled'; ?> />
-								<label class="form-check-label" for="<?php print $uid ?>">
+								<label class="form-check-label" for="<?= $uid ?>">
 									Administrator
 								</label>
 

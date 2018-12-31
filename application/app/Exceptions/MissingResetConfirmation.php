@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class MissingResetConfirmation extends Exception {
 	protected $_text = 'Missing Reset Confirmation';

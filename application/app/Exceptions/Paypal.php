@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class Paypal extends Exception {
 	protected $_text = 'Generic Paypay Error';

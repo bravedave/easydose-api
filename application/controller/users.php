@@ -101,28 +101,6 @@ class users extends Controller {
 
 	}
 
-	protected function _index() {
-		if ( currentUser::isAdmin()) {
-			$dao = new dao\users;
-			$this->data = $dao->getAll();
-			//~ sys::dump( $this->data);
-
-			$this->render([
-				'title' => $this->title = 'Users',
-				'primary' => 'report',
-				'secondary' => 'index']);
-
-		}
-
-	}
-
-	public function index() {
-		$this->isPost() ?
-			$this->postHandler() :
-			$this->_index();
-
-	}
-
 	protected function _edit( $id = 0, $readonly = false) {
 		if ( currentUser::isAdmin()) {
 			$this->data = (object)[
@@ -204,23 +182,24 @@ class users extends Controller {
 			$this->render([
 				'title' => $this->title = 'User',
 				'primary' => 'edit',
+				'secondary' => 'index'
+
+			]);
+
+		}
+
+	}
+
+	protected function _index() {
+		if ( currentUser::isAdmin()) {
+			$dao = new dao\users;
+			$this->data = $dao->getAll();
+			//~ sys::dump( $this->data);
+
+			$this->render([
+				'title' => $this->title = 'Users',
+				'primary' => 'report',
 				'secondary' => 'index']);
-
-		}
-
-	}
-
-	public function view( $id = 0) {
-		if ( currentUser::isAdmin()) {
-			$this->_edit( $id, $readonly = true);
-
-		}
-
-	}
-
-	public function edit( $id = 0) {
-		if ( currentUser::isAdmin()) {
-			$this->_edit( $id, $readonly = FALSE);
 
 		}
 
@@ -228,9 +207,7 @@ class users extends Controller {
 
 	public function createinvoice( $id = 0) {
 		if ( currentUser::isAdmin()) {
-
-			if ( $id) {
-
+			if ( $id = (int)$id) {
 				$dao = new dao\users;
 				if ( $dto = $dao->getByID( $id)) {
 
@@ -249,11 +226,60 @@ class users extends Controller {
 						'primary' => 'account/invoice-create',
 						'secondary' => 'index']);
 
-				}
-				else { throw new \Exceptions\InvalidAccount; }
+				} else { throw new \Exceptions\InvalidAccount; }
 
-			}
-			else { throw new \Exceptions\InvalidAccount; }
+			} else { throw new \Exceptions\InvalidAccount; }
+
+		}
+
+	}
+
+	public function createinvoiceAUTO( $id = 0) {
+		if ( currentUser::isAdmin()) {
+			if ( $id = (int)$id) {
+				$dao = new dao\users;
+				if ( $invID = $dao->autoCreateInvoiceFromLast( $id)) {
+					Response::redirect( url::tostring('account/invoice/' . $invID), 'created invoice');
+
+				}
+
+			} else { throw new \Exceptions\InvalidAccount; }
+
+		}
+
+	}
+
+	public function due() {
+		$dao = new dao\users;
+		$this->data = $dao->getUserLicenses();
+
+		$this->render([
+			'title' => $this->title = 'User',
+			'primary' => 'due',
+			'secondary' => 'index'
+
+		]);
+
+	}
+
+	public function edit( $id = 0) {
+		if ( currentUser::isAdmin()) {
+			$this->_edit( $id, $readonly = FALSE);
+
+		}
+
+	}
+
+	public function index() {
+		$this->isPost() ?
+			$this->postHandler() :
+			$this->_index();
+
+	}
+
+	public function view( $id = 0) {
+		if ( currentUser::isAdmin()) {
+			$this->_edit( $id, $readonly = true);
 
 		}
 

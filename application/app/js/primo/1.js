@@ -28,8 +28,23 @@ if ( typeof moment != 'undefined') {
 			LLLL: "dddd, MMMM Do YYYY LT",
 			llll: "ddd, MMM D YYYY LT"
 		}
+
 	});
 
 };
+
+_brayworth_.urlwrite = _ed_.url = function( _url, withProtocol) {
+	if ( 'undefined' == typeof _url) { _url = ''; }
+	if ( 'undefined' == typeof withProtocol) { withProtocol = false; }
+
+	if ( withProtocol)  {
+		return ( '<?php printf( '%s%s', url::$PROTOCOL, url::$URL) ?>' + _url);
+
+	}
+
+	return ( '<?= url::$URL ?>' + _url);
+
+};
+
 
 // console.log( 'primo');

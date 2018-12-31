@@ -9,6 +9,9 @@
 
 	*/
 
-namespace exceptions;
+namespace Exceptions;
 
-class Exception extends \dvc\Exception {}
+class NoActiveLicense extends Exception {
+	protected $_text = 'No Active License';
+
+}

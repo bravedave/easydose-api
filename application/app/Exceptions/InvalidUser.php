@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class InvalidUser extends Exception {
 	protected $_text = 'Invalid User';

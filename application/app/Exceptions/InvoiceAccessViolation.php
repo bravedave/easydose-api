@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class InvoiceNotFound extends Exception {
 	protected $_text = 'Invoice Not Found';

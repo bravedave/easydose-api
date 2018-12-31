@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class InvalidProduct extends Exception {
 	protected $_text = 'Invalid Product';

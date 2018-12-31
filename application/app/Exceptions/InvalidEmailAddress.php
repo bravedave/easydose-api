@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class InvalidEmailAddress extends Exception {
 	protected $_text = 'Invalid Email Address';

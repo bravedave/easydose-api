@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class MissingUserID extends Exception {
 	protected $_text = 'Missing User ID';

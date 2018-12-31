@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class InvalidGUID extends Exception {
 	protected $_text = 'Invalid GUID';

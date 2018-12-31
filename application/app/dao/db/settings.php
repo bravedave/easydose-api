@@ -8,7 +8,7 @@
 		http://creativecommons.org/licenses/by/4.0/
 
 	*/
-Namespace dvc\sqlite;
+namespace dvc\sqlite;
 
 $dbc = new dbCheck( $this->db, 'settings' );
 $dbc->defineField( 'name', 'text');
@@ -26,6 +26,7 @@ $dbc->defineField( 'bank_bsb', 'text');
 $dbc->defineField( 'bank_account', 'text');
 $dbc->defineField( 'invoice_email', 'text');
 $dbc->defineField( 'abn', 'text');
+$dbc->defineField( 'invoice_creation_days', 'int');
 $dbc->check();
 
 if ( $res = $this->db->Result( 'SELECT count(*) count FROM settings' )) {

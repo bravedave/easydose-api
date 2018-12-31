@@ -9,11 +9,11 @@
 
 	*/
 
-Namespace dao;
+namespace dao;
 
 class settings extends _dao {
 	protected $_db_name = 'settings';
-	static $dto = FALSE;
+	static $dto = false;
 
 	public function firstRun() {
 		/**
@@ -24,7 +24,13 @@ class settings extends _dao {
 		if ( $res = $this->Result( "SELECT name FROM sqlite_master WHERE type='table' AND name='settings';"))
 			return ( !$res->dto());
 
-		return ( TRUE);
+		return ( true);
+
+	}
+
+	static private function _getFirst() {
+		$dao = new self;
+		return ( $dao->getFirst());
 
 	}
 
@@ -32,7 +38,7 @@ class settings extends _dao {
 		if ( $res = $this->Result( "SELECT * FROM settings"))
 			return ( $res->dto());
 
-		return ( FALSE);
+		return ( false);
 
 	}
 
@@ -44,6 +50,14 @@ class settings extends _dao {
 
 	}
 
+	static public function get( $field) {
+		if ( self::$dto || self::$dto = self::_getFirst())
+			return ( self::$dto->{$field});
+
+		return ( null);
+
+	}
+
 	public function useSubscriptions() {
 		if ( self::$dto || self::$dto = $this->getFirst()) {
 			if ( isset( self::$dto->use_subscription))
@@ -51,11 +65,11 @@ class settings extends _dao {
 
 		}
 
-		return ( FALSE);
+		return ( false);
 
 	}
 
-	public function lockdown( $set = NULL) {
+	public function lockdown( $set = null) {
 		$lockdown = FALSE;
 		if ( self::$dto || self::$dto = $this->getFirst()) {
 			$lockdown = (int)self::$dto->lockdown;

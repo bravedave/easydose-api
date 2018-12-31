@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class ResetDisabled extends Exception {
 	protected $_text = 'Reset is Disabled - you have to activate it if you need it';

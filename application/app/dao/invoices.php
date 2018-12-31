@@ -9,7 +9,7 @@
 
 	*/
 
-Namespace dao;
+namespace dao;
 
 class invoices extends _dao {
 	protected $_db_name = 'invoices';
@@ -86,7 +86,7 @@ class invoices extends _dao {
 			FROM
 			 	invoices
 			WHERE
-				 ifnull(state,'') <> 'canceled' AND user_id = %s
+				ifnull(state,'') <> 'canceled' AND user_id = %s
 			ORDER BY
 				CASE ifnull( expires, '')
 					WHEN '' THEN '9999-99-99'
@@ -95,11 +95,11 @@ class invoices extends _dao {
 
 		if ( $res = $this->Result( $sql)) {
 			// if ( $debug) \sys::dump( $res);
-			return ( $res->dtoSet( NULL, $this->template));
+			return ( $res->dtoSet( null, $this->template));
 
 		}
 
-		return ( FALSE);
+		return ( false);
 
 	}
 
@@ -198,6 +198,38 @@ class invoices extends _dao {
 		}
 
 		return ( $license);
+
+	}
+
+	public function getUnpaidForUser( $userID = 0) {
+		$debug = false;
+		// $debug = true;
+
+		if ( !(int)$userID) {
+			$userID = \currentUser::id();
+
+		}
+
+		$sql = sprintf(
+			"SELECT
+				*
+			FROM
+			 	invoices
+			WHERE
+				ifnull(state,'') <> 'canceled' AND ifnull(state,'') <> 'approved' AND user_id = %s
+			ORDER BY
+				CASE ifnull( expires, '')
+					WHEN '' THEN '9999-99-99'
+					ELSE expires
+				END ASC, created ASC", $userID);
+
+		if ( $res = $this->Result( $sql)) {
+			// if ( $debug) \sys::dump( $res);
+			return ( $res->dto( $this->template));
+
+		}
+
+		return ( false);
 
 	}
 

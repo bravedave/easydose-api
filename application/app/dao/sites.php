@@ -44,7 +44,8 @@ class sites extends _dao {
 		}
 		else {
 			$sql = 'SELECT
-			 		sites.*, guid.user_id guid_user_id
+			 		sites.*,
+					guid.user_id guid_user_id
 				FROM sites
 					LEFT JOIN guid on guid.guid = sites.guid
 				WHERE

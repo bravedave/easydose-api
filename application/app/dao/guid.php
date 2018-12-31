@@ -9,7 +9,7 @@
 
 	*/
 
-Namespace dao;
+namespace dao;
 
 class guid extends _dao {
 	protected $_db_name = 'guid';
@@ -151,8 +151,8 @@ class guid extends _dao {
 	}
 
 	public function getLicenseOf( \dao\dto\guid $dto) {
-		$debug = FALSE;
-		// $debug = TRUE;
+		$debug = false;
+		// $debug = true;
 
 		if ( (int)$dto->user_id) {
 			$licenseDAO = new license;	// dao\license;
@@ -189,8 +189,8 @@ class guid extends _dao {
 	}
 
 	public function getLicense( $guid) {
-		$debug = FALSE;
-		// $debug = TRUE;
+		$debug = false;
+		// $debug = true;
 
 		if ( $debug) \sys::logger( sprintf( 'dao\guid->getLicense(%s) :: getting license', $guid));
 
@@ -199,7 +199,7 @@ class guid extends _dao {
 
 		}
 
-		return ( FALSE);
+		return ( false);
 
 	}
 
@@ -222,8 +222,8 @@ class guid extends _dao {
 	}
 
 	public function getUser( $guid) {
-		$debug = FALSE;
-		// $debug = TRUE;
+		$debug = false;
+		// $debug = true;
 
 		if ( $debug) \sys::logger( sprintf( 'dao\guid->getUser(%s) :: getting user', $guid));
 
@@ -232,7 +232,7 @@ class guid extends _dao {
 
 		}
 
-		return ( FALSE);
+		return ( false);
 
 	}
 

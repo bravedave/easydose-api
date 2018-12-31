@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class ProductNotFound extends Exception {
 	protected $_text = 'Product Not Found';

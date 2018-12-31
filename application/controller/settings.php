@@ -25,7 +25,9 @@ class settings extends Controller {
 				'bank_bsb' => (string)$this->getPost('bank_bsb'),
 				'bank_account' => (string)$this->getPost('bank_account'),
 				'abn' => (string)$this->getPost('abn'),
-				'invoice_email' => (string)$this->getPost('invoice_email')
+				'invoice_email' => (string)$this->getPost('invoice_email'),
+				'invoice_creation_days' => (int)$this->getPost('invoice_creation_days')
+
 			];
 
 			if ( currentUser::isProgrammer()) {

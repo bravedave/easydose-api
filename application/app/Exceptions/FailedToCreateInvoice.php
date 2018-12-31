@@ -9,7 +9,7 @@
 
 	*/
 
-NameSpace Exceptions;
+namespace exceptions;
 
 class FailedToCreateInvoice extends Exception {
 	protected $_text = 'Failed To Create Invoice';
