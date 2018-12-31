@@ -108,7 +108,7 @@ $(document).ready( function() {
 				url : _ed_.url('users'),
 				data : {
 					action : 'get-invoices-for-user',
-					id : 44
+					id : id
 
 				}
 
