@@ -9,72 +9,65 @@
 	*/
 
 abstract class strings extends dvc\strings {
-  static function getGUID(){
-    mt_srand( (double)microtime() * 10000);  //optional for php 4.2.0 and up.
-    $charid = strtoupper(md5(uniqid(rand(), true)));
-    $hyphen = chr(45);  // "-"
-    $uuid = chr(123)    // "{"
-      .substr($charid, 0, 8).$hyphen
-      .substr($charid, 8, 4).$hyphen
-      .substr($charid,12, 4).$hyphen
-      .substr($charid,16, 4).$hyphen
-      .substr($charid,20,12)
-      .chr(125);        // "}"
+	static function getGUID(){
+		mt_srand( (double)microtime() * 10000);  //optional for php 4.2.0 and up.
+		$charid = strtoupper(md5(uniqid(rand(), true)));
+		$hyphen = chr(45);  // "-"
+		$uuid = chr(123)    // "{"
+			.substr($charid, 0, 8).$hyphen
+			.substr($charid, 8, 4).$hyphen
+			.substr($charid,12, 4).$hyphen
+			.substr($charid,16, 4).$hyphen
+			.substr($charid,20,12)
+			.chr(125);        // "}"
 
-    return $uuid;
+		return $uuid;
 
-  }
+	}
 
-  static function ShortLicense( $license) {
-    if ( 'easydoseOPEN' == $license)
-      return 'OPEN';
+	static function ShortLicense( $license) {
+		if ( 'easydoseOPEN' == $license) return 'OPEN';
+		if ( 'easydose10' == $license) return 'E-10';
+		if ( 'easydose2' == $license) return 'E-5';
+		if ( 'easydoseFREE' == $license) return 'FREE';
 
-    if ( 'easydose10' == $license)
-      return 'E-10';
+		return ( $license);
 
-    if ( 'easydose2' == $license)
-      return 'E-5';
+	}
 
-    if ( 'easydoseFREE' == $license)
-      return 'FREE';
+	static function StringToOS( $osIn) {
+		if ( preg_match( '@^Microsoft Windows XP@', $osIn )) {
+			return 'WinXP';
 
-    return ( $license);
+		}
+		elseif ( preg_match( '@^Microsoft Windows \[Version 6.1.7601\]@', $osIn )) {
+			return 'Win7/2008';
 
-  }
+		}
+		elseif ( preg_match( '@^Microsoft Windows \[Version 6.2.9200\]@', $osIn )) {
+			return 'Win8/2012';
 
-  static function StringToOS( $osIn) {
-    if ( preg_match( '@^Microsoft Windows XP@', $osIn )) {
-      return 'WinXP';
+		}
+		elseif ( preg_match( '@^Microsoft Windows \[Version 6.3.9200\]@', $osIn )) {
+			return 'Win8.1/2012 R2';
 
-    }
-    elseif ( preg_match( '@^Microsoft Windows \[Version 6.1.7601\]@', $osIn )) {
-      return 'Win7/2008';
+		}
+		elseif ( preg_match( '@^Microsoft Windows \[Version 6.3.9600\]@', $osIn )) {
+			return 'Win8.1 U1/2012';
 
-    }
-    elseif ( preg_match( '@^Microsoft Windows \[Version 6.2.9200\]@', $osIn )) {
-      return 'Win8/2012';
+		}
+		elseif ( preg_match( '@^Microsoft Windows \[Version 10@', $osIn )) {
+			return 'Win10';
 
-    }
-    elseif ( preg_match( '@^Microsoft Windows \[Version 6.3.9200\]@', $osIn )) {
-      return 'Win8.1/2012 R2';
+		}
+		else {
+			return $osIn;
 
-    }
-    elseif ( preg_match( '@^Microsoft Windows \[Version 6.3.9600\]@', $osIn )) {
-      return 'Win8.1 U1/2012';
+		}
 
-    }
-    elseif ( preg_match( '@^Microsoft Windows \[Version 10@', $osIn )) {
-      return 'Win10';
+	}
 
-    }
-    else {
-      return $osIn;
-
-    }
-
-  }
-
-  //~ static function asLocalDate( $date) {
+	//~ static function asLocalDate( $date) {
 		//~ if ( $time = strtotime( $date))
 			//~ return ( date( config::$DATE_FORMAT, $time));
 
@@ -82,12 +75,12 @@ abstract class strings extends dvc\strings {
 
 	//~ }
 
-  static function asShortDateTime( $date) {
-    return ( strings::asShortDate( $date, TRUE));
+	static function asShortDateTime( $date) {
+		return ( strings::asShortDate( $date, true));
 
 		// if ( (string)$date == '0000-00-00')
 		// 	return ( FALSE);
-    //
+		//
 		// if ( ( $t = strtotime( $date)) !== FALSE) {
 		// 	if ( date( 'Y-m-d', $t) == date( 'Y-m-d'))
 		// 		return ( date( 'h:m', $t));
@@ -95,9 +88,9 @@ abstract class strings extends dvc\strings {
 		// 		return ( date( 'd-M', $t));
 		// 	else
 		// 		return ( date( config::$DATE_FORMAT, $t));
-    //
+		//
 		// }
-    //
+		//
 		// return FALSE;
 
 	}
