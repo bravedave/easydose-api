@@ -16,17 +16,47 @@ class users extends Controller {
 		//~ sys::dump( $this->getPost());
 
 		if ( $action == 'delete') {
-
 			if ( $id = (int)$this->getPost('id')) {
 				$dao = new dao\users;
 				$dao->delete( $id);
-				\Json::ack( 'deleted user');
 
-			}
-			else {
-				\Json::nak( 'invalid id');
+				\Json::ack( $action);
 
-			}
+			} else { \Json::nak( $action); }
+
+		}
+		elseif ( $action == 'get-invoices-for-user') {
+			/*
+			_brayworth_.post({
+				url : _ed_.url('users'),
+				data : {
+					action : 'get-invoices-for-user',
+					id : 44
+
+				}
+
+			}).then( function( d) { console.log( d); });
+			*/
+
+			if ( $id = (int)$this->getPost('id')) {
+				$dao = new dao\invoices;
+				if ( $dtoSet = $dao->getForUser( $id)) {
+					$a = [];
+					foreach ( $dtoSet as $dto) {
+						$a[] = (object)[
+							'id' => $dto->id,
+							'state' => (string)$dto->state,
+							'created' => date( 'Y-m-d', strtotime( $dto->created)),
+
+						];
+
+					}
+
+					\Json::ack( $action)->add('data', $a);
+
+				} else { \Json::nak( $action); }
+
+			} else { \Json::nak( $action); }
 
 		}
 		elseif ( $action == 'save/update') {
@@ -264,7 +294,7 @@ class users extends Controller {
 
 	public function edit( $id = 0) {
 		if ( currentUser::isAdmin()) {
-			$this->_edit( $id, $readonly = FALSE);
+			$this->_edit( $id, $readonly = false);
 
 		}
 

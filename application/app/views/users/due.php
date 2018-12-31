@@ -90,6 +90,44 @@ $(document).ready( function() {
 
 			}
 
+		}).on( 'contextmenu', function( e) {
+			if ( e.shiftKey)
+				return;
+
+			e.stopPropagation();e.preventDefault();
+
+			_brayworth_.hideContexts();
+
+			let _context = _brayworth_.context();
+			let _tr = $(this);
+			let id = _tr.data('id');
+
+			_context.append( $('<a><i class="fa fa-user" /><strong>Goto Account</strong></a>').attr('href',_ed_.url('users/view/' + id)));
+
+			_brayworth_.post({
+				url : _ed_.url('users'),
+				data : {
+					action : 'get-invoices-for-user',
+					id : 44
+
+				}
+
+			}).then( function( d) {
+				if ( 'ack' == d.response && d.data.length > 0) {
+					_context.append( '<div>Invoices...</div>');
+					$.each( d.data, function( i, el) {
+						let invDate = _ed_.moment( el.created);
+						let inv = el.id + '. ' + invDate.format( 'll') + ' - ' + el.state;
+						_context.append( $('<a></a>').html( inv).prepend('<i class="fa fa-file-text-o" />').attr('href',_ed_.url('account/invoice/' + el.id)));
+
+					});
+
+				}
+
+			});
+
+			_context.open( e);
+
 		});
 
 	});
