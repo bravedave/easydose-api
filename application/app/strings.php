@@ -74,13 +74,13 @@ abstract class strings extends dvc\strings {
 
   }
 
-  static function asLocalDate( $date) {
-		if ( $time = strtotime( $date))
-			return ( date( config::$DATE_FORMAT, $time));
+  //~ static function asLocalDate( $date) {
+		//~ if ( $time = strtotime( $date))
+			//~ return ( date( config::$DATE_FORMAT, $time));
 
-		return FALSE;
+		//~ return FALSE;
 
-	}
+	//~ }
 
   static function asShortDateTime( $date) {
     return ( strings::asShortDate( $date, TRUE));
