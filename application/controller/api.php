@@ -258,80 +258,82 @@ class api extends Controller {
 
 	}
 
-  protected function setAccount( $action) {
-    /*
-    *  associated an email address associated with a guid
-    *  this can only be done if the email is blank
-    *
-    *  curl -X POST -H "Accept: application/json" -d action="set-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" -d email="david@brayworth.com.au" "http://localhost/api/"
-    */
-    if ( $guid = $this->getPost( 'guid')) {
+	protected function setAccount( $action) {
+		/*
+		*  associated an email address associated with a guid
+		*  this can only be done if the email is blank
+		*
+		*  curl -X POST -H "Accept: application/json" -d action="set-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" -d email="david@brayworth.com.au" "http://localhost/api/"
+		*/
+		if ( $guid = $this->getPost( 'guid')) {
 
-      $guidDAO = new dao\guid;
-      if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
+			$guidDAO = new dao\guid;
+			if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
 
-        if ( (int)$guidDTO->user_id < 1) {
+				if ( (int)$guidDTO->user_id < 1) {
 
-          $email = $this->getPost( 'email');
+					$email = $this->getPost( 'email');
 
-          if ( strings::IsEmailAddress( $email)) {
+					if ( strings::IsEmailAddress( $email)) {
 
-            $usersDAO = new dao\users;
-            if ( $usersDTO = $usersDAO->getUserByEmail( $email)) {
-              /*
-              * Only allow one guid per account
-              */
-              $guidDTOs = $guidDAO->getForUser( $usersDTO->id);
-              if ( count( $guidDTOs)) {
-                /*
-                * to test this using a guid that is already in the database
-                * try to assign it using a duplicate email
-                *
-                * sql to get info:
-                *   select g.id, g.guid, u.name, u.email from guid g left join users u on g.user_id = u.id;
-                *
-                * curl -X POST -H "Accept: application/json" -d action="set-account" -d guid="{a guid id}" -d email="john@citizen.com" "http://localhost/api/"
-                */
-                Json::nak( sprintf( '%s : email already used', $action));
+						$usersDAO = new dao\users;
+						if ( $usersDTO = $usersDAO->getUserByEmail( $email)) {
+							/*
+							* Only allow one guid per account
+							*/
+							$guidDTOs = $guidDAO->getForUser( $usersDTO->id);
+							if ( count( $guidDTOs)) {
+								/*
+								* to test this using a guid that is already in the database
+								* try to assign it using a duplicate email
+								*
+								* sql to get info:
+								*   select g.id, g.guid, u.name, u.email from guid g left join users u on g.user_id = u.id;
+								*
+								* curl -X POST -H "Accept: application/json" -d action="set-account" -d guid="{a guid id}" -d email="john@citizen.com" "http://localhost/api/"
+								*/
+								Json::nak( sprintf( '%s : email already used', $action));
 
-              }
-              else {
-                $guidDAO->UpdateByID([
-                  'user_id' => $usersDTO->id,
-                  'updated' => \db::dbTimeStamp()
-                ], $guidDTO->id);
-                \Json::ack( sprintf( '%s :: found account', $action))
-                  ->add( 'email', $email);
+							}
+							else {
+								$guidDAO->UpdateByID([
+									'user_id' => $usersDTO->id,
+									'updated' => \db::dbTimeStamp()
+								], $guidDTO->id);
+								\Json::ack( sprintf( '%s :: found account', $action))
+									->add( 'email', $email);
 
-              }
+							}
 
-            }
-            else {
-              $a = explode( '@', $email);
-              $name = (string)$a[0];
-              $a = [
-                'username' => $email,
-                'name' => $name,
-                'email' => $email,
-                'created' => \db::dbTimeStamp(),
-                'updated' => \db::dbTimeStamp()
+						}
+						else {
+							$a = explode( '@', $email);
+							$name = (string)$a[0];
+							$a = [
+								'username' => $email,
+								'name' => $name,
+								'email' => $email,
+								'created' => \db::dbTimeStamp(),
+								'updated' => \db::dbTimeStamp()
 
-              ];
-              $id = $usersDAO->Insert( $a);
-              $guidDAO->UpdateByID( ['user_id' => $id], $guidDTO->id);
+							];
+							$id = $usersDAO->Insert( $a);
+							$guidDAO->UpdateByID( ['user_id' => $id], $guidDTO->id);
 
-              \Json::ack( sprintf( '%s :: added account', $action))
-                ->add( 'email', $email);
+							\Json::ack( sprintf( '%s :: added account', $action))
+								->add( 'email', $email);
 
-            }
+						}
 
-          }
+					}
 
-        } else { \Json::nak( sprintf( '%s : account already assigned', $action)); }
-      } else { \Json::nak( $action); }
-    } else { \Json::nak( $action); }
+				} else { \Json::nak( sprintf( '%s : account already assigned', $action)); }
 
-  }
+			} else { \Json::nak( $action); }
+
+		} else { \Json::nak( $action); }
+
+	}
 
 	public function index() {
 		$this->isPost() ?

@@ -63,7 +63,7 @@ class users extends _dao {
 							'user_id' => $user->id,
 							'invoices_id' => 0,
 							'product_id' => $line->product_id,
-							'rate' => $line->rate,
+							'rate' => $product->rate,
 							'created' => \db::dbTimeStamp(),
 							'updated' => \db::dbTimeStamp()
 
