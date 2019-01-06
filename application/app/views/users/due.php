@@ -19,6 +19,7 @@
 
 		<tr>
 			<td class="border-0">proprietor</td>
+			<td class="border-0">business</td>
 			<td class="border-0">license</td>
 			<td class="text-center border-0">wks</td>
 			<td class="text-center border-0">expires</td>
@@ -46,7 +47,8 @@
 			}
 			?>>
 			<td><?= $dto->name ?></td>
-			<td><?= $dto->license ?></td>
+			<td><div style="width: 250px;" class="text-truncate"><?= $dto->business_name ?></div></td>
+			<td><?= strings::ShortLicense( $dto->license) ?></td>
 			<td class="text-center"><?= $dto->workstations ?></td>
 			<td class="text-center"><?= strings::asShortDate( $dto->expires) ?></td>
 			<td class="text-center"><?= $dto->last_invoice ?></td>

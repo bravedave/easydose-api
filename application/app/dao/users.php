@@ -174,6 +174,7 @@ class users extends _dao {
 		$sql = 'SELECT
 				u.id,
 				u.name,
+				u.business_name,
 				inv.id inv_id,
 				inv.state,
 				inv.created
@@ -190,6 +191,7 @@ class users extends _dao {
 			$this->Q( "CREATE TEMPORARY TABLE _lic (
 				id INTEGER DEFAULT 0,
 				name TEXT NOT NULL DEFAULT '',
+				business_name TEXT NOT NULL DEFAULT '',
 				license TEXT NOT NULL DEFAULT '',
 				last_invoice TEXT NOT NULL DEFAULT '',
 				last_invoice_state TEXT NOT NULL DEFAULT '',
@@ -205,6 +207,7 @@ class users extends _dao {
 				$a = [
 					'id' => $dto->id,
 					'name' => $dto->name,
+					'business_name' => $dto->business_name,
 					'last_invoice' => $dto->inv_id,
 					'last_invoice_state' => $dto->state,
 					'last_invoice_created' => $dto->created,

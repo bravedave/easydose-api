@@ -283,6 +283,8 @@ class users extends Controller {
 		$dao = new dao\users;
 		$this->data = $dao->getUserLicenses();
 
+		//~ sys::dump( $this->data);
+
 		$this->render([
 			'title' => $this->title = 'Users - Due',
 			'primary' => 'due',
