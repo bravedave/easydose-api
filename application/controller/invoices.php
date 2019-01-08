@@ -14,129 +14,166 @@
 class invoices extends Controller {
 
 	protected function postHandler() {
-	$action = $this->getPost('action');
+		$action = $this->getPost('action');
 
-	if ( 'create invoice' == $action) {
-		if ( $user_id = (int)$this->getPost('user_id')) {
-			if ( $product_id = (int)$this->getPost('product_id')) {
+		if ( 'apply-discount' == $action) {
+			if ( currentUser::isAdmin()) {
+				if ( $id = (int)$this->getPost('invoice_id')) {
+					$a = [
+						'discount_reason' => (string)$this->getPost('reason'),
+						'discount' => (float)$this->getPost('discount'),
+						'updated' => \db::dbTimeStamp()
+					];
 
-				$productsDAO = new dao\products;
-				$usersDAO = new dao\users;
+					$dao = new dao\invoices;
+					$dao->UpdateByID( $a, $id);
 
-				if ( $usersDTO = $usersDAO->getByID( $user_id)) {
+					\Json::ack( $action);
 
-					// sys::dump( $this->getPost());
-					if ( $productDTO = $productsDAO->getByID( $product_id)) {
+				} else { \Json::nak( $action); }
 
-						$aInvoices = [
-							'user_id' => $usersDTO->id,
-							'created' => \db::dbTimeStamp(),
-							'updated' => \db::dbTimeStamp()
-						];
+			} else { \Json::nak( $action); }
 
-						$aInvoicesDetail = [];
-						$aInvoicesDetail[] = [
-							'user_id' => $usersDTO->id,
-							'invoices_id' => 0,
-							'product_id' => $productDTO->id,
-							'rate' => $productDTO->rate,
-							'created' => \db::dbTimeStamp(),
-							'updated' => \db::dbTimeStamp()
-						];
+		}
+		elseif ( 'create invoice' == $action) {
+			if ( $user_id = (int)$this->getPost('user_id')) {
+				if ( $product_id = (int)$this->getPost('product_id')) {
 
-						if ( $workstation_id = (int)$this->getPost('workstation_id')) {
-							if ( $wksDTO = $productsDAO->getByID( $workstation_id)) {
-								$aInvoicesDetail[] = [
-									'user_id' => $usersDTO->id,
-									'invoices_id' => 0,
-									'product_id' => $wksDTO->id,
-									'rate' => $wksDTO->rate,
-									'created' => \db::dbTimeStamp(),
-									'updated' => \db::dbTimeStamp()
-								];
+					$productsDAO = new dao\products;
+					$usersDAO = new dao\users;
 
-							} else { throw new \Exceptions\InvalidWorkstationProduct; }
+					if ( $usersDTO = $usersDAO->getByID( $user_id)) {
 
-						}
+						// sys::dump( $this->getPost());
+						if ( $productDTO = $productsDAO->getByID( $product_id)) {
 
-						if ( count($aInvoicesDetail)) {
-							$dao = new dao\invoices;
-							$invID = $dao->Insert( $aInvoices);
+							$aInvoices = [
+								'user_id' => $usersDTO->id,
+								'created' => \db::dbTimeStamp(),
+								'updated' => \db::dbTimeStamp()
+							];
 
-							$dao = new dao\invoices_detail;
-							foreach ($aInvoicesDetail as $line) {
-								$line['invoices_id'] = $invID;
-								$dao->Insert( $line);
+							$aInvoicesDetail = [];
+							$aInvoicesDetail[] = [
+								'user_id' => $usersDTO->id,
+								'invoices_id' => 0,
+								'product_id' => $productDTO->id,
+								'rate' => $productDTO->rate,
+								'created' => \db::dbTimeStamp(),
+								'updated' => \db::dbTimeStamp()
+							];
+
+							if ( $workstation_id = (int)$this->getPost('workstation_id')) {
+								if ( $wksDTO = $productsDAO->getByID( $workstation_id)) {
+									$aInvoicesDetail[] = [
+										'user_id' => $usersDTO->id,
+										'invoices_id' => 0,
+										'product_id' => $wksDTO->id,
+										'rate' => $wksDTO->rate,
+										'created' => \db::dbTimeStamp(),
+										'updated' => \db::dbTimeStamp()
+									];
+
+								} else { throw new \Exceptions\InvalidWorkstationProduct; }
 
 							}
 
-							Response::redirect( url::tostring('account/invoice/' . $invID), 'created invoice');
+							if ( count($aInvoicesDetail)) {
+								$dao = new dao\invoices;
+								$invID = $dao->Insert( $aInvoices);
 
-						} else { throw new \Exceptions\FailedToCreateInvoice; }
+								$dao = new dao\invoices_detail;
+								foreach ($aInvoicesDetail as $line) {
+									$line['invoices_id'] = $invID;
+									$dao->Insert( $line);
 
-					} else { throw new \Exceptions\ProductNotFound; }
+								}
 
-				} else { throw new \Exceptions\InvalidUser; }
+								Response::redirect( url::tostring('account/invoice/' . $invID), 'created invoice');
 
-			} else { throw new \Exceptions\InvalidProduct; }
+							} else { throw new \Exceptions\FailedToCreateInvoice; }
 
-		} else { throw new \Exceptions\MissingUserID; }
+						} else { throw new \Exceptions\ProductNotFound; }
 
-	}
-    elseif ( 'update-expires' == $action) {
-      if ( currentUser::isAdmin()) {
-        if ( $id = (int)$this->getPost('invoice_id')) {
-          $a = [
-            'expires' => $this->getPost('expires'),
-            'updated' => \db::dbTimeStamp()
-          ];
+					} else { throw new \Exceptions\InvalidUser; }
 
-          $dao = new dao\invoices;
-          $dao->UpdateByID( $a, $id);
+				} else { throw new \Exceptions\InvalidProduct; }
 
-          \Json::ack( $action);
+			} else { throw new \Exceptions\MissingUserID; }
 
-        } else { \Json::nak( $action); }
+		}
+		elseif ( 'make-authoritative' == $action) {
+			if ( currentUser::isAdmin()) {
+				if ( $id = (int)$this->getPost('invoice_id')) {
+					$a = [
+						'authoritative' => (int)$this->getPost('value'),
+						'updated' => \db::dbTimeStamp()
+					];
 
-      } else { \Json::nak( $action); }
+					$dao = new dao\invoices;
+					$dao->UpdateByID( $a, $id);
 
-    }
-    elseif ( 'update-workstation_override' == $action) {
-      if ( currentUser::isAdmin()) {
-        if ( $id = (int)$this->getPost('invoice_id')) {
-          $a = [
-            'workstation_override' => $this->getPost('workstations'),
-            'updated' => \db::dbTimeStamp()
-          ];
+					\Json::ack( $action);
 
-          $dao = new dao\invoices;
-          $dao->UpdateByID( $a, $id);
+				} else { \Json::nak( $action); }
 
-          \Json::ack( $action);
+			} else { \Json::nak( $action); }
 
-        } else { \Json::nak( $action); }
+		}
+		elseif ( 'update-expires' == $action) {
+			if ( currentUser::isAdmin()) {
+				if ( $id = (int)$this->getPost('invoice_id')) {
+					$a = [
+						'expires' => $this->getPost('expires'),
+						'updated' => \db::dbTimeStamp()
+					];
 
-      } else { \Json::nak( $action); }
+					$dao = new dao\invoices;
+					$dao->UpdateByID( $a, $id);
 
-    }
-    elseif ( 'update-state' == $action) {
-      if ( currentUser::isAdmin()) {
-        if ( $id = (int)$this->getPost('invoice_id')) {
-          $a = [
-            'state' => $this->getPost('state'),
-            'state_change' => 'manual',
-            'state_changed' => \db::dbTimeStamp(),
-            'state_changed_by' => currentUser::id(),
-            'updated' => \db::dbTimeStamp()
+					\Json::ack( $action);
 
-          ];
+				} else { \Json::nak( $action); }
 
-          $dao = new dao\invoices;
-          $dao->UpdateByID( $a, $id);
+			} else { \Json::nak( $action); }
 
-          \Json::ack( $action);
+		}
+		elseif ( 'update-workstation_override' == $action) {
+			if ( currentUser::isAdmin()) {
+				if ( $id = (int)$this->getPost('invoice_id')) {
+					$a = [
+						'workstation_override' => $this->getPost('workstations'),
+						'updated' => \db::dbTimeStamp()
+					];
 
-        } else { \Json::nak( $action); }
+					$dao = new dao\invoices;
+					$dao->UpdateByID( $a, $id);
+
+					\Json::ack( $action);
+
+				} else { \Json::nak( $action); }
+
+			} else { \Json::nak( $action); }
+
+		}
+		elseif ( 'update-state' == $action) {
+			if ( currentUser::isAdmin()) {
+				if ( $id = (int)$this->getPost('invoice_id')) {
+					$a = [
+						'state' => $this->getPost('state'),
+						'state_change' => 'manual',
+						'state_changed' => \db::dbTimeStamp(),
+						'state_changed_by' => currentUser::id(),
+						'updated' => \db::dbTimeStamp()
+
+					];
+
+					$dao = new dao\invoices;
+					$dao->UpdateByID( $a, $id);
+
+					\Json::ack( $action);
+
+				} else { \Json::nak( $action); }
 
 			} else { \Json::nak( $action); }
 

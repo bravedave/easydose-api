@@ -26,6 +26,29 @@ class invoices extends _dao {
 
 	}
 
+	static function isProvisional( dto\invoices $dto) {
+		if ( 'provisional' == $dto->state) {
+			$cDate = new \DateTime($dto->created);
+			$diff = $cDate->diff( new \DateTime());
+			if ( $diff->days < \config::provisional_invoice_grace) {
+				return true;
+
+			}
+
+		}
+
+		return false;
+
+	}
+
+	static function ProvisionalExpiry( dto\invoices $dto) {
+		$d = new \DateTime( $dto->created);
+		$d->add( new \DateInterval( sprintf( 'P%dD', \config::provisional_invoice_grace)));
+
+		return $d->format('Y-m-d');
+
+	}
+
 	public function getInvoice( \dao\dto\invoices $dto) {
 		$dao = new invoices_detail;
 		if ( $lines = $dao->getLines( $dto)) {
@@ -35,6 +58,8 @@ class invoices extends _dao {
 				$tot += (float)$line->rate;
 
 			}
+
+			$tot -= (float)$dto->discount;
 
 			$dto->total = $tot;
 			$dto->tax = $tot / \config::tax_rate_devisor;
@@ -105,7 +130,7 @@ class invoices extends _dao {
 
 	public function getActiveLicenseForUser( $userID = 0) {
 		$debug = false;
-		// $debug = true;
+		$debug = true;
 
 		$license = false;
 
@@ -126,17 +151,28 @@ class invoices extends _dao {
 
 			}
 
+			//~ \sys::dump( $dtoSet);
 			foreach ( $dtoSet as $dto) {
 
-				$dto->effective = ( $lastExpire ? $lastExpire : $dto->created);
+				$dto->effective = $dto->created;
+				if ( !( $dto->state == 'approved' || self::isProvisional( $dto) && $dto->authoritative)) {
+					/*
+					if it is not an invoice with is approved and authoritive
+					the effective date may already be established and we can use that,
+					this invoice could extend it.
+					*/
+					if ( $lastExpire) $dto->effective = $lastExpire;
 
+				}
+
+				//~ if ( $dto->id == 138) \sys::dump( $dto);
 				$this->_check_expiry( $dto);
 
 				$lastExpire = $dto->expires;
 
-				if ( $dto->state == 'approved' && $dto->expires >= date( 'Y-m-d')) {
+				if ( ( $dto->state == 'approved' || self::isProvisional( $dto)) && $dto->expires >= date( 'Y-m-d')) {
 					if ( $ret = $this->getInvoice( $dto)) {
-						if ( $license) {
+						if ( $license && !$dto->authoritative) {
 							// there is an active license this is an extension
 							$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
 							if ( $debug) \sys::logger( sprintf( 'dao\invoices->getActiveLicenseForUser : %s: %s - extending', $dto->id, $license->expires));
@@ -144,7 +180,7 @@ class invoices extends _dao {
 						}
 						else {
 
-							if ( $debug) \sys::logger( sprintf( 'dao\invoices->getActiveLicenseForUser : %s : %s', $dto->id, $dto->expires));
+							if ( $debug) \sys::logger( sprintf( 'dao\invoices->getActiveLicenseForUser : %s : %s : %s', $dto->id, $dto->state, $dto->expires));
 
 							$license = new dto\license;
 							$license->type = 'LICENSE';

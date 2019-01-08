@@ -530,7 +530,7 @@ class account extends Controller {
 							$this->data->invoice,
 						 	$this->data->license);
 
-				    $html = $inv->render();
+						$html = $inv->render();
 						print $html;
 
 						$this->load('invoice-options');

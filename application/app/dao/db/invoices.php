@@ -21,4 +21,7 @@ $dbc->defineField( 'created', 'text');
 $dbc->defineField( 'updated', 'text');
 $dbc->defineField( 'expires', 'text');
 $dbc->defineField( 'workstation_override', 'int');
+$dbc->defineField( 'authoritative', 'int');
+$dbc->defineField( 'discount', 'float');
+$dbc->defineField( 'discount_reason', 'text');
 $dbc->check();

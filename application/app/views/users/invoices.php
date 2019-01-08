@@ -23,6 +23,7 @@
 			<tr>
 				<td>id</td>
 				<td>state</td>
+				<td class="text-center">authoritative</td>
 				<td>created</td>
 				<td>expires</td>
 
@@ -35,6 +36,7 @@
 				<tr data-id="<?php print $dto->id ?>" invoice>
 					<td><?= $dto->id ?></td>
 					<td><?= $dto->state ?></td>
+					<td class="text-center"><?= $dto->authoritative ? strings::html_tick : '' ?></td>
 					<td><?= strings::asLocalDate( $dto->created) ?></td>
 					<td><?= strings::asLocalDate( $dto->expires) ?></td>
 
@@ -47,7 +49,7 @@
 		<?php if ( $this->data->license ) { ?>
 			<tfoot>
 				<tr>
-					<td class="text-right" colspan="3">license expires:</td>
+					<td class="text-right" colspan="4">license expires:</td>
 					<td><?= strings::asLocalDate( $this->data->license->expires) ?></td>
 
 				</tr>

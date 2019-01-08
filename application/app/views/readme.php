@@ -71,9 +71,8 @@
 <?php } ?>
 
 <h4>Status</h4>
-<p>
-  Alpha
-</p>
+<p>Released</p>
+
 <p>
   Please report any issues to <a href="mailto:<?php print \config::$SUPPORT_EMAIL ?>?subject=EasyDose Backend" target="_blank">
     <?php printf( "%s &lt;%s&gt;", \config::$SUPPORT_NAME, \config::$SUPPORT_EMAIL )?>

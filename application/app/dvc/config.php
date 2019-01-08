@@ -44,6 +44,7 @@ abstract class config extends _config {
 	const invoice_prefix = 'me.';
 
 	const products = [ 'easydose5', 'easydose10', 'easydoseOPEN'];
+	const provisional_invoice_grace = 21;
 
 	const show_db_reset = false;
 

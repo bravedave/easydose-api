@@ -11,145 +11,144 @@
 use dvc\html;
 
 class invoice {
-  protected $sys, $account, $invoice, $license;
+	protected $sys, $account, $invoice, $license;
 
-  function __construct( $sys, $account, $invoice, $license) {
-    $this->sys = $sys;
-    $this->account = $account;
-    $this->invoice = $invoice;
-    $this->license = $license;
+	function __construct( $sys, $account, $invoice, $license) {
+		$this->sys = $sys;
+		$this->account = $account;
+		$this->invoice = $invoice;
+		$this->license = $license;
 
-  }
+	}
 
-  function render() {
+	function render() {
 
-    /*-- -------------[ head of invoice ]------------- -- -
-    +---------------------+---------------------+
-    |                     | Company Details     |
-    +---------------------+---------------------+
-    | Customer Details    |                     |
-    +---------------------+---------------------+
-    --*/
+		/*-- -------------[ head of invoice ]------------- -- -
+		+---------------------+---------------------+
+		|                     | Company Details     |
+		+---------------------+---------------------+
+		| Customer Details    |                     |
+		+---------------------+---------------------+
+		--*/
 
-    $thead = new html\table("table table-sm borderless m-0");
+		$thead = new html\table("table table-sm borderless m-0");
 
-    $tr = $thead->tr();
+		$tr = $thead->tr();
 
-    $path = __DIR__ . '/public/images/logo.jpg';
-    $type = pathinfo( $path, PATHINFO_EXTENSION);
-    $data = file_get_contents( $path);
-    $base64 = 'data:image/' . $type . ';base64,' . base64_encode( $data);
+		$path = __DIR__ . '/public/images/logo.jpg';
+		$type = pathinfo( $path, PATHINFO_EXTENSION);
+		$data = file_get_contents( $path);
+		$base64 = 'data:image/' . $type . ';base64,' . base64_encode( $data);
 
-    $img = sprintf( '<img src="%s" />', $base64);
+		$img = sprintf( '<img src="%s" />', $base64);
 
-    /*--- ---[ start our details]--- ---*/
-    $tr->td( $img, ['style' => 'width: 400px; padding: 0']);
+		/*--- ---[ start our details]--- ---*/
+		$tr->td( $img, ['style' => 'width: 400px; padding: 0']);
 
-    $td = $tr->td( NULL);
+		$td = $tr->td( null);
 
-    $td->appendChild( new html\div( $this->sys->name));
-    if ( $this->sys->street) {
-      $td->appendChild( new html\div( $this->sys->street));
+		$td->appendChild( new html\div( $this->sys->name));
+		if ( $this->sys->street) {
+			$td->appendChild( new html\div( $this->sys->street));
 
-    }
+		}
 
-    $_a = [];
-    if ( $this->sys->town) {
-      $_a[] = $this->sys->town;
+		$_a = [];
+		if ( $this->sys->town) $_a[] = $this->sys->town;
+		if ( $this->sys->state) $_a[] = $this->sys->state;
+		if ( $this->sys->postcode ) $_a[] = $this->sys->postcode;
+		if ( count( $_a)) $td->appendChild( new html\div( implode( ' ', $_a)));
 
-    }
-    if ( $this->sys->state) {
-      $_a[] = $this->sys->state;
+		if ( $this->sys->abn) $td->appendChild( new html\div( sprintf('ABN: %s', $this->sys->abn)));
 
-    }
-    if ( $this->sys->postcode ) {
-      $_a[] = $this->sys->postcode;
+		/*--- ---[ end our details]--- ---*/
 
-    }
-    if ( count( $_a)) {
-      $td->appendChild( new html\div( implode( ' ', $_a)));
+		/*--- ---[ start their details]--- ---*/
+		$tr = $thead->tr();
+		$td = $tr->td( null);
+		$tr->td('&nbsp;');
 
-    }
-    if ( $this->sys->abn) {
-      $td->appendChild( new html\div( sprintf('ABN: %s', $this->sys->abn)));
+		$td->appendChild( new html\div( $this->account->name));
+		if ( $this->account->business_name && $this->account->business_name != $this->account->name) {
+			$td->appendChild( new html\div( $this->account->business_name));
 
-    }
-    /*--- ---[ end our details]--- ---*/
+		}
 
-    /*--- ---[ start their details]--- ---*/
-    $tr = $thead->tr();
-    $td = $tr->td( NULL);
-    $tr->td('&nbsp;');
+		if ( $this->account->street) {
+			$td->appendChild( new html\div( $this->account->street));
 
-    $td->appendChild( new html\div( $this->account->name));
-    if ( $this->account->business_name && $this->account->business_name != $this->account->name) {
-      $td->appendChild( new html\div( $this->account->business_name));
+		}
 
-    }
+		$_a = [];
+		if ( $this->account->town) $_a[] = $this->account->town;
+		if ( $this->account->state) $_a[] = $this->account->state;
+		if ( $this->account->postcode ) $_a[] = $this->account->postcode;
+		if ( count( $_a)) $td->appendChild( new html\div( implode( ' ', $_a)));
+		if ( $this->account->abn) $td->appendChild( new html\div( sprintf('ABN: %s', $this->account->abn)));
+		/*--- ---[ end their details]--- ---*/
 
-    if ( $this->account->street) {
-      $td->appendChild( new html\div( $this->account->street));
+		/*--- ---[ headline ]--- ---*/
+		$headline = new html\table('table table-sm borderless m-0');
+		//~ $hcellWith = ( $this->invoice->authoritative ? 25 : 33);
+		$hcellWith = 33;
 
-    }
+		$status = 'not paid';
+		//~ if ( 'provisional' == $this->invoice->state) {
+		if ( dao\invoices::isProvisional( $this->invoice)) {
+			$status = 'provisional';
 
-    $_a = [];
-    if ( $this->account->town) {
-      $_a[] = $this->account->town;
+			//~ }
 
-    }
-    if ( $this->account->state) {
-      $_a[] = $this->account->state;
+			//~ $cDate = new DateTime($this->invoice->created);
+			//~ $diff = $cDate->diff( new DateTime());
+			//~ if ( $diff->days < \config::provisional_invoice_grace) {
+				//~ $status = 'provisional';
 
-    }
-    if ( $this->account->postcode ) {
-      $_a[] = $this->account->postcode;
+			//~ }
 
-    }
-    if ( count( $_a)) {
-      $td->appendChild( new html\div( implode( ' ', $_a)));
+		}
+		elseif ( 'approved' == $this->invoice->state) {
+			$status = 'paid';
 
-    }
+		}
+		elseif ( 'canceled' == $this->invoice->state) {
+			$status = 'canceled';
 
-    if ( $this->account->abn) {
-      $td->appendChild( new html\div( sprintf('ABN: %s', $this->account->abn)));
+		}
 
-    }
-    /*--- ---[ end their details]--- ---*/
 
-    /*--- ---[ headline ]--- ---*/
-    $headline = new html\table("table table-sm borderless m-0");
+		$tr = $headline->tr();
+		$tr->td( new html\div( sprintf('Tax Invoice: <strong>%s</strong>', sys::format_invoice_number( $this->invoice->id))),
+			[ 'class' => 'bx-1', 'style' => sprintf( 'width: %s%%;', $hcellWith)]);
+		$tr->td( new html\div( sprintf('Status: <strong>%s</strong>', $status)),
+			[ 'class' => 'bx-1 text-center', 'style' => sprintf( 'width: %s%%;', $hcellWith)]);
+		$tr->td( new html\div( sprintf('Invoice Date: <strong>%s</strong>', strings::asLocalDate( $this->invoice->created))),
+			[ 'class' => 'bx-1 text-right', 'style' => sprintf( 'width: %s%%;', $hcellWith)]);
+		//~ $tr->td( new html\div( sprintf('Expires: %s', strings::asLocalDate( $this->invoice->expires))),
+			//~ [ 'class' => 'bx-1 text-right', 'style' => 'width: 25%;']);
 
-    $tr = $headline->tr();
-    $tr->td( new html\div( sprintf('Tax Invoice: <strong>%s</strong>', sys::format_invoice_number( $this->invoice->id))),
-      [ 'class' => 'bx-1', 'style' => 'width: 33%;']);
-    $tr->td( new html\div( sprintf('Status: <strong>%s</strong>', ( 'approved' == $this->invoice->state ? 'paid' : ( 'canceled' == $this->invoice->state ? 'canceled' : 'not paid')))),
-      [ 'class' => 'bx-1 text-center', 'style' => 'width: 33%;']);
-    $tr->td( new html\div( sprintf('Invoice Date: <strong>%s</strong>', strings::asLocalDate( $this->invoice->created))),
-      [ 'class' => 'bx-1 text-right', 'style' => 'width: 33%;']);
-    // $tr->td( new html\div( sprintf('Expires: %s', strings::asLocalDate( $this->invoice->expires))),
-    //   [ 'class' => 'bx-1 text-right', 'style' => 'width: 25%;']);
+		$tr = $thead->tr();
+		$td = $tr->td( $headline, ['colspan' => '2', 'style' => 'padding: 0;' ]);
+		/*--- ---[ headline ]--- ---*/
 
-    $tr = $thead->tr();
-    $td = $tr->td( $headline, ['colspan' => '2', 'style' => 'padding: 0;' ]);
-    /*--- ---[ headline ]--- ---*/
+		/*-- ---[ body of invoice ]---
+		+--------------------+----------+----------+
+		| Description        | Rate     | Term     |
+		+--------------------+----------+----------+
+		| EasyDose 10        | 550      | Year     |
+		| Discount           |  50      |          |
+		+--------------------+----------+----------+
+		| Total              | 500      |          |
+		| Includes GST       |  49.50   |          |
+		+--------------------+----------+----------+
+		--*/
 
-    /*-- ---[ body of invoice ]---
-    +--------------------+----------+----------+
-    | Description        | Rate     | Term     |
-    +--------------------+----------+----------+
-    | EasyDose 10        | 550      | Year     |
-    +--------------------+----------+----------+
-    | Total              | 550      |          |
-    | Includes GST       |  50      |          |
-    +--------------------+----------+----------+
-    --*/
-
-    $tbody = new html\table("table");
-    $tr = $tbody->head()->tr();
-    $tr->td('Description');
-    $tr->td('Rate',['class' => 'text-right']);
-    // $tr->td('Valid To',['class' => 'text-center']);
-    $tr->td('Term',['class' => 'text-center']);
+		$tbody = new html\table('table');
+		$tr = $tbody->head()->tr();
+		$tr->td('Description');
+		$tr->td('Rate',['class' => 'text-right']);
+		// $tr->td('Valid To',['class' => 'text-center']);
+		$tr->td('Term',['class' => 'text-center']);
 
     foreach ( $this->invoice->lines as $dto) {
       $validTo = $this->invoice->expires;
@@ -163,101 +162,114 @@ class invoice {
 
     }	// foreach ( $this->invoice->lines as $dto)
 
-    $tr = $tbody->tr();
-    $tr->td( '<strong>Total:</strong>', [ 'style' => 'border-top: 6px double #dee2e6;']);
-    $tr->td( sprintf( '<strong>%s</strong>', number_format( $this->invoice->total, 2)),
-      [ 'style' => 'border-top: 6px double #dee2e6;', 'class' => 'text-right']);
-    $tr->td( '&nbsp;',[ 'style' => 'border-top: 6px double #dee2e6;']);
+		if ( $this->invoice->discount) {
+			$tr = $tbody->tr();
+			$tr->td( sprintf( 'Discount: %s', $this->invoice->discount_reason));
+			$tr->td( number_format( $this->invoice->discount * -1, 2), [ 'class' => 'text-right']);
+			$tr->td( '&nbsp;');
+		}
+		$tr = $tbody->tr();
+		$tr->td( '<strong>Total:</strong>', [ 'style' => 'border-top: 6px double #dee2e6;']);
+		$tr->td( sprintf( '<strong>%s</strong>', number_format( $this->invoice->total, 2)),
+			[ 'style' => 'border-top: 6px double #dee2e6;', 'class' => 'text-right']);
+		$tr->td( '&nbsp;',[ 'style' => 'border-top: 6px double #dee2e6;']);
 
-    $tr = $tbody->tr();
-    $tr->td( 'Total includes GST:');
-    $tr->td( number_format( $this->invoice->tax, 2), [ 'class' => 'text-right']);
-    $tr->td( '&nbsp;');
+		$tr = $tbody->tr();
+		$tr->td( 'Total includes GST:');
+		$tr->td( number_format( $this->invoice->tax, 2), [ 'class' => 'text-right']);
+		$tr->td( '&nbsp;');
 
-    $tlicense = new html\table("table");
-    if ( 'active' == $this->license->state) {
+		$tlicense = new html\table("table");
+		if ( 'active' == $this->license->state) {
 
-      $tr = $tlicense->head()->tr();
-      $td = $tr->td( '<h6 class="m-0">current license</h6>', ['colspan' => '4']);
+			$tr = $tlicense->head()->tr();
+			$td = $tr->td( '<h6 class="m-0">current license</h6>', ['colspan' => '4']);
 
-      $tr = $tlicense->head()->tr();
-      $td = $tr->td( 'description');
-      $td = $tr->td( 'workstation');
-      $td = $tr->td( 'expires');
-      $td = $tr->td( 'state');
+			$tr = $tlicense->head()->tr();
+			$td = $tr->td( 'description');
+			$td = $tr->td( 'workstation');
+			$td = $tr->td( 'expires');
+			$td = $tr->td( 'state');
 
-      $tr = $tlicense->tr();
-      $td = $tr->td( sprintf( '%s<br />%s', $this->license->description, $this->license->product));
-      $td = $tr->td( (string)$this->license->workstations);
-      $td = $tr->td( strings::asLocalDate( $this->license->expires));
-      $td = $tr->td( $this->license->state);
+			$tr = $tlicense->tr();
+			$td = $tr->td( sprintf( '%s<br />%s', $this->license->description, $this->license->product));
+			$td = $tr->td( (string)$this->license->workstations);
+			$td = $tr->td( strings::asLocalDate( $this->license->expires));
+			$td = $tr->td( $this->license->state);
 
-      if ( $this->invoice->workstation_override) {
-        $tr = $tlicense->tr();
-        $td = $tr->td( '<em>workstation override applied</em>', ['colspan' => '4']);
+			if ( $this->invoice->workstation_override) {
+				$tr = $tlicense->tr();
+				$td = $tr->td( '<em>workstation override applied</em>', ['colspan' => '4']);
 
-      }
+			}
 
-    }
-    else {
-      $tr = $tlicense->tr();
-      $td = $tr->td( 'no active license');
+		}
+		else {
+			$tr = $tlicense->tr();
+			$td = $tr->td( 'no active license');
 
-    }
-
-
-    /*-- ---[ foot of invoice ]---
-    +-------------------------------------------+
-    | text                                      |
-    +-------------------------------------------+
-    --*/
-    $tfoot = new html\table("table borderless");
-    $tr = $tfoot->tr();
-    $td = $tr->td( sprintf('<div>
-          <strong>Banking</strong>
-
-          %s BSB: %s Account: %s
-
-          <p class="lead">
-          Please <strong>Quote</strong> Invoice : <strong>%s</strong>
-          when making a Bank Deposit</p>
-
-        </div>',
-        $this->sys->bank_name,
-        $this->sys->bank_bsb,
-        $this->sys->bank_account,
-        sys::format_invoice_number( $this->invoice->id)));
-
-    $tr = $tfoot->tr();
-    $td = $tr->td(
-      '<p>Products with a term of <em><strong>year</strong></em> are valid 1 year
-        from the payment date. Where the product is an extension, the product will
-        be valid 1 year from the expiry date of the previous product</p>');
-
-    $ret = new html\table("table borderless table-invoice");
-    $ret->tr()->td( $thead);
-    $ret->tr()->td( $tbody);
-    $ret->tr()->td( $tlicense);
-    $ret->tr()->td( $tfoot);
-
-    // return ( $ret);
-
-    $html = $ret->render( TRUE);
-    // create instance
-    $cssToInlineStyles = new TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
-    $parts = [
-      __DIR__,
-      'public',
-      'css',
-      'minimum.css'
-    ];
-    $css = file_get_contents( implode( DIRECTORY_SEPARATOR, $parts));
-
-    // output
-    $html = $cssToInlineStyles->convert( $html, $css);
-    return ( $html);
+		}
 
 
-  }
+		/*-- ---[ foot of invoice ]---
+		+-------------------------------------------+
+		| text                                      |
+		+-------------------------------------------+
+		--*/
+		$tfoot = new html\table('table borderless');
+		$tr = $tfoot->tr();
+		$td = $tr->td( sprintf('<div>
+			<strong>Banking</strong>
+
+			%s BSB: %s Account: %s
+
+			<p class="lead">
+			Please <strong>Quote</strong> Invoice : <strong>%s</strong>
+			when making a Bank Deposit</p>
+
+			</div>',
+			$this->sys->bank_name,
+			$this->sys->bank_bsb,
+			$this->sys->bank_account,
+			sys::format_invoice_number( $this->invoice->id)));
+
+		$tr = $tfoot->tr();
+		$td = $tr->td(
+			'<p>Products with a term of <em><strong>year</strong></em> are valid 1 year
+			from the payment date. Where the product is an extension, the product will
+			be valid 1 year from the expiry date of the previous product</p>');
+
+		if ( 'provisional' == $status) {
+			$tr = $tfoot->tr();
+			$td = $tr->td( sprintf('<p>Warning : Provisional status will expire on %s</p>', strings::asLocalDate( dao\invoices::ProvisionalExpiry( $this->invoice))));
+
+		}
+
+
+		$ret = new html\table('table borderless table-invoice');
+		$ret->tr()->td( $thead);
+		$ret->tr()->td( $tbody);
+		$ret->tr()->td( $tlicense);
+		$ret->tr()->td( $tfoot);
+
+		// return ( $ret);
+
+		$html = $ret->render( true);
+		// create instance
+		$cssToInlineStyles = new TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+		$parts = [
+			__DIR__,
+			'public',
+			'css',
+			'minimum.css'
+		];
+		$css = file_get_contents( implode( DIRECTORY_SEPARATOR, $parts));
+
+		// output
+		$html = $cssToInlineStyles->convert( $html, $css);
+		return ( $html);
+
+
+	}
 
 }
