@@ -11,92 +11,105 @@
 i[title="download as CSV"] {margin-top: -18px;}
 </style>
 <div class="row">
-  <div class="col-md-8">
-      <input type="search" placeholder="search..." class="form-control" autofocus
-        name="<?php print $sid = uniqid( 'ed') ?>"
-        id="<?php print $sid ?>"
-        />
+	<div class="col-md-8">
+		<input type="search" placeholder="search..." class="form-control" autofocus
+			name="<?php print $sid = uniqid( 'ed') ?>"
+			id="<?php print $sid ?>"
+			/>
 
-  </div>
+	</div>
 
-  <div class="col-md-4 d-none d-md-block">
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" checked
-        name="<?php print $chkid = uniqid( 'ed') ?>"
-        id="<?php print $chkid ?>"
-        />
-      <label class="form-check-label" for="<?php print $chkid ?>">
-        hide development databases
+	<div class="col-md-4 d-none d-md-block">
+	<div class="form-check">
+	<input type="checkbox" class="form-check-input" checked
+	name="<?php print $chkid = uniqid( 'ed') ?>"
+	id="<?php print $chkid ?>"
+	/>
+	<label class="form-check-label" for="<?php print $chkid ?>">
+	hide development databases
 
-      </label>
+	</label>
 
-    </div>
+	</div>
 
-  </div>
+	</div>
 
 </div>
 
 <div class="row">
-  <div class="col p-0">
-    <table class="table" guid-list>
-      <thead>
-        <tr>
-          <td class="d-none d-lg-table-cell" style="width: 40px;" role="sort-header" data-key="id" data-sorttype="numeric">id</td>
-          <td role="sort-header" data-key="guid">guid</td>
-          <td class="d-none d-lg-table-cell" style="width: 18em;" role="sort-header" data-key="name">proprietor</td>
-          <td class="text-center" style="width: 5em;" role="sort-header" data-key="license" data-sorttype="numeric">use license</td>
-          <td class="text-center" style="width: 8em;" role="sort-header" data-key="created">created</td>
-          <td class="d-none d-lg-table-cell text-center" style="width: 8em;" role="sort-header" data-key="updated">updated</td>
-          <td class="d-none d-lg-table-cell text-center" style="width: 8em;" role="sort-header" data-key="expires">expires</td>
+	<div class="col p-0">
+		<table class="table" guid-list>
+			<thead>
+				<tr>
+					<td class="d-none d-lg-table-cell" style="width: 40px;" role="sort-header" data-key="id" data-sorttype="numeric">id</td>
+					<td role="sort-header" data-key="guid">guid</td>
+					<td class="d-none d-lg-table-cell" style="width: 18em;" role="sort-header" data-key="name">proprietor</td>
+					<td class="text-center" style="width: 5em;" role="sort-header" data-key="license" data-sorttype="numeric">use license</td>
+					<td class="text-center" style="width: 5em;" role="sort-header" data-key="override">has override</td>
+					<td class="text-center" style="width: 8em;" role="sort-header" data-key="created">created</td>
+					<td class="d-none d-lg-table-cell text-center" style="width: 8em;" role="sort-header" data-key="updated">updated</td>
+					<td class="d-none d-lg-table-cell text-center" style="width: 8em;" role="sort-header" data-key="expires">expires</td>
 
-        </tr>
+				</tr>
 
-      </thead>
+			</thead>
 
-      <tbody>
-        <?php while ( $dto = $this->data->res->dto()) {
-          $expires = '';
-          if ( $t = strtotime( $dto->expires)) {
-            $expires = date( \config::$DATE_FORMAT, strtotime( $dto->expires));
+			<tbody>
+			<?php while ( $dto = $this->data->res->dto()) {
+				$expires = '';
+				if ( $t = strtotime( $dto->expires)) {
+					$expires = date( \config::$DATE_FORMAT, strtotime( $dto->expires));
 
-          }  ?>
-          <tr
-            data-id="<?php print $dto->id ?>"
-            data-guid="<?php print $dto->guid ?>"
-            data-name="<?php print $dto->name ?>"
-            data-license="<?php print (int)$dto->use_license ?>"
-            data-created="<?php print $dto->created ?>"
-            data-updated="<?php print $dto->updated ?>"
-            data-expires="<?php print $dto->expires ?>"
-            data-dev="<?php print (int)$dto->development ?>"
-            class="<?php if ( (int)$dto->development) print 'd-none'; ?>"
-            row-guid>
-            <td class="d-none d-lg-table-cell"><?php print $dto->id ?></td>
-            <td><?php print $dto->guid ?>
-              <div class="text-muted small">
-                <?php printf('%s', $dto->site); ?>
+				}  ?>
+				<tr
+					data-id="<?php print $dto->id ?>"
+					data-guid="<?php print $dto->guid ?>"
+					data-name="<?php print $dto->name ?>"
+					data-license="<?php print (int)$dto->use_license ?>"
+					data-created="<?php print $dto->created ?>"
+					data-updated="<?php print $dto->updated ?>"
+					data-expires="<?php print $dto->expires ?>"
+					data-override="<?php
+						if ( strtotime( $dto->grace_expires) > time()) {
+							print date( 'Y-m-d', strtotime( $dto->grace_expires));
+						}
+						else {
+							print '0000-00-00';
 
-              </div>
+						} ?>"
+					data-dev="<?php print (int)$dto->development ?>"
+					class="<?php if ( (int)$dto->development) print 'd-none'; ?>"
+					row-guid>
+					<td class="d-none d-lg-table-cell"><?php print $dto->id ?></td>
+					<td><?php print $dto->guid ?>
+						<div class="text-muted small">
+						<?php printf('%s', $dto->site); ?>
 
-            </td>
-            <td class="d-none d-lg-table-cell"><?php print $dto->name ?></td>
-            <td class="text-center" style="width: 5em;" license-indicator><?php
-              if ( $dto->use_license ) {
-                print strings::html_tick;
-              } ?></td>
-            <td class="text-center"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->created)) ?></td>
-            <td class="d-none d-lg-table-cell text-center"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->updated)) ?></td>
-            <td class="d-none d-lg-table-cell text-center"><?php print $expires; ?></td>
+						</div>
 
-          </tr>
+					</td>
+					<td class="d-none d-lg-table-cell"><?php print $dto->name ?></td>
+					<td class="text-center" license-indicator><?php
+						if ( $dto->use_license ) {
+							print strings::html_tick;
+						} ?></td>
+					<td class="text-center"><?php
+						if ( strtotime( $dto->grace_expires) > time() ) {
+							print strings::html_tick;
+						} ?></td>
+					<td class="text-center"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->created)) ?></td>
+					<td class="d-none d-lg-table-cell text-center"><?php print date( \config::$DATE_FORMAT, strtotime( $dto->updated)) ?></td>
+					<td class="d-none d-lg-table-cell text-center"><?php print $expires; ?></td>
 
-        <?php } ?>
+				</tr>
 
-      </tbody>
+			<?php } ?>
 
-    </table>
+			</tbody>
 
-  </div>
+		</table>
+
+	</div>
 
 </div>
 <?php

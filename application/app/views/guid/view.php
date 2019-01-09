@@ -268,8 +268,8 @@
           <tr>
             <td>&nbsp;</td>
             <td colspan="3">
-              <input type="submit" name="action" class='btn btn-primary' value="apply license override" />
-              <input type="submit" name="action" class='btn btn-danger' value="remove license override" />
+              <input type="submit" name="action" class='btn btn-outline-primary' value="apply license override" />
+              <input type="submit" name="action" class='btn btn-outline-danger' value="remove license override" />
 
             </td>
 

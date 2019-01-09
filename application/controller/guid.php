@@ -13,87 +13,87 @@
 
 class guid extends Controller {
 
-  protected function postHandler() {
-    $action = $this->getPost('action');
+	protected function postHandler() {
+		$action = $this->getPost('action');
 
-    if ( 'apply license override' == $action || 'remove license override' == $action) {
-      if ( $id = (int)$this->getPost('id')) {
-        $dao = new dao\guid;
-        if ('remove license override' == $action) {
-          $a = [
-            'grace_product' => '',
-            'grace_workstations' => 0,
-            'grace_expires' => ''
-          ];
+		if ( 'apply license override' == $action || 'remove license override' == $action) {
+			if ( $id = (int)$this->getPost('id')) {
+				$dao = new dao\guid;
+				if ('remove license override' == $action) {
+					$a = [
+						'grace_product' => '',
+						'grace_workstations' => 0,
+						'grace_expires' => ''
+					];
 
-        }
-        else {
-          $a = [
-            'grace_product' => $this->getPost('grace_product'),
-            'grace_workstations' => $this->getPost('grace_workstations'),
-            'grace_expires' => $this->getPost('grace_expires')
-          ];
+				}
+				else {
+					$a = [
+						'grace_product' => $this->getPost('grace_product'),
+						'grace_workstations' => $this->getPost('grace_workstations'),
+						'grace_expires' => $this->getPost('grace_expires')
+					];
 
-        }
-        $dao->UpdateByID( $a, $id);
-        Response::redirect( url::toString('guid/view/' . $id), $action);
+				}
+				$dao->UpdateByID( $a, $id);
+				Response::redirect( url::toString('guid/view/' . $id), $action);
 
-      }
-      else {
-        Response::redirect( url::toString('guid'), 'invalid id');
+			}
+			else {
+				Response::redirect( url::toString('guid'), 'invalid id');
 
-      }
+			}
 
-    }
-    elseif ( 'use-version-2-license' == $action) {
-      if ( $id = (int)$this->getPost('id')) {
-        $dao = new dao\guid;
-        $dao->UpdateByID( ['use_license' => (int)$this->getPost('value')], $id);
-        \Json::ack( $action);
+		}
+		elseif ( 'use-version-2-license' == $action) {
+		if ( $id = (int)$this->getPost('id')) {
+		$dao = new dao\guid;
+		$dao->UpdateByID( ['use_license' => (int)$this->getPost('value')], $id);
+		\Json::ack( $action);
 
-      }
-      else {
-        \Json::nak( $action);
+		}
+		else {
+		\Json::nak( $action);
 
-      }
+		}
 
-    }
-    elseif ( 'development-mark' == $action) {
-      if ( $id = (int)$this->getPost('id')) {
-        $dao = new dao\guid;
-        $dao->UpdateByID( ['development' => (int)$this->getPost('value')], $id);
-        \Json::ack( $action);
+		}
+		elseif ( 'development-mark' == $action) {
+		if ( $id = (int)$this->getPost('id')) {
+		$dao = new dao\guid;
+		$dao->UpdateByID( ['development' => (int)$this->getPost('value')], $id);
+		\Json::ack( $action);
 
-      }
-      else {
-        \Json::nak( $action);
+		}
+		else {
+		\Json::nak( $action);
 
-      }
+		}
 
-    }
-    elseif ( 'detach-account' == $action) {
-      if ( $id = (int)$this->getPost('id')) {
-        $dao = new dao\guid;
-        $dao->UpdateByID( [
-          'user_id' => 0,
-          'updated' => \db::dbTimeStamp()
-        ], $id);
+		}
+		elseif ( 'detach-account' == $action) {
+		if ( $id = (int)$this->getPost('id')) {
+		$dao = new dao\guid;
+		$dao->UpdateByID( [
+		'user_id' => 0,
+		'updated' => \db::dbTimeStamp()
+		], $id);
 
-        \Json::ack( $action);
+		\Json::ack( $action);
 
-      }
-      else {
-        \Json::nak( $action);
+		}
+		else {
+		\Json::nak( $action);
 
-      }
+		}
 
-    }
-    else {
-      Response::redirect( url::toString('guid'));
+		}
+		else {
+			Response::redirect( url::toString('guid'));
 
-    }
+		}
 
-  }
+	}
 
 	public function view( $id) {
 		if ( currentUser::isAdmin()) {
