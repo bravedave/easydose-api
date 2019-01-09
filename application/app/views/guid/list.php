@@ -38,7 +38,7 @@ i[title="download as CSV"] {margin-top: -18px;}
 
 <div class="row">
 	<div class="col p-0">
-		<table class="table" guid-list>
+		<table class="table table-sm" guid-list>
 			<thead>
 				<tr>
 					<td class="d-none d-lg-table-cell" style="width: 40px;" role="sort-header" data-key="id" data-sorttype="numeric">id</td>
