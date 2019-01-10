@@ -7,23 +7,23 @@
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
 
-  PRAGMA foreign_keys=off;
+	PRAGMA foreign_keys=off;
 
-  BEGIN TRANSACTION;
+	BEGIN TRANSACTION;
 
-  ALTER TABLE guid RENAME TO _guid_old;
+	ALTER TABLE guid RENAME TO _guid_old;
 
-  <create here>
+	<create here>
 
-  INSERT INTO guid ( id, guid, user_id, agreements_id, created, updated )
-    SELECT id, guid, user_id, agreements_id, created, updated
-    FROM _guid_old;
+	INSERT INTO guid ( id, guid, user_id, agreements_id, created, updated )
+		SELECT id, guid, user_id, agreements_id, created, updated
+		FROM _guid_old;
 
-  COMMIT;
+	COMMIT;
 
-  PRAGMA foreign_keys=on;
+	PRAGMA foreign_keys=on;
 	*/
-Namespace dvc\sqlite;
+namespace dvc\sqlite;
 
 $dbc = new dbCheck( $this->db, 'guid' );
 $dbc->defineField( 'guid', 'text');

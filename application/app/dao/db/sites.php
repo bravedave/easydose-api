@@ -8,7 +8,7 @@
 		http://creativecommons.org/licenses/by/4.0/
 
 	*/
-Namespace dvc\sqlite;
+namespace dvc\sqlite;
 
 $dbc = new dbCheck( $this->db, 'sites' );
 $dbc->defineField( 'site', 'text');

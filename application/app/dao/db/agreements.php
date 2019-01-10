@@ -7,11 +7,8 @@
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
 
-  description:
-    definition file for agreements table
-
 	*/
-Namespace dvc\sqlite;
+namespace dvc\sqlite;
 
 $dbc = new dbCheck( $this->db, 'agreements' );
 $dbc->defineField( 'token', 'text');

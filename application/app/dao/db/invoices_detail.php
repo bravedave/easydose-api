@@ -8,7 +8,7 @@
 		http://creativecommons.org/licenses/by/4.0/
 
 	*/
-Namespace dvc\sqlite;
+namespace dvc\sqlite;
 
 $dbc = new dbCheck( $this->db, 'invoices_detail' );
 $dbc->defineField( 'user_id', 'text');
