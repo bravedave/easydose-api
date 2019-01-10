@@ -169,12 +169,16 @@ class users extends Controller {
 			$this->data->readonly = $readonly;
 			$latestSite = false;
 			if ( $readonly) {
-				$dao = new dao\license;
-				$this->data->license = $dao->getLicense( $id);
+				//~ sys::dump( $this->data->license);
 
 				$dao = new dao\invoices;
 				$this->data->invoices = $dao->getForUser( $id);
-				$this->data->license = $dao->getActiveLicenseForUser( $id);
+				if ( !( $this->data->license = $dao->getActiveLicenseForUser( $id))) {
+					$dao = new dao\license;
+					$this->data->license = $dao->getLicense( $id);
+
+				}
+				//~ sys::dump( $this->data->license);
 
 				$dao = new dao\guid;
 				$this->data->guid = $dao->getForUser( $id);

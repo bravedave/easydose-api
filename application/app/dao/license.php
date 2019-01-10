@@ -7,9 +7,6 @@
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
 
-	description:
-		data access worker for agreements table
-
 	*/
 
 namespace dao;
@@ -17,7 +14,7 @@ namespace dao;
 class license extends _dao {
 	public function getLicense( $user = 0) {
 		$debug = false;
-		// $debug = true;
+		//~ $debug = true;
 
 		if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting license', $user));
 
@@ -61,6 +58,7 @@ class license extends _dao {
 			if ( count( $dtoSet)) {
 				if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: got Gratis license', $user));
 				if ( $ret = $dao->getGratisLicenseOf( $dtoSet[0])) {
+					//~ \sys::dump( $ret);
 					return ( $ret);
 
 				}
