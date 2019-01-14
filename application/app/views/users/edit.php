@@ -210,7 +210,7 @@
 				<?php }	// if ( $this->data->readonly)
 				else { ?>
 					<input  class="btn btn-primary" type="submit" name="action" value="save/update" />
-					<a href="<?php url::write('users/view/' . $this->data->dto->id) ?>" class="btn btn-primary btn-link">cancel</a>
+					<a href="<?php url::write('users/view/' . $this->data->dto->id) ?>" class="btn btn-link">cancel</a>
 				<?php }	// if ( $this->data->readonly) ?>
 
 			</div>
