@@ -27,7 +27,6 @@ abstract class config extends _config {
 	//~ static $paypalSandbox = TRUE;
 	static $paypalSandbox = false;
 
-	static $SITEMAPS = true;
 
 	static $SUPPORT_NAME = 'My.EasyDose Webmaster';
 	static $SUPPORT_EMAIL = 'help@easydose.net.au';
