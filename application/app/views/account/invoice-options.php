@@ -14,25 +14,45 @@
 	 	Ordinary Authenticated user - non admin
 
 	*/ ?>
+<form class="form-group row d-print-none" id="<?= $uidFrmExclusion = strings::rand() ?>">
+	<input type="hidden" name="invoice_id" value="<?= $this->data->invoice->id ?>" />
+	<input type="hidden" name="action" value="license-exclusion" />
+	<div class="col">
+		<div class="form-check">
+			<input type="checkbox" class="form-check-input" name="license_exclusion" value="1"
+				id="<?= $uid = strings::rand() ?>"
+				<?php if ($this->data->invoice->license_exclusion) print 'checked' ?> />
+
+			<label class="form-check-label" for="<?= $uid ?>">
+				Exclude from License Calculations
+
+			</label>
+
+		</div>
+
+	</div>
+
+</form>
+
 <div class="row d-print-none">
 	<div class="col">
-		<form class="form" method="POST" action="<?php url::write('account') ?>">
-			<input type="hidden" name="id" value="<?php print $this->data->invoice->id ?>" />
 
 	<?php	if ( !in_array( $this->data->invoice->state, ['approved', 'canceled']) && currentUser::id() == $this->data->invoice->user_id ) {  ?>
+		<form class="form" method="POST" action="<?php url::write('account') ?>">
+			<input type="hidden" name="id" value="<?= $this->data->invoice->id ?>" />
 
 			<input type="submit" name="action" class="btn btn-primary" value="pay invoice" />
 
+		</form>
 	<?php	}
 
 			if ( currentUser::isAdmin()) {	?>
 
-			<div class="btn-group btn-group-sm">
-
+		<div class="btn-group btn-group-sm">
 	<?php
 				if ( !in_array( $this->data->invoice->state, ['canceled'])) {  ?>
-				<a href="#" class="btn btn-outline-secondary" id="change-expiry">change expiry</a>
-				<a href="#" class="btn btn-outline-secondary" id="override-workstations">override wks</a>
+			<a href="#" class="btn btn-outline-secondary" id="change-expiry">change expiry</a>
+			<a href="#" class="btn btn-outline-secondary" id="override-workstations">override wks</a>
 
 	<?php
 
@@ -48,33 +68,34 @@
 					*/
 
 					if ( !in_array( $this->data->invoice->state, ['approved', 'canceled']) || ($this->data->invoice->state_change == 'manual' && $diff < 180)) {  ?>
-				<a href="#" class="btn btn-outline-secondary" id="change-state">change status</a>
-				<a href="#" class="btn btn-outline-secondary" id="discount">discount</a>
+			<a href="#" class="btn btn-outline-secondary" id="change-state">change status</a>
+			<a href="#" class="btn btn-outline-secondary" id="discount">discount</a>
 
 	<?php
 					}
 
 				}
 
-			}
+			} ?>
 
+
+	<?php
 			if ( !in_array( $this->data->invoice->state, ['approved', 'canceled'])) {  ?>
-				<a href="<?php url::write( sprintf( 'account/invoice/%s?send=yes', $this->data->invoice->id )) ?>" class="btn btn-outline-secondary">send invoice</a>
+			<a class="btn btn-outline-secondary" href="<?php url::write( sprintf( 'account/invoice/%s?send=yes', $this->data->invoice->id )) ?>">send invoice</a>
 
 	<?php
 			}
 
 			if ( currentUser::isAdmin()) {  ?>
-				<a href="<?php url::write( sprintf( 'users/view/%s', $this->data->invoice->user_id )) ?>" class="btn btn-outline-secondary">account</a>
-				<a href="#" id="authoritative-invoice" class="btn btn-outline-secondary"><?php
+			<a class="btn btn-outline-secondary" href="<?php url::write( sprintf( 'users/view/%s', $this->data->invoice->user_id )) ?>">account</a>
+			<a href="#" id="authoritative-invoice" class="btn btn-outline-secondary"><?php
 					if ( $this->data->invoice->authoritative) print '<i class="fa fa-fw fa-check"></i>';
 					?>authoritative</a>
 
-			</div>
+		</div>
 	<?php
 			} ?>
 
-		</form>
 
 	</div>
 
@@ -341,6 +362,25 @@ $(document).ready( function() {
 			}
 
 		});
+
+	});
+
+	$('input[name="license_exclusion"]').on( 'change', function( e) {
+		$(this).closest('form').submit();
+
+	});
+
+	$('#<?= $uidFrmExclusion ?>').on( 'submit', function( e) {
+		let data = $(this).serializeFormJSON();
+		//~ console.log( data);
+
+		_brayworth_.post({
+			url : _brayworth_.url( 'invoices'),
+			data : data
+
+		}).then( _brayworth_.growl);
+
+		return false;
 
 	});
 

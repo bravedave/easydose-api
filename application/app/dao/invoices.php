@@ -153,6 +153,7 @@ class invoices extends _dao {
 
 			//~ \sys::dump( $dtoSet);
 			foreach ( $dtoSet as $dto) {
+				if ( $dto->license_exclusion) continue;
 
 				$dto->effective = $dto->created;
 				if ( !( $dto->state == 'approved' || self::isProvisional( $dto) && $dto->authoritative)) {

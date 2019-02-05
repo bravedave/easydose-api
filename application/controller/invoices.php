@@ -102,6 +102,24 @@ class invoices extends Controller {
 			} else { throw new \Exceptions\MissingUserID; }
 
 		}
+		elseif ( 'license-exclusion' == $action) {
+			if ( currentUser::isAdmin()) {
+				if ( $id = (int)$this->getPost('invoice_id')) {
+					$a = [
+						'license_exclusion' => (int)$this->getPost('license_exclusion'),
+						'updated' => \db::dbTimeStamp()
+					];
+
+					$dao = new dao\invoices;
+					$dao->UpdateByID( $a, $id);
+
+					\Json::ack( $action);
+
+				} else { \Json::nak( $action); }
+
+			} else { \Json::nak( $action); }
+
+		}
 		elseif ( 'make-authoritative' == $action) {
 			if ( currentUser::isAdmin()) {
 				if ( $id = (int)$this->getPost('invoice_id')) {

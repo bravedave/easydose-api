@@ -24,4 +24,5 @@ $dbc->defineField( 'workstation_override', 'int');
 $dbc->defineField( 'authoritative', 'int');
 $dbc->defineField( 'discount', 'float');
 $dbc->defineField( 'discount_reason', 'text');
+$dbc->defineField( 'license_exclusion', 'int');
 $dbc->check();

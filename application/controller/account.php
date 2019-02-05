@@ -138,90 +138,6 @@ class account extends Controller {
 
 
 			}
-			// elseif ( $action == 'buy product') {
-			// 	if ( $product = (int)$this->getPost('product_id')) {
-			// 		$dao = new dao\products;
-			// 		if ( $dto = $dao->getByID( $product)) {
-			//
-			// 			$total = $dto->rate;
-			// 			$tax = round( $total / 11, 2 );
-			// 			$rate = $total - $tax;
-			//
-			// 			// ### Itemized information
-			// 			// (Optional) Lets you specify item wise
-			// 			// information
-			// 			$item1 = new PayPal\Api\Item;
-			// 			$item1->setName( $dto->description)
-			// 			    ->setCurrency('AUD')
-			// 			    ->setQuantity(1)
-			// 			    ->setSku( $dto->name) // Similar to `item_number` in Classic API
-			// 			    ->setPrice( $rate);
-			//
-			// 			$itemList = new PayPal\Api\ItemList;
-			// 			$itemList->setItems( [$item1]);
-			//
-			// 			$details = new PayPal\Api\Details;
-			// 			$details
-			// 			    ->setTax( $tax)
-			// 			    ->setSubtotal( $rate);
-			//
-			// 			$amount = new PayPal\Api\Amount;
-			// 			$amount->setCurrency("AUD")
-			// 			    ->setTotal( $total)
-			// 			    ->setDetails( $details);
-			//
-			// 			$transaction = new PayPal\Api\Transaction;
-			// 			$transaction->setAmount( $amount)
-			// 			    ->setItemList( $itemList)
-			// 			    ->setDescription( "EasyDose License Purchase")
-			// 			    ->setInvoiceNumber( uniqid());
-			//
-			//
-			// 			/*--- ---[ final build of paypal payment object ]--- ---*/
-			// 			$payer = new PayPal\Api\Payer;
-			// 			$payer->setPaymentMethod("paypal");
-			//
-			// 			$redirectUrls = new PayPal\Api\RedirectUrls;
-			// 			$redirectUrls->setReturnUrl( url::$PROTOCOL . url::tostring( 'account/ExecutePayment?success=true'))
-			// 			    ->setCancelUrl( url::$PROTOCOL . url::tostring( 'account/ExecutePayment?success=false'));
-			//
-			// 			$_payment = new PayPal\Api\Payment;
-			// 			$_payment->setIntent("sale")
-			// 					    ->setPayer( $payer)
-			// 					    ->setRedirectUrls($redirectUrls)
-			// 					    ->setTransactions( [$transaction]);
-			//
-			// 			$payment = paypal::createPayment( $_payment);
-			//
-			// 			$a = [
-			// 				'payment_id' => $payment->id,
-			// 				'state' => $payment->state,
-			// 				'product_id' => $dto->id,
-			// 				'name' => $dto->name,
-			// 				'description' => $dto->description,
-			// 				'tax' => $tax,
-			// 				'value' => $total,
-			// 				'user_id' => currentUser::id(),
-			// 				'created' => \db::dbTimeStamp(),
-			// 				'updated' => \db::dbTimeStamp()
-			// 			];
-			// 			$dao = new dao\payments;
-			// 			$dao->Insert( $a);
-			//
-			// 			Response::redirect( $payment->getApprovalLink());
-			//
-			// 			// print ('<b>need to store the payment details here</b>');
-			// 			// \sys::dump( $a, NULL, FALSE);
-			// 			// \sys::dump( $dto, NULL, FALSE);
-			// 			// \sys::dump( $payment);
-			//
-			// 		}
-			// 		else { throw new \Exception('Invalid Product - cannot find product'); }
-			//
-			// 	}
-			// 	else { throw new \Exception('Invalid Product'); }
-			//
-			// }
 			elseif ( $action == 'pay invoice') {
 				if ( $id = (int)$this->getPost('id')) {
 					$dao = new dao\invoices;
@@ -515,7 +431,8 @@ class account extends Controller {
 
 						];
 
-						// sys::dump( $this->data);
+						//~ sys::dump( $this->data);
+						//~ sys::dump( $this->data->invoice);
 
 						$p = $this->page(['title' => ( $this->title = 'View Invoice')]);
 						$p
@@ -561,7 +478,7 @@ class account extends Controller {
 									'state_change' => 'manual',
 									'state_changed' => \db::dbTimeStamp(),
 									'state_changed_by' => \currentUser::id(),
-			            'updated' => \db::dbTimeStamp()
+									   'updated' => \db::dbTimeStamp()
 
 								];
 
