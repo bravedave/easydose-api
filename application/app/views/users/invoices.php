@@ -8,73 +8,71 @@
 		http://creativecommons.org/licenses/by/4.0/
 
 	*/	?>
-	<h6 class="m-0">invoices</h6>
+<h6 class="m-0">invoices</h6>
 
 <?php
 	if ( $this->data->invoices ) { ?>
 
-	<table class="table table-sm">
-		<colgroup>
-			<col span="3" style="width: 33%;" />
+<table class="table table-sm">
+	<thead class="small">
+		<tr>
+			<td style="width: 50px;">id</td>
+			<td style="width: 60px;">state</td>
+			<td class="text-center">authoritative</td>
+			<td class="text-center">license</td>
+			<td class="text-center" style="width: 90px;">created</td>
+			<td class="text-center" style="width: 90px;">expires</td>
 
-		</colgroup>
+		</tr>
 
-		<thead class="small">
-			<tr>
-				<td>id</td>
-				<td>state</td>
-				<td class="text-center">authoritative</td>
-				<td>created</td>
-				<td>expires</td>
+	</thead>
+
+	<tbody>
+		<?php foreach ($this->data->invoices as $dto) {  ?>
+			<tr data-id="<?php print $dto->id ?>" invoice>
+				<td><?= $dto->id ?></td>
+				<td><?= $dto->state ?></td>
+				<td class="text-center"><?= $dto->authoritative ? strings::html_tick : '' ?></td>
+				<td class="text-center"><?= $dto->license_exclusion ? 'excluded' : '' ?></td>
+				<td><?= strings::asLocalDate( $dto->created) ?></td>
+				<td><?= strings::asLocalDate( $dto->expires) ?></td>
 
 			</tr>
 
-		</thead>
+		<?php }	// foreach ($this->data->invoices as $dto)  ?>
 
-		<tbody>
-			<?php foreach ($this->data->invoices as $dto) {  ?>
-				<tr data-id="<?php print $dto->id ?>" invoice>
-					<td><?= $dto->id ?></td>
-					<td><?= $dto->state ?></td>
-					<td class="text-center"><?= $dto->authoritative ? strings::html_tick : '' ?></td>
-					<td><?= strings::asLocalDate( $dto->created) ?></td>
-					<td><?= strings::asLocalDate( $dto->expires) ?></td>
+	</tbody>
 
-				</tr>
+	<?php if ( $this->data->license ) { ?>
+		<tfoot>
+			<tr>
+				<td class="text-right" colspan="4">license expires:</td>
+				<td><?= strings::asLocalDate( $this->data->license->expires) ?></td>
+				<td>&nbsp;</td>
 
-			<?php }	// foreach ($this->data->invoices as $dto)  ?>
+			</tr>
 
-		</tbody>
+		</tfoot>
 
-		<?php if ( $this->data->license ) { ?>
-			<tfoot>
-				<tr>
-					<td class="text-right" colspan="4">license expires:</td>
-					<td><?= strings::asLocalDate( $this->data->license->expires) ?></td>
+	<?php }	// if ( $this->data->license ) ?>
 
-				</tr>
+</table>
 
-			</tfoot>
+<script>
+$(document).ready( function() {
+	$('tr[invoice]').each( function( i, el) {
+		var _tr = $(el);
+		var id = _tr.data('id');
 
-		<?php }	// if ( $this->data->license ) ?>
-
-	</table>
-
-	<script>
-	$(document).ready( function() {
-		$('tr[invoice]').each( function( i, el) {
-			var _tr = $(el);
-			var id = _tr.data('id');
-
-			_tr.addClass('pointer').on('click', function( e) {
-				window.location.href = _brayworth_.url('account/invoice/' + id);
-
-			});
+		_tr.addClass('pointer').on('click', function( e) {
+			window.location.href = _brayworth_.url('account/invoice/' + id);
 
 		});
 
 	});
-	</script>
+
+});
+</script>
 
 
 <?php
