@@ -105,7 +105,14 @@ class api extends Controller {
 
 			if ( $a['deployment'] == 'Build' ) {
 				sys::logger('api/getAccount - development checkin');
-				\Json::ack( sprintf( '%s - developer', $action));
+				\Json::ack( sprintf( '%s - developer', $action))
+					->add( 'License', config::developer_license)
+					->add( 'workstations', config::developer_workstations)
+					->add('NextPaymentDue', strtotime('+1 month'))
+					->add('Subscription_Status', 'active')
+					->add('authoritive', 'yes')
+					;
+
 				return;
 
 			}
@@ -252,11 +259,12 @@ class api extends Controller {
 						sys::logger('api/getAccount - development license');
 						$j
 							->add( 'type', 'LICENSE')
-							->add( 'License', 'easydoseOPEN')
+							->add( 'License', config::developer_license)
 							->add( 'description', 'Development License')
 							->add( 'state', 'active')
-							->add( 'workstations', 9)
-							->add( 'expires', date('Y-m-d', strtotime('+1 month')));
+							->add( 'workstations', config::developer_workstations)
+							->add( 'expires', date('Y-m-d', strtotime('+1 month')))
+							;
 
 					}
 					else {

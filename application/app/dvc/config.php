@@ -41,6 +41,9 @@ abstract class config extends _config {
 
 	const country_code = 'AU';
 
+	const developer_license = 'easydoseOPEN';
+	const developer_workstations = 9;
+
 	const invoice_prefix = 'me.';
 
 	const products = [ 'easydose5', 'easydose10', 'easydoseOPEN'];
