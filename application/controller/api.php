@@ -104,6 +104,7 @@ class api extends Controller {
 				'updated' => \db::dbTimeStamp()];
 
 			if ( $a['deployment'] == 'Build' ) {
+				sys::logger('api/getAccount - development checkin');
 				\Json::ack( sprintf( '%s - developer', $action));
 
 			}
@@ -223,37 +224,53 @@ class api extends Controller {
 
 	protected function getAccount( $action) {
 		/*
-		*  return the email address associated with the account
+		*  return the account information including license
 		*
 		*  curl -X POST -H "Accept: application/json" -d action="get-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "http://localhost/api/"
+		*  curl -X POST -H "Accept: application/json" -d action="get-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" -d deployment=Build "http://localhost/api/
 		*
 		*/
 		if ( $guid = $this->getPost( 'guid')) {
 			$guidDAO = new dao\guid;
 			if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
-			$email = '';
-			if ( (int)$guidDTO->user_id > 0) {
-			$usersDAO = new dao\users;
-			if ( $usersDTO = $usersDAO->getByID( $guidDTO->user_id))
-			$email = $usersDTO->email;
-
-			}
-
-			$j = \Json::ack( $action)
-				->add( 'guid', $guid)
-				->add( 'email', $email);
-
-			if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
-				if ( $license = $guidDAO->getLicenseOf( $guidDTO)) { // will add guid if it doesn't exist
-				$j
-				->add( 'type', $license->type)
-				->add( 'description', $license->description)
-				->add( 'License', $license->product)
-				->add( 'state', $license->state)
-				->add( 'workstations', $license->workstations)
-				->add( 'expires', $license->expires);
+				$email = '';
+				if ( (int)$guidDTO->user_id > 0) {
+					$usersDAO = new dao\users;
+					if ( $usersDTO = $usersDAO->getByID( $guidDTO->user_id))
+						$email = $usersDTO->email;
 
 				}
+
+				$j = \Json::ack( $action)
+					->add( 'guid', $guid)
+					->add( 'email', $email);
+
+				if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
+					$deployment = $this->getPost( 'deployment');
+					if ( $deployment == 'Build') {
+						sys::logger('api/getAccount - development license');
+						$j
+							->add( 'type', 'LICENSE')
+							->add( 'License', 'easydoseOPEN')
+							->add( 'description', 'Development License')
+							->add( 'state', 'active')
+							->add( 'workstations', 9)
+							->add( 'expires', date('Y-m-d', strtotime('+1 month')));
+
+					}
+					else {
+						if ( $license = $guidDAO->getLicenseOf( $guidDTO)) { // will add guid if it doesn't exist
+							$j
+								->add( 'type', $license->type)
+								->add( 'description', $license->description)
+								->add( 'License', $license->product)
+								->add( 'state', $license->state)
+								->add( 'workstations', $license->workstations)
+								->add( 'expires', $license->expires);
+
+						}
+
+					}
 
 				}
 
