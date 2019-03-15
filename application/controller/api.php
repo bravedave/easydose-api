@@ -106,6 +106,7 @@ class api extends Controller {
 			if ( $a['deployment'] == 'Build' ) {
 				sys::logger('api/getAccount - development checkin');
 				\Json::ack( sprintf( '%s - developer', $action));
+				return;
 
 			}
 
