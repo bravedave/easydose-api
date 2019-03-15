@@ -108,7 +108,7 @@ class api extends Controller {
 				\Json::ack( sprintf( '%s - developer', $action))
 					->add( 'License', config::developer_license)
 					->add( 'workstations', config::developer_workstations)
-					->add('NextPaymentDue', strtotime('+1 month'))
+					->add('NextPaymentDue', date( 'Y-m-d', strtotime('+1 month')))
 					->add('Subscription_Status', 'active')
 					->add('authoritive', 'yes')
 					;
