@@ -103,7 +103,12 @@ class api extends Controller {
 				'email' => $this->getPost('email'),
 				'updated' => \db::dbTimeStamp()];
 
-			if ( $a['deployment'] != "" ) {
+			if ( $a['deployment'] == 'Build' ) {
+				\Json::ack( sprintf( '%s - developer', $action));
+
+			}
+
+			if ( $a['deployment'] != '' ) {
 				$res = $this->dbResult( sprintf( "SELECT * FROM SITES WHERE site = '%s' AND workstation = '%s'",
 					$this->db->escape( $a['site']),
 					$this->db->escape( $a['workstation']))
