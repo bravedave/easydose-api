@@ -26,7 +26,8 @@ class settings extends Controller {
 				'bank_account' => (string)$this->getPost('bank_account'),
 				'abn' => (string)$this->getPost('abn'),
 				'invoice_email' => (string)$this->getPost('invoice_email'),
-				'invoice_creation_days' => (int)$this->getPost('invoice_creation_days')
+				'invoice_creation_days' => (int)$this->getPost('invoice_creation_days'),
+				'invoice_autosend' => (int)$this->getPost('invoice_autosend'),
 
 			];
 

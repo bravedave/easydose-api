@@ -115,8 +115,22 @@
 
 			</div>
 
-			<div class="text-muted">
+			<div class="text-muted font-italic">
 				The number of days before it is due for renewal that new invoice will be created
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="form-group row">
+		<div class="offset-3 col-9">
+			<div class="form-check">
+				<input type="checkbox" class="form-check-input" name="invoice_autosend" value="1"
+					id="<?= $uid = strings::rand() ?>"
+					<?php if ( $this->data->invoice_autosend) print 'checked'; ?> />
+				<label class="form-check-label" for="<?= $uid ?>">Automatically send invoices when created</label>
 
 			</div>
 

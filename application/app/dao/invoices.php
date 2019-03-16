@@ -129,8 +129,8 @@ class invoices extends _dao {
 	}
 
 	public function getActiveLicenseForUser( $userID = 0) {
-		$debug = false;
-		//~ $debug = true;
+		//~ $debug = false;
+		$debug = true;
 
 		$license = false;
 
@@ -267,6 +267,64 @@ class invoices extends _dao {
 		}
 
 		return ( false);
+
+	}
+
+	public function send( dto\invoices $dto) {
+		$users = new users;
+		$settings = new settings;
+		$daoLicense = new license;
+
+		if ( $account = $users->getByID( $dto->user_id)) {
+			$sys = $settings->getFirst();
+
+			$inv = new \invoice(
+				$sys,
+				$account,
+				$this->getInvoice( $dto),
+				$daoLicense->getLicense( $dto->user_id)
+				);
+
+			$html = $inv->render();
+			//~ print $html;
+
+			$mail = \sys::mailer();
+			$mail->CharSet = 'UTF-8';
+			$mail->Encoding = 'base64';
+
+			if ( \strings::IsEmailAddress( $sys->invoice_email)) {
+				$mail->SetFrom( $sys->invoice_email, \config::$WEBNAME);
+
+			}
+
+			$mail->Subject  = \config::$WEBNAME . " Invoice";
+			$mail->AddAddress( $account->email, $account->name );
+			// $mail->AddAddress( 'david@brayworth.com.au', 'David Bray' );
+
+			$mail->MsgHTML( $html);
+
+			if ( $mail->send()) {
+				//~ print '<h2>Sent</h2>';
+
+				$a = [
+					'state' => 'sent',
+					'state_change' => 'manual',
+					'state_changed' => \db::dbTimeStamp(),
+					'state_changed_by' => \currentUser::id(),
+					'updated' => \db::dbTimeStamp()
+
+				];
+
+				$this->UpdateByID( $a, $dto->id);
+
+			}
+			else {
+				//~ print '<h2>Error - NOT Sent</h2>';
+				\sys::logger( 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo);
+
+			}
+
+		}
 
 	}
 

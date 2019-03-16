@@ -41,6 +41,22 @@ class api extends Controller {
 			$this->getLicense( $action);
 
 		}
+		elseif ( false) {
+		//~ elseif ( $action == 'send-invoice') {
+			/*
+				curl -X POST -H "Accept: application/json" -d action=send-invoice -d id=153 http://localhost/api/
+			*/
+			if ( $id = (int)$this->getPost( 'id')) {
+				$dao = new dao\invoices;
+				if ( $dto = $dao->getByID( $id)) {
+					$dao->send( $dto);
+					\Json::ack( $action);
+
+				} else { \Json::nak( $action); }
+
+			} else { \Json::nak( $action); }
+
+		}
 
 	}
 
@@ -77,6 +93,7 @@ class api extends Controller {
 		$site = $this->getPost('site');
 		if ( $site != '' ) {
 			/*
+			*  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0418745334 -d email=david@brayworth.com.au -d workstation=WISPER -d deployment=Web -d version="RC2.1.10.0.9" -d productid=EasydoseOPEN -d activated=yes -d expires="2019-07-14" -d patients=24 -d patientsActive=15 -d guid="{D226CA40-CA53-94C2-2DC1-F86851D79F20}" "http://localhost/api/"
 			*  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 -d guid="{D226CA40-CA53-94C2-2DC1-F86851D79F20}" "http://localhost/api/"
 			*  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "http://localhost/api/"
 			*  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}"  "https://my.easydose.net.au/api/"
@@ -134,7 +151,6 @@ class api extends Controller {
 					$NextPaymentDue = date('Y-m-d', 0);
 					$authoritive = false;
 
-
 					if ( $licenseDTO = $guidDAO->getLicense( $a['guid'])) { // will add guid if it doesn't exist
 						$a['productid'] = $licenseDTO->product;
 						$a['expires'] = date( 'Y-m-d', strtotime($licenseDTO->expires));
@@ -162,8 +178,15 @@ class api extends Controller {
 								$iDAO = new dao\invoices;
 								if ( !( $dtoUP = $iDAO->getUnpaidForUser( $uDto->id))) {
 									$uDAO = new dao\users;
-									if ( $uDAO->autoCreateInvoiceFromLast( $uDto->id)) {
+									if ( $invID = $uDAO->autoCreateInvoiceFromLast( $uDto->id)) {
 										\sys::logger( sprintf( 'auto created invoice ..(%s)', $interval->days));
+										if ( (int)dao\settings::get('invoice_autosend')) {
+											if ( $iDTO = $iDAO->getByID( $invID)) {
+												$iDAO->send( $iDTO);
+
+											}
+
+										}
 
 									} else { \sys::logger( sprintf( 'could not create an invoice ..(%s)', $interval->days)); }
 
@@ -176,6 +199,10 @@ class api extends Controller {
 							}
 
 						}
+						//~ else {
+							//~ \sys::logger( sprintf( 'will NOT create a invoice, not due : %s %s ..(%s)', $licenseDTO->expires, $NextPaymentDue, $interval->days));
+
+						//~ }
 
 					}
 
