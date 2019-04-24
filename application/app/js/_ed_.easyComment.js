@@ -46,7 +46,7 @@ _ed_.easyComment = function() {
 			text : fld,
 			buttons : {
 				post : function( e) {
-					$(this).modal('close');
+					$(this).modal('hide');
 
 					data.comment = fld.val();
 
