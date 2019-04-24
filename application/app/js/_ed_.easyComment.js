@@ -40,14 +40,13 @@ _ed_.easyComment = function() {
 
 		}
 
-		_brayworth_.modal({
+		let modal = _brayworth_.modal({
 			width : 600,
 			title : 'Enter a Comment',
 			text : fld,
 			buttons : {
 				post : function( e) {
-					$(this).modal('hide');
-
+					modal.close();
 					data.comment = fld.val();
 
 					_brayworth_.post({
