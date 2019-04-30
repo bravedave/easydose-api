@@ -8,7 +8,7 @@
 		http://creativecommons.org/licenses/by/4.0/
 	*/
 abstract class sys extends dvc\sys {
-	protected static $_settings = FALSE;
+	protected static $_settings = false;
 
 	protected static function _settings() {
 		if ( !self::$_settings) {
@@ -32,21 +32,6 @@ abstract class sys extends dvc\sys {
 
 	static function firstRun() {
 		return ( self::_settings()->firstRun());
-
-	}
-
-	static function paypalAuth() {
-		return ( self::_settings()->paypalAuth());
-
-	}
-
-	static function paypalLive() {
-		return ( self::_settings()->paypalLive());
-
-	}
-
-	static function useSubscriptions() {
-		return ( self::_settings()->useSubscriptions());
 
 	}
 
@@ -78,6 +63,38 @@ abstract class sys extends dvc\sys {
 			echo 'Message sent!';
 
 		}
+
+	}
+
+	static function notifySupport( $subject, $message) {
+		$mailer = self::mailer();
+		$mailer->ContentType = 'text/plain';
+		$mailer->IsHTML(false);
+		$mailer->CharSet = 'UTF-8';
+		$mailer->Subject  = $subject;
+		$mailer->Body = $message;
+		$mailer->AddAddress( \config::$SUPPORT_EMAIL, \config::$SUPPORT_NAME);
+
+		if ( !$mailer->Send()) {
+			self::logger( 'sys::notifySupport : ' . $mailer->ErrorInfo);
+			self::logger( $subject . ':' . $message);
+
+		}
+
+	}
+
+	static function paypalAuth() {
+		return ( self::_settings()->paypalAuth());
+
+	}
+
+	static function paypalLive() {
+		return ( self::_settings()->paypalLive());
+
+	}
+
+	static function useSubscriptions() {
+		return ( self::_settings()->useSubscriptions());
 
 	}
 

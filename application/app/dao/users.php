@@ -57,6 +57,8 @@ class users extends _dao {
 
 				$aInvoicesDetail = [];
 				$products = new products;
+				$license->wksCharged = 0;
+				$license->wksLine = -1;
 				foreach ( $license->license->lines as $line) {
 					if ( $product = $products->getByID( $line->product_id)) {
 						$aInvoicesDetail[] = [
@@ -69,15 +71,117 @@ class users extends _dao {
 
 						];
 
+						if ( in_array( $product->name, [
+							'WKSSTATION1',
+							'WKSSTATION2',
+							'WKSSTATION3',
+							'WKSSTATION4',
+							'WKSSTATION5'])) {
+							$license->wksLine = count( $aInvoicesDetail) -1;
+
+						}
+
+
+						//~ printf( '%s<br />', $product->name);
+						if ( in_array( $product->name, [
+							'WKSSTATION1',
+							'easydose5',
+							'easydose10',
+							'easydoseOPEN'])) {
+							$license->wksCharged += 1;
+
+						}
+						elseif ( 'WKSSTATION2' == $product->name) {
+							$license->wksCharged += 2;
+
+						}
+						elseif ( 'WKSSTATION3' == $product->name) {
+							$license->wksCharged += 3;
+
+						}
+						elseif ( 'WKSSTATION4' == $product->name) {
+							$license->wksCharged += 4;
+
+						}
+						elseif ( 'WKSSTATION5' == $product->name) {
+							$license->wksCharged += 5;
+
+						}
+
+
 					} else { throw new \Exceptions\InvalidProduct; }
 
 				}
 
-				//~ \sys::dump( $aInvoices, 'Invoice', false);
-				//~ \sys::dump( $aInvoicesDetail, 'Invoice Detail', false);
-				//~ \sys::dump( $license);
-
 				if ( count($aInvoicesDetail)) {
+
+					// use during testing ...
+					//~ $aInvoicesDetail[] = [
+						//~ 'user_id' => 12,
+						//~ 'invoices_id' => 0,
+						//~ 'product_id' => 2,
+						//~ 'rate' => 11,
+						//~ 'created' => '2019-05-01 07:26:28',
+						//~ 'updated' => '2019-05-01 07:26:28',
+
+					//~ ];
+					//~ $license->wksLine = count( $aInvoicesDetail) -1;
+					// use during testing ...
+
+					if ( $license->wksCharged < $license->workstations) {
+						$msg = [
+							'Upgrading Wks Charge',
+							'---',
+							sprintf( 'User: %s', $user->name),
+							sprintf( 'Wks: %s/%s', $license->wksCharged, $license->workstations),
+
+						];
+
+						if ( 2 == $license->workstations) { $product = $products->getByName( 'WKSSTATION1'); }
+						elseif ( 3 == $license->workstations) { $product = $products->getByName( 'WKSSTATION2'); }
+						elseif ( 4 == $license->workstations) { $product = $products->getByName( 'WKSSTATION3'); }
+						elseif ( 5 == $license->workstations) { $product = $products->getByName( 'WKSSTATION4'); }
+						elseif ( 6 == $license->workstations) { $product = $products->getByName( 'WKSSTATION5'); }
+
+						if ( $product) {
+							if ( $license->wksLine < 0) {
+								$aInvoicesDetail[] = [
+									'user_id' => $user->id,
+									'invoices_id' => 0,
+									'product_id' => $product->id,
+									'rate' => $product->rate,
+									'created' => \db::dbTimeStamp(),
+									'updated' => \db::dbTimeStamp()
+
+								];
+
+								$msg[] = sprintf( 'upgrade license : %s', $product->name);
+
+							}
+							else {
+								$aInvoicesDetail[$license->wksLine]['product_id'] = $product->id;
+								$aInvoicesDetail[$license->wksLine]['rate'] = $product->rate;
+								$msg[] = sprintf( 'upgraded line to : %s', $product->name);
+
+							}
+
+							\sys::notifySupport('WKS Fix', implode( PHP_EOL, $msg));
+
+						}
+						else {
+							$msg[] = 'failed : could not find a product for the workstation license';
+							\sys::notifySupport('WKS Fix', implode( PHP_EOL, $msg));
+							return;
+
+						}
+
+
+					}
+
+					//~ \sys::dump( $aInvoices, 'Invoice', false);
+					//~ \sys::dump( $aInvoicesDetail, 'Invoice Detail', false);
+					//~ \sys::dump( $license);
+
 					$dao = new invoices;
 					$invID = $dao->Insert( $aInvoices);
 
@@ -90,9 +194,9 @@ class users extends _dao {
 
 					return ( $invID);
 
-				} else { \sys::logger( 'could not create autocreate invoice : FailedToCreateInvoice'); }
+				} else { \sys::logger( sprintf( 'could not create autocreate invoice : FailedToCreateInvoice : %s', $user->name)); }
 
-			} else { \sys::logger( 'could not create autocreate invoice : NoActiveLicense'); }
+			} else { \sys::logger( sprintf( 'could not create autocreate invoice : NoActiveLicense : %s', $user->name)); }
 
 		} else { \sys::logger( 'could not create autocreate invoice : InvalidAccount'); }
 
