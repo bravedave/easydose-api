@@ -16,28 +16,28 @@
 	*/
 class sites extends Controller {
 
-  protected function postHandler() {
-    $action = $this->getPost('action');
+	protected function postHandler() {
+		$action = $this->getPost('action');
 
-    if ( 'delete' == $action) {
-      if ( $id = (int)$this->getPost('id')) {
-        $dao = new dao\sites;
-        $dao->delete( $id);
-        \Json::ack( $action);
+		if ( 'delete' == $action) {
+			if ( $id = (int)$this->getPost('id')) {
+				$dao = new dao\sites;
+				$dao->delete( $id);
+				\Json::ack( $action);
 
-      }
-      else {
-        \Json::nak( $action);
+			}
+			else {
+				\Json::nak( $action);
 
-      }
+			}
 
-    }
-    else {
-      \Json::nak( $action);
+		}
+		else {
+			\Json::nak( $action);
 
-    }
+		}
 
-  }
+	}
 
   public function createaccount( $id = 0) {
     /**
@@ -140,8 +140,8 @@ class sites extends Controller {
 				if ( $site = $dao->getByID( $id)) {
 					$this->data = (object)[
 						'site' => $site,
-						'guid' => FALSE,
-						'account' => FALSE
+						'guid' => false,
+						'account' => false
 					];
 
 					if ( $this->data->site->guid) {

@@ -62,8 +62,8 @@ class api extends Controller {
 
 	protected function getLicense( $action) {
 		/*
-		 *  curl -X POST -H "Accept: application/json" -d action=get-license -d guid="{D226CA40-CA53-94C2-2DC1-F86851D79F20}" "http://localhost/api/"
-		 *  curl -X POST -H "Accept: application/json" -d action=get-license -d guid="{D226CA40-CA53-94C2-2DC1-F86851D79F20}" "https://my.easydose.net.au/api/"
+		 *  curl -X POST -H "Accept: application/json" -d action=get-license -d guid="{a guid}" "http://localhost/api/"
+		 *  curl -X POST -H "Accept: application/json" -d action=get-license -d guid="{a guid}" "https://my.easydose.net.au/api/"
 		 */
 		// if ( $guid = '{D226CA40-CA53-94C2-2DC1-F86851D79F20}') {
 		if ( $guid = $this->getPost('guid')) {
@@ -93,15 +93,14 @@ class api extends Controller {
 		$site = $this->getPost('site');
 		if ( $site != '' ) {
 			/*
-			*  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0418745334 -d email=david@brayworth.com.au -d workstation=WISPER -d deployment=Web -d version="RC2.1.10.0.9" -d productid=EasydoseOPEN -d activated=yes -d expires="2019-07-14" -d patients=24 -d patientsActive=15 -d guid="{D226CA40-CA53-94C2-2DC1-F86851D79F20}" "http://localhost/api/"
-			*  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 -d guid="{D226CA40-CA53-94C2-2DC1-F86851D79F20}" "http://localhost/api/"
-			*  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "http://localhost/api/"
-			*  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d tel=0893494011 -d workstation=WISPER -d deployment=Build -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}"  "https://my.easydose.net.au/api/"
+			*  curl -X POST -H "Accept: application/json" -d action=checkin -d site="Davido the Demo" -d state=WA -d address="1 Wisteria Lane" -d suburb="Hogwash"  -d tel=0893494011 -d workstation=WISPER -d deployment=Web -d version="RC2.1.10.0.9" -d productid=EasydoseLegacy -d activated=yes -d expires="2018-01-14" -d patients=24 -d patientsActive=15 -d guid="{a guid}"  "http://localhost/api/"
 			*/
 
 			$a = [
 				'site' => $site,
 				'state' => $this->getPost('state'),
+				'town' => $this->getPost( 'suburb'),
+				'street' => $this->getPost( 'address'),
 				'tel' => $this->getPost('tel'),
 				'ip' => $this->Request->getRemoteIP(),
 				'workstation' => $this->getPost('workstation'),
@@ -261,8 +260,8 @@ class api extends Controller {
 		/*
 		*  return the account information including license
 		*
-		*  curl -X POST -H "Accept: application/json" -d action="get-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" "http://localhost/api/"
-		*  curl -X POST -H "Accept: application/json" -d action="get-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" -d deployment=Build "http://localhost/api/
+		*  curl -X POST -H "Accept: application/json" -d action="get-account" -d guid="{a guid}" "http://localhost/api/"
+		*  curl -X POST -H "Accept: application/json" -d action="get-account" -d guid="{a guid}" -d deployment=Build "http://localhost/api/
 		*
 		*/
 		if ( $guid = $this->getPost( 'guid')) {
@@ -321,7 +320,7 @@ class api extends Controller {
 		*  associated an email address associated with a guid
 		*  this can only be done if the email is blank
 		*
-		*  curl -X POST -H "Accept: application/json" -d action="set-account" -d guid="{9D85652E-E7D8-BAED-7C89-72720005B87D}" -d email="david@brayworth.com.au" "http://localhost/api/"
+		*  curl -X POST -H "Accept: application/json" -d action="set-account" -d guid="{a guid}" -d email="david@brayworth.com.au" "http://localhost/api/"
 		*/
 		if ( $guid = $this->getPost( 'guid')) {
 

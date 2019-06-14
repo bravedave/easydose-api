@@ -13,6 +13,8 @@ namespace dvc\sqlite;
 $dbc = new dbCheck( $this->db, 'sites' );
 $dbc->defineField( 'site', 'text');
 $dbc->defineField( 'state', 'text');
+$dbc->defineField( 'street', 'text');
+$dbc->defineField( 'town', 'text');
 $dbc->defineField( 'tel', 'text');
 $dbc->defineField( 'ip', 'text');
 $dbc->defineField( 'workstation', 'text');
