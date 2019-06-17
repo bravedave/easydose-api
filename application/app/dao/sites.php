@@ -14,6 +14,47 @@ namespace dao;
 class sites extends _dao {
 	protected $_db_name = 'sites';
 
+	public function discover( dto\users $dto) {
+		$dao = new guid;
+		if ( $guids = $dao->getForUser( $dto->id)) {
+			//~ \sys::dump( $dguid);
+			$latestSite = false;
+			$sites = [];
+			foreach( $guids as $guid) {
+				if ( $res = $this->getForGUID( $guid->guid)) {
+					while ( $site = $res->dto()) {
+						$sites[] = $site;
+						if ( $latestSite) {
+							if ( strtotime($site->updated) > strtotime($latestSite->updated)) {
+								$latestSite = $site;
+
+							}
+
+						}
+						else {
+							$latestSite = $site;
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if ( $latestSite) {
+				if ( !$dto->street) $dto->street = $latestSite->street;
+				if ( !$dto->town) $dto->town = $latestSite->town;
+				if ( !$dto->state) $dto->state = $latestSite->state;
+				//~ \sys::dump( $latestSite, null, false);
+				//~ \sys::dump( $dto);
+
+			}
+
+		}
+
+	}
+
 	public function getAll( $fields = '*', $order = '' ) {
 		if ( is_null( $this->_db_name))
 			throw new Exceptions\DBNameIsNull;

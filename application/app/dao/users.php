@@ -16,6 +16,7 @@ namespace dao;
 
 class users extends _dao {
 	protected $_db_name = 'users';
+	protected $template = '\dao\dto\users';
 
 	const due = 1;
 	const expired = 2;

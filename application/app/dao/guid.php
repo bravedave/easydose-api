@@ -55,20 +55,17 @@ class guid extends _dao {
 
 		}
 
-		if ( !(int)$userID) {
-			$userID = \currentUser::id();
-
-		}
+		if ( !(int)$userID) $userID = \currentUser::id();
 
 		$this->db->log = $this->log;
 		$sql = sprintf( 'SELECT * FROM guid WHERE user_id = %s', $userID);
 
 		if ( $res = $this->Result( $sql)) {
-			return ( $res->dtoSet( NULL, $this->template));
+			return ( $res->dtoSet( null, $this->template));
 
 		}
 
-		return ( FALSE);
+		return ( false);
 
 	}
 

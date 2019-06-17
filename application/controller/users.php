@@ -161,6 +161,9 @@ class users extends Controller {
 				if ( $dto = $dao->getByID( $id)) {
 					$this->data = (object)['dto' => $dto];
 
+					$dao = new dao\sites;
+					$dao->discover( $dto);
+
 				}
 				else { throw new \Exceptions\InvalidAccount; }
 
