@@ -60,7 +60,7 @@ class sites extends _dao {
 			throw new Exceptions\DBNameIsNull;
 
 		$this->db->log = $this->log;
-		if ( \Request::get()->ServerIsLocal()) {
+		if ( \application::Request()->ServerIsLocal()) {
 			return ( $this->Result( sprintf( 'SELECT %s FROM %s %s', $fields, $this->db_name(), $order )));
 
 		}
@@ -73,7 +73,7 @@ class sites extends _dao {
 
 	public function getAllIncludeUserID() {
 		// if ( FALSE) {
-		if ( \Application::Request()->ServerIsLocal()) {
+		if ( \application::Request()->ServerIsLocal()) {
 			$sql = 'SELECT
 					sites.*,
 					guid.user_id guid_user_id
