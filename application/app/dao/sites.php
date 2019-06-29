@@ -73,7 +73,7 @@ class sites extends _dao {
 
 	public function getAllIncludeUserID() {
 		// if ( FALSE) {
-		if ( \Request::get()->ServerIsLocal()) {
+		if ( \Application::Request()->ServerIsLocal()) {
 			$sql = 'SELECT
 					sites.*,
 					guid.user_id guid_user_id
