@@ -1,9 +1,10 @@
-application/data/
-application/controller/.bak/
+.vs/*
 application/app/.bak/
-vendor/
-*.lock
 application/app/public/css/dvc.min.css
 application/app/public/css/dvc-4.min.css
 application/app/public/js/brayworthlib.js
 application/app/public/js/brayworthlib4.js
+application/controller/.bak/
+application/data/
+vendor/
+*.lock
