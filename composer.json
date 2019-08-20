@@ -1,5 +1,5 @@
 {
-	"name": "bravedave/EasyDose-API",
+	"name": "bravedave/easydose-api",
 	"description": "DVC-AUTH - Framework for EasyDOSE subscription access",
 	"version": "0.0.1",
 	"minimum-stability": "dev",
