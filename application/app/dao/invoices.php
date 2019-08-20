@@ -130,7 +130,7 @@ class invoices extends _dao {
 
 	public function getActiveLicenseForUser( $userID = 0) {
 		$debug = false;
-		// $debug = true;
+		$debug = true;
 
 		if ( $debug) \sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
 		
@@ -168,8 +168,8 @@ class invoices extends _dao {
 				}
 				
 				//~ if ( $dto->id == 138) \sys::dump( $dto);
+				$_expires = $dto->expires;	// before contamination
 				$this->_check_expiry( $dto);
-				
 				$lastExpire = $dto->expires;
 				
 				// if ( ( $dto->state == 'approved' || self::isProvisional( $dto)) && $dto->expires >= date( 'Y-m-d')) {
@@ -177,15 +177,17 @@ class invoices extends _dao {
 					if ( $ret = $this->getInvoice( $dto)) {
 						if ( $license && !$dto->authoritative) {
 							// there is an active license this is an extension
-							// if ( strtotime( $dto->expires) > 0) {
-								// $license->expires = date( 'Y-m-d', strtotime( $dto->expires));
-							
-							// }
-							// else {
-								$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
+							if ( strtotime( $_expires) > 0) {
+								$license->expires = date( 'Y-m-d', strtotime( $_expires));	// before contamination
+								if ( $debug) \sys::logger( sprintf( '%s: %s - absolute :: %s', $dto->id, $license->expires, __METHOD__));
 
-							// }
-							if ( $debug) \sys::logger( sprintf( '%s: %s - extending :: %s', $dto->id, $license->expires, __METHOD__));
+							
+							}
+							else {
+								$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
+								if ( $debug) \sys::logger( sprintf( '%s: %s - extending :: %s', $dto->id, $license->expires, __METHOD__));
+
+							}
 							
 						}
 						else {
