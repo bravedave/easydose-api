@@ -177,14 +177,14 @@ class invoices extends _dao {
 					if ( $ret = $this->getInvoice( $dto)) {
 						if ( $license && !$dto->authoritative) {
 							// there is an active license this is an extension
-							if ( strtotime( $dto->expires) > 0) {
-								$license->expires = date( 'Y-m-d', strtotime( $dto->expires));
+							// if ( strtotime( $dto->expires) > 0) {
+								// $license->expires = date( 'Y-m-d', strtotime( $dto->expires));
 							
-							}
-							else {
+							// }
+							// else {
 								$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
 
-							}
+							// }
 							if ( $debug) \sys::logger( sprintf( '%s: %s - extending :: %s', $dto->id, $license->expires, __METHOD__));
 							
 						}
