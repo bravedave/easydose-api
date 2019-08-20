@@ -83,11 +83,11 @@ class invoices extends _dao {
 		// 		LEFT JOIN
 		// 	 		users u ON u.id = i.user_id %s', $fields, $order);
 		$_sql = sprintf( 'SELECT %s
-	 		FROM invoices i
-	  		LEFT JOIN
-			 		users u ON u.id = i.user_id
+			FROM invoices i
+			LEFT JOIN
+					users u ON u.id = i.user_id
 				LEFT JOIN
-				 	_tmpsitess s ON s.user_id = i.user_id %s
+					_tmpsitess s ON s.user_id = i.user_id %s
 			ORDER BY i.id DESC', $fields, $order);
 
 		// \sys::logSQL( $_sql);
@@ -109,7 +109,7 @@ class invoices extends _dao {
 			"SELECT
 				*
 			FROM
-			 	invoices
+				invoices
 			WHERE
 				ifnull(state,'') <> 'canceled' AND user_id = %s
 			ORDER BY
@@ -130,31 +130,32 @@ class invoices extends _dao {
 
 	public function getActiveLicenseForUser( $userID = 0) {
 		$debug = false;
-		//~ $debug = true;
+		// $debug = true;
 
+		if ( $debug) \sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
+		
 		$license = false;
-
+		
 		if ( $dtoSet = $this->getForUser( $userID)) {
-			/* look up and return the first active license
-			*/
+			/* look up and return the first active license */
 			$lastExpire = false;
-
+			
 			$dao = new guid;
 			if ( $dtoSetGUID = $dao->getForUser( $userID)) {
 				if ( count( $dtoSetGUID)) {
 					if ( $dtoGratis = $dao->getGratisLicenseOf( $dtoSetGUID[0])) {
 						$lastExpire = $dtoGratis->expires;
-
+						
 					}
-
+					
 				}
-
+				
 			}
-
+			
 			//~ \sys::dump( $dtoSet);
 			foreach ( $dtoSet as $dto) {
 				if ( $dto->license_exclusion) continue;
-
+				
 				$dto->effective = $dto->created;
 				if ( !( $dto->state == 'approved' || self::isProvisional( $dto) && $dto->authoritative)) {
 					/*
@@ -163,26 +164,34 @@ class invoices extends _dao {
 					this invoice could extend it.
 					*/
 					if ( $lastExpire) $dto->effective = $lastExpire;
-
+					
 				}
-
+				
 				//~ if ( $dto->id == 138) \sys::dump( $dto);
 				$this->_check_expiry( $dto);
-
+				
 				$lastExpire = $dto->expires;
-
-				if ( ( $dto->state == 'approved' || self::isProvisional( $dto)) && $dto->expires >= date( 'Y-m-d')) {
+				
+				// if ( ( $dto->state == 'approved' || self::isProvisional( $dto)) && $dto->expires >= date( 'Y-m-d')) {
+				if ( ( $dto->state == 'approved' || self::isProvisional( $dto)) && strtotime( $dto->expires) > 0) {
 					if ( $ret = $this->getInvoice( $dto)) {
 						if ( $license && !$dto->authoritative) {
 							// there is an active license this is an extension
-							$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
-							if ( $debug) \sys::logger( sprintf( 'dao\invoices->getActiveLicenseForUser : %s: %s - extending', $dto->id, $license->expires));
+							if ( strtotime( $dto->expires) > 0) {
+								$license->expires = date( 'Y-m-d', strtotime( $dto->expires));
+							
+							}
+							else {
+								$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
 
+							}
+							if ( $debug) \sys::logger( sprintf( '%s: %s - extending :: %s', $dto->id, $license->expires, __METHOD__));
+							
 						}
 						else {
 
-							if ( $debug) \sys::logger( sprintf( 'dao\invoices->getActiveLicenseForUser : %s : %s : %s', $dto->id, $dto->state, $dto->expires));
-
+							if ( $debug) \sys::logger( sprintf( '%s : %s : %s :: %s', $dto->id, $dto->state, $dto->expires, __METHOD__));
+							
 							$license = new dto\license;
 							$license->type = 'LICENSE';
 							$license->expires = $dto->expires;
@@ -192,7 +201,7 @@ class invoices extends _dao {
 									$license->description = $line->description;
 									$license->workstations += 1;
 									$license->state = 'active';
-
+									
 								}
 								elseif ( 'WKSSTATION1' == $line->name ) {
 									$license->workstations += 1;
@@ -209,35 +218,46 @@ class invoices extends _dao {
 								elseif ( 'WKSSTATION5' == $line->name ) {
 									$license->workstations += 5;
 								}
-
+								
 								if ( 'active' == $license->state) {
 									$license->license = $ret;
-
+									
 								}
-
+								
 							}
-
+							
 							if ($dto->workstation_override) {
 								$license->workstations = $dto->workstation_override;
-
+								
 							}
-
+							
 							// \sys::dump( $ret);
-
+							
 						}
-
+						
 					}
 
 				}
-
+				else {
+					if ( $debug) \sys::logger( sprintf( '%s : %s(%s) :: %s', 
+					$dto->id, 
+					$dto->state, 
+					$dto->expires, 
+					'approved' == $dto->state ? 'yes' : 'no',
+					__METHOD__));
+					
+					
+				}
+				
 			}
-
+			
 		}
-
+		
+		if ( $debug) \sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
 		return ( $license);
-
+		
 	}
-
+	
 	public function getUnpaidForUser( $userID = 0) {
 		$debug = false;
 		// $debug = true;
@@ -251,7 +271,7 @@ class invoices extends _dao {
 			"SELECT
 				*
 			FROM
-			 	invoices
+				invoices
 			WHERE
 				ifnull(state,'') <> 'canceled' AND ifnull(state,'') <> 'approved' AND user_id = %s
 			ORDER BY
