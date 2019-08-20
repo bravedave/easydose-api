@@ -276,7 +276,10 @@ class users extends _dao {
 	}
 
 	public function getUserLicenses() {
-		$sql = 'SELECT
+		$debug = false;
+		// $debug = true;
+
+		$sql = "SELECT
 				u.id,
 				u.name,
 				u.business_name,
@@ -289,8 +292,9 @@ class users extends _dao {
 					FROM invoices
 					GROUP BY user_id
 					ORDER BY id DESC) inv
-				WHERE
-				 	inv.user_id = u.id';
+			WHERE
+				'canceled' != inv.state AND
+				inv.user_id = u.id";
 
 		if ( $res = $this->Result( $sql)) {
 			$this->Q( "CREATE TEMPORARY TABLE _lic (
@@ -308,7 +312,7 @@ class users extends _dao {
 
 			)");
 
-			$data = $res->dtoSet( function( $dto) {
+			$data = $res->dtoSet( function( $dto) use( $debug) {
 				$a = [
 					'id' => $dto->id,
 					'name' => $dto->name,
@@ -327,11 +331,16 @@ class users extends _dao {
 
 					//~ if ( date( 'Y-m-d', strtotime( $license->expires)) < date( 'Y-m-d')) {
 
-					$lex = new \DateTime($license->expires);
+					$lex = new \DateTime( $license->expires);
 					$tod = new \DateTime;
-					$interval = $tod->diff($lex);
-					if ( $interval->days < settings::get('invoice_creation_days')) {
-						if ( $interval->days < 0) {
+					$interval = $tod->diff( $lex);
+					if ( $debug) \sys::logger( sprintf('#%d : %s(%s - %s) : %s', $dto->id, 
+						$license->expires, 
+						$interval->days,
+						$interval->format('%R%a days'),
+						__METHOD__));
+					if ( (int)$interval->format('%R%a') < settings::get('invoice_creation_days')) {
+						if ( $interval->format('%R%a') < 0) {
 							$a['due'] = self::expired;
 
 						}
@@ -363,7 +372,8 @@ class users extends _dao {
 
 			});
 
-			return( $this->Result("SELECT * FROM _lic WHERE license <> '' ORDER BY expires ASC"));
+			return( $this->Result( sprintf( "SELECT * FROM _lic WHERE due <> %d AND license <> '' ORDER BY expires ASC", self::expired)));
+			// return( $this->Result("SELECT * FROM _lic WHERE license <> '' ORDER BY expires ASC"));
 
 		}
 
