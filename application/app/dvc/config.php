@@ -18,6 +18,8 @@
 namespace dvc;
 
 abstract class config extends _config {
+	static protected $_EASYDOSE_VERSION = 0;
+
 	static $DB_TYPE = 'sqlite';
 	static $DATE_FORMAT = 'd/m/Y';
 
@@ -66,4 +68,44 @@ abstract class config extends _config {
  	// static $DB_CACHE = 'APC';	// values = 'APC'
 	// static $DB_CACHE_DEBUG = TRUE;
 
+	static protected function easydose_config() {
+		return sprintf( '%s%seasydose-api.json', self::dataPath(), DIRECTORY_SEPARATOR);
+
+	}
+
+	static function easydose_version( $set = null) {
+		$ret = self::$_EASYDOSE_VERSION;
+
+		if ( (float)$set) {
+			$config = self::easydose_config();
+
+			$j = file_exists( $config) ?
+				json_decode( file_get_contents( $config)):
+				(object)[];
+
+			self::$_EASYDOSE_VERSION = $j->easydose_version = $set;
+
+			file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES));
+
+		}
+
+		return $ret;
+
+	}
+
+	static function easydose_init() {
+		if ( file_exists( $config = self::easydose_config())) {
+			$j = json_decode( file_get_contents( $config));
+
+			if ( isset( $j->easydose_version)) {
+				self::$_EASYDOSE_VERSION = (float)$j->easydose_version;
+
+			};
+
+		}
+
+	}
+
 }
+
+config::easydose_init();
