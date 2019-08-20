@@ -11,6 +11,12 @@
 
 	*/
 class users extends Controller {
+	protected function before() {
+		parent::before();
+		$this->RequireValidation = \sys::lockdown();
+
+	}
+
 	protected function postHandler() {
 		$action = $this->getPost('action');
 		//~ sys::dump( $this->getPost());
@@ -122,12 +128,6 @@ class users extends Controller {
 			} else { \Json::nak( sprintf( '%s : missing guid', $action)); }
 
 		}
-
-	}
-
-	function __construct( $rootPath) {
-		$this->RequireValidation = \sys::lockdown();
-		parent::__construct( $rootPath);
 
 	}
 
