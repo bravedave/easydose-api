@@ -320,9 +320,9 @@ class invoices extends _dao {
 
 			}
 
-		}
+			$license->workstations = $finalWorkstations + $finalWorkstationExtensions;
 
-		$license->workstations = $finalWorkstations + $finalWorkstationExtensions;
+		}
 
 		if ( $debug) sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
 		return ( $license);
