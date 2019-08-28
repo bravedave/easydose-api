@@ -14,7 +14,7 @@ namespace dao;
 class license extends _dao {
 	public function getLicense( $user = 0) {
 		$debug = false;
-		//~ $debug = true;
+		// $debug = true;
 
 		if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: getting license', $user));
 

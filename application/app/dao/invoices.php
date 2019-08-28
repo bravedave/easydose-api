@@ -10,6 +10,8 @@
 	*/
 
 namespace dao;
+use strings;
+use sys;
 
 class invoices extends _dao {
 	protected $_db_name = 'invoices';
@@ -90,7 +92,7 @@ class invoices extends _dao {
 					_tmpsitess s ON s.user_id = i.user_id %s
 			ORDER BY i.id DESC', $fields, $order);
 
-		// \sys::logSQL( $_sql);
+		// sys::logSQL( $_sql);
 
 		return ( $this->Result( $_sql));
 
@@ -119,7 +121,7 @@ class invoices extends _dao {
 				END ASC, created ASC", $userID);
 
 		if ( $res = $this->Result( $sql)) {
-			// if ( $debug) \sys::dump( $res);
+			// if ( $debug) sys::dump( $res);
 			return ( $res->dtoSet( null, $this->template));
 
 		}
@@ -132,68 +134,121 @@ class invoices extends _dao {
 		$debug = false;
 		// $debug = true;
 
-		if ( $debug) \sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
-		
+		if ( $debug) sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
+
 		$license = false;
-		
+
 		if ( $dtoSet = $this->getForUser( $userID)) {
 			/* look up and return the first active license */
 			$lastExpire = false;
-			
+
 			$dao = new guid;
 			if ( $dtoSetGUID = $dao->getForUser( $userID)) {
 				if ( count( $dtoSetGUID)) {
 					if ( $dtoGratis = $dao->getGratisLicenseOf( $dtoSetGUID[0])) {
 						$lastExpire = $dtoGratis->expires;
-						
+
 					}
-					
+
 				}
-				
+
 			}
-			
-			//~ \sys::dump( $dtoSet);
+
+			//~ sys::dump( $dtoSet);
+			$finalWorkstations = 0;
+			$finalWorkstationExtensions = 0;
 			foreach ( $dtoSet as $dto) {
 				if ( $dto->license_exclusion) continue;
-				
+
 				$dto->effective = $dto->created;
 				if ( !( $dto->state == 'approved' || self::isProvisional( $dto) && $dto->authoritative)) {
-					/*
-					if it is not an invoice with is approved and authoritive
-					the effective date may already be established and we can use that,
-					this invoice could extend it.
-					*/
+					/**
+					 * if it is not an invoice with is approved and authoritive
+					 * the effective date may already be established and we can use that,
+					 * this invoice could extend it.
+					 * */
 					if ( $lastExpire) $dto->effective = $lastExpire;
-					
+
 				}
-				
-				//~ if ( $dto->id == 138) \sys::dump( $dto);
+
+				//~ if ( $dto->id == 138) sys::dump( $dto);
 				$_expires = $dto->expires;	// before contamination
 				$this->_check_expiry( $dto);
 				$lastExpire = $dto->expires;
-				
+
 				// if ( ( $dto->state == 'approved' || self::isProvisional( $dto)) && $dto->expires >= date( 'Y-m-d')) {
 				if ( ( $dto->state == 'approved' || self::isProvisional( $dto)) && strtotime( $dto->expires) > 0) {
 					if ( $ret = $this->getInvoice( $dto)) {
 						if ( $license && !$dto->authoritative) {
-							// there is an active license this is an extension
-							if ( strtotime( $_expires) > 0) {
-								$license->expires = date( 'Y-m-d', strtotime( $_expires));	// before contamination
-								if ( $debug) \sys::logger( sprintf( '%s: %s - absolute :: %s', $dto->id, $license->expires, __METHOD__));
+							foreach ( $ret->lines as $line) {
+								if ( in_array( $line->name, \config::products)) {
+									// there is an active license this is an extension
+									if ( strtotime( $_expires) > 0) {
+										$license->expires = date( 'Y-m-d', strtotime( $_expires));	// before contamination
+										if ( $debug) sys::logger( sprintf( '%s: %s - absolute :: %s', $dto->id, $license->expires, __METHOD__));
 
-							
-							}
-							else {
-								$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
-								if ( $debug) \sys::logger( sprintf( '%s: %s - extending :: %s', $dto->id, $license->expires, __METHOD__));
+
+									}
+									else {
+										$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
+										if ( $debug) sys::logger( sprintf( '%s: %s - extending :: %s', $dto->id, $license->expires, __METHOD__));
+
+									}
+
+									/**
+									 * not sure about this calculation ..
+									 * what if there is a valid workstation extension expiring from before this license ...
+									 *
+									 * so we introduce $finalWorkstationExtensions - which are all the valid extensions
+									 * so the license is
+									 * 	- what is active, usually 1, but may have an override
+									 *  - plus any non expired workstations
+									 * 		- so if you purchase an extension in month 6 of your subscription
+									 * 		- then for the first period of the following subscription you will have
+									 * 		- an extra workstation ... if you buy workstations as part of that invoice
+									 *
+									 * */
+									// if ($finalWorkstations < 1) $finalWorkstations = 1;
+									$finalWorkstations = 1;
+
+								}
+								elseif ( 'WKSSTATION1' == $line->name ) {
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 1;
+
+								}
+								elseif ( 'WKSSTATION2' == $line->name ) {
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 2;
+
+								}
+								elseif ( 'WKSSTATION3' == $line->name ) {
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 3;
+
+								}
+								elseif ( 'WKSSTATION4' == $line->name ) {
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 4;
+
+								}
+								elseif ( 'WKSSTATION5' == $line->name ) {
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 5;
+
+								}
+
+								if ($dto->workstation_override) {
+									if ( strings::DateDiff( $dto->expires) < 0) {
+										$finalWorkstations = $dto->workstation_override;
+										$finalWorkstationExtensions = 0;
+
+									}
+
+								}
 
 							}
-							
+
 						}
 						else {
 
-							if ( $debug) \sys::logger( sprintf( '%s : %s : %s :: %s', $dto->id, $dto->state, $dto->expires, __METHOD__));
-							
+							if ( $debug) sys::logger( sprintf( '%s : %s : %s :: %s', $dto->id, $dto->state, $dto->expires, __METHOD__));
+
 							$license = new dto\license;
 							$license->type = 'LICENSE';
 							$license->expires = $dto->expires;
@@ -201,65 +256,79 @@ class invoices extends _dao {
 								if ( in_array( $line->name, \config::products)) {
 									$license->product = $line->name;
 									$license->description = $line->description;
-									$license->workstations += 1;
+									if ( strings::DateDiff( $dto->expires) < 0) {
+										$finalWorkstations = 1;
+
+									}
 									$license->state = 'active';
-									
+
 								}
 								elseif ( 'WKSSTATION1' == $line->name ) {
-									$license->workstations += 1;
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 1;
+
 								}
 								elseif ( 'WKSSTATION2' == $line->name ) {
-									$license->workstations += 2;
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 2;
+
 								}
 								elseif ( 'WKSSTATION3' == $line->name ) {
-									$license->workstations += 3;
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 3;
+
 								}
 								elseif ( 'WKSSTATION4' == $line->name ) {
-									$license->workstations += 4;
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 4;
+
 								}
 								elseif ( 'WKSSTATION5' == $line->name ) {
-									$license->workstations += 5;
+									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 5;
+
 								}
-								
+
 								if ( 'active' == $license->state) {
 									$license->license = $ret;
-									
+
 								}
-								
+
 							}
-							
+
 							if ($dto->workstation_override) {
-								$license->workstations = $dto->workstation_override;
-								
+								if ( strings::DateDiff( $dto->expires) < 0) {
+									$finalWorkstations = $dto->workstation_override;
+									$finalWorkstationExtensions = 0;
+
+								}
+
 							}
-							
-							// \sys::dump( $ret);
-							
+
+							// sys::dump( $ret);
+
 						}
-						
+
 					}
 
 				}
 				else {
-					if ( $debug) \sys::logger( sprintf( '%s : %s(%s) :: %s', 
-					$dto->id, 
-					$dto->state, 
-					$dto->expires, 
-					'approved' == $dto->state ? 'yes' : 'no',
-					__METHOD__));
-					
-					
+					if ( $debug) sys::logger( sprintf( '%s : %s(%s) :: %s',
+						$dto->id,
+						$dto->state,
+						$dto->expires,
+						'approved' == $dto->state ? 'yes' : 'no',
+						__METHOD__));
+
+
 				}
-				
+
 			}
-			
+
 		}
-		
-		if ( $debug) \sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
+
+		$license->workstations = $finalWorkstations + $finalWorkstationExtensions;
+
+		if ( $debug) sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
 		return ( $license);
-		
+
 	}
-	
+
 	public function getUnpaidForUser( $userID = 0) {
 		$debug = false;
 		// $debug = true;
@@ -283,7 +352,7 @@ class invoices extends _dao {
 				END ASC, created ASC", $userID);
 
 		if ( $res = $this->Result( $sql)) {
-			// if ( $debug) \sys::dump( $res);
+			// if ( $debug) sys::dump( $res);
 			return ( $res->dto( $this->template));
 
 		}
@@ -310,11 +379,11 @@ class invoices extends _dao {
 			$html = $inv->render();
 			//~ print $html;
 
-			$mail = \sys::mailer();
+			$mail = sys::mailer();
 			$mail->CharSet = 'UTF-8';
 			$mail->Encoding = 'base64';
 
-			if ( \strings::IsEmailAddress( $sys->invoice_email)) {
+			if ( strings::IsEmailAddress( $sys->invoice_email)) {
 				$mail->SetFrom( $sys->invoice_email, \config::$WEBNAME);
 
 			}
@@ -342,7 +411,7 @@ class invoices extends _dao {
 			}
 			else {
 				//~ print '<h2>Error - NOT Sent</h2>';
-				\sys::logger( 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo);
+				sys::logger( 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo);
 
 			}
 

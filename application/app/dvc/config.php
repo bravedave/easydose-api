@@ -85,7 +85,7 @@ abstract class config extends _config {
 
 			self::$_EASYDOSE_VERSION = $j->easydose_version = $set;
 
-			file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES));
+			file_put_contents( $config, json_encode( $j, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
 
 		}
 
