@@ -1,23 +1,22 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
-
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-
-	description:
-		global programmable settings
-
-	note:
-	 	dvc defaults will be set in the parent class
-
-	*/
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * This work is licensed under a Creative Commons Attribution 4.0 International Public License.
+ *      http://creativecommons.org/licenses/by/4.0/
+ *
+ * description:
+ *		global programmable settings
+ *
+ * note:
+ * 		dvc defaults will be set in the parent class
+ **/
 
 namespace dvc;
 
-abstract class config extends _config {
+abstract class config extends core\config {
 	static protected $_EASYDOSE_VERSION = 0;
 
 	static $DB_TYPE = 'sqlite';
