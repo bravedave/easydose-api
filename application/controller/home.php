@@ -18,9 +18,13 @@ class home extends Controller {
 		 * curl -X POST -H "Accept: application/json" -d action="-system-logon-" -d u="john" -d p="" "http://localhost/"
 		 */
 		$action = $this->getPost( 'action');
+
 		if ( $action == '-system-logon-') {
 			if ( $u = $this->getPost( 'u')) {
+
 				if ( $p = $this->getPost( 'p')) {
+					// sys::logger( sprintf('%s : %s.%s : %s', $action, $u, $p, __METHOD__));
+
 					$dao = new \dao\users;
 					if ( $dto = $dao->validate( $u, $p))
 						\Json::ack( $action);
@@ -37,14 +41,14 @@ class home extends Controller {
 			/*
 			 * send a link to reset the password
 			 */
-		 	\sys::logger('-send-password-link-');
-		 	if ( $u = $this->getPost( 'u')) {
+			\sys::logger('-send-password-link-');
+			if ( $u = $this->getPost( 'u')) {
 				$dao = new \dao\users;
 				if ( $dto = $dao->getUserByEmail( $u)) {
 					/*
 					 * this will only work for email addresses
 					 */
-				 	if ( $dao->sendResetLink( $dto)) {
+					if ( $dao->sendResetLink( $dto)) {
 						\Json::ack( 'sent reset link')
 							->add('message', 'sent link, check your email and your junk mail');
 						// \sys::logger('-sent-password-link-');
