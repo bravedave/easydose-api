@@ -334,8 +334,8 @@ class users extends _dao {
 					$lex = new \DateTime( $license->expires);
 					$tod = new \DateTime;
 					$interval = $tod->diff( $lex);
-					if ( $debug) \sys::logger( sprintf('#%d : %s(%s - %s) : %s', $dto->id,
-						$license->expires,
+					if ( $debug) \sys::logger( sprintf('#%d : %s(%s - %s) : %s', $dto->id, 
+						$license->expires, 
 						$interval->days,
 						$interval->format('%R%a days'),
 						__METHOD__));
@@ -433,22 +433,17 @@ class users extends _dao {
 
 		if ( $u && $p) {
 			$dto = FALSE;
-			if ( \strings::IsEmailAddress( $u)) {
+			if ( \strings::IsEmailAddress( $u))
 				$dto = $this->getUserByEmail( $u);
-
-			}
-			else {
+			else
 				$dto = $this->getUserByUserName( $u);
-
-			}
 
 			if ( $dto) {
 				if ( password_verify( $p, $dto->pass)) {
 					\dvc\session::edit();
 					\dvc\session::set('uid', $dto->id);
 					\dvc\session::close();
-
-					return ( true);
+					return ( TRUE);
 
 				}
 
@@ -456,7 +451,7 @@ class users extends _dao {
 
 		}
 
-		return ( false);
+		return ( FALSE);
 
 	}
 

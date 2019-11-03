@@ -1,14 +1,15 @@
 <?php
 /*
- * David Bray
- * BrayWorth Pty Ltd
- * e. david@brayworth.com.au
- *
- * This work is licensed under a Creative Commons Attribution 4.0 International Public License.
- *      http://creativecommons.org/licenses/by/4.0/
- *
- * security: admin only
-*/
+	David Bray
+	BrayWorth Pty Ltd
+	e. david@brayworth.com.au
+
+	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
+		http://creativecommons.org/licenses/by/4.0/
+
+  security: admin only
+
+	*/
 
 class guid extends Controller {
 
@@ -44,35 +45,47 @@ class guid extends Controller {
 			}
 
 		}
+		elseif ( 'use-version-2-license' == $action) {
+		if ( $id = (int)$this->getPost('id')) {
+		$dao = new dao\guid;
+		$dao->UpdateByID( ['use_license' => (int)$this->getPost('value')], $id);
+		\Json::ack( $action);
+
+		}
+		else {
+		\Json::nak( $action);
+
+		}
+
+		}
 		elseif ( 'development-mark' == $action) {
-			if ( $id = (int)$this->getPost('id')) {
-				$dao = new dao\guid;
-				$dao->UpdateByID( ['development' => (int)$this->getPost('value')], $id);
+		if ( $id = (int)$this->getPost('id')) {
+		$dao = new dao\guid;
+		$dao->UpdateByID( ['development' => (int)$this->getPost('value')], $id);
+		\Json::ack( $action);
 
-				\Json::ack( $action);
+		}
+		else {
+		\Json::nak( $action);
 
-			}
-			else {
-				\Json::nak( $action);
-
-			}
+		}
 
 		}
 		elseif ( 'detach-account' == $action) {
-			if ( $id = (int)$this->getPost('id')) {
-				$dao = new dao\guid;
-				$dao->UpdateByID( [
-					'user_id' => 0,
-					'updated' => \db::dbTimeStamp()
-				], $id);
+		if ( $id = (int)$this->getPost('id')) {
+		$dao = new dao\guid;
+		$dao->UpdateByID( [
+		'user_id' => 0,
+		'updated' => \db::dbTimeStamp()
+		], $id);
 
-				\Json::ack( $action);
+		\Json::ack( $action);
 
-			}
-			else {
-				\Json::nak( $action);
+		}
+		else {
+		\Json::nak( $action);
 
-			}
+		}
 
 		}
 		else {
@@ -118,9 +131,7 @@ class guid extends Controller {
 			$this->render([
 				'title' => $this->title,
 				'primary' => 'view',
-				'secondary' => 'main-index'
-
-			]);
+				'secondary' => 'main-index']);
 
 		}
 		else {
@@ -130,49 +141,47 @@ class guid extends Controller {
 
 	}
 
-	protected function _index() {
-		if ( currentUser::isAdmin()) {
-			$guidDAO = new dao\guid;
-			$this->data = (object)[ 'res' => $guidDAO->getAll() ];
+  protected function _index() {
+    if ( currentUser::isAdmin()) {
+      $guidDAO = new dao\guid;
+      $this->data = (object)[ 'res' => $guidDAO->getAll() ];
 
-			$this->render([
-				'title' => $this->title = 'pharmacy databases',
-				'primary' => 'list',
-				'secondary' => 'main-index'
+      $this->render([
+        'title' => $this->title = 'pharmacy databases',
+        'primary' => 'list',
+        'secondary' => 'main-index']);
 
-			]);
+    }
+    else {
+      response::Redirect();
 
-		}
-		else {
-			response::Redirect();
+    }
 
-		}
+  }
 
-	}
+  public function index() {
+    $this->isPost() ?
+      $this->postHandler() :
+      $this->_index();
 
-	public function index() {
-		$this->isPost() ?
-			$this->postHandler() :
-			$this->_index();
+  }
 
-	}
+  public function remove( $id = 0) {
+    if ( currentUser::isProgrammer()) {
+      if ( (int) $id) {
+        $dao = new dao\guid;
+        $dao->delete( $id);
 
-	public function remove( $id = 0) {
-		if ( currentUser::isProgrammer()) {
-			if ( (int) $id) {
-				$dao = new dao\guid;
-				$dao->delete( $id);
+      }
 
-			}
+      Response::Redirect( url::tostring( 'guid/'), 'removed pharmacy database');
 
-			Response::Redirect( url::tostring( 'guid/'), 'removed pharmacy database');
+    }
+    else {
+      Response::Redirect();
 
-		}
-		else {
-			Response::Redirect();
+    }
 
-		}
-
-	}
+  }
 
 }

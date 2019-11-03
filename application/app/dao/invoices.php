@@ -233,7 +233,7 @@ class invoices extends _dao {
 
 								}
 
-								if ( (int)$dto->workstation_override) {
+								if ($dto->workstation_override) {
 									if ( strings::DateDiff( $dto->expires) < 0) {
 										$finalWorkstations = $dto->workstation_override;
 										$finalWorkstationExtensions = 0;

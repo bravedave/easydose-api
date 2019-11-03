@@ -157,7 +157,7 @@ class guid extends _dao {
 				if ( $debug) \sys::logger( sprintf( 'dao\guid->getLicenseOf :: %s license', $license->state));
 				if ( 'active' == strtolower( $license->state)) {
 					if ( $debug) \sys::logger( sprintf( 'dao\guid->getLicenseOf :: return active license : %s', $license->expires));
-					$license->authoritive = true;
+					$license->authoritive = $dto->use_license;
 					return ( $license);
 
 				}
@@ -171,7 +171,7 @@ class guid extends _dao {
 
 				*/
 				if ( $license = $this->getGratisLicenseOf( $dto)) {
-					$license->authoritive = true;
+					$license->authoritive = $dto->use_license;
 
 				}
 
