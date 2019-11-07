@@ -326,7 +326,7 @@ class invoices extends _dao {
 		}
 
 		// only return if license has not expired ?
-		if ( $dto->expires >= date('Y-m-d')) {
+		if ( $license->expires >= date('Y-m-d')) {
 			if ( $debug) sys::logger( sprintf( '--- ---[ found %s license : %s ]--- ---', $license->state, __METHOD__));
 			return ( $license);
 
