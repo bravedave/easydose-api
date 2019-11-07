@@ -260,7 +260,8 @@ class invoices extends _dao {
 										$finalWorkstations = 1;
 
 									}
-									$license->state = $dto->expires > date('Y-m-d') ? 'active' : 'inactive';
+									$license->state = 'active';
+									// $license->state = $dto->expires > date('Y-m-d') ? 'active' : 'inactive';
 
 								}
 								elseif ( 'WKSSTATION1' == $line->name ) {
