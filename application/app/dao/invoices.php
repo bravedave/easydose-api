@@ -260,7 +260,7 @@ class invoices extends _dao {
 										$finalWorkstations = 1;
 
 									}
-									$license->state = 'active';
+									$license->state = $dto->expires > date('Y-m-d') ? 'active' : 'inactive';
 
 								}
 								elseif ( 'WKSSTATION1' == $line->name ) {
@@ -324,8 +324,15 @@ class invoices extends _dao {
 
 		}
 
+		// only return if license has not expired ?
+		if ( $dto->expires >= date('Y-m-d')) {
+			if ( $debug) sys::logger( sprintf( '--- ---[ found %s license : %s ]--- ---', $license->state, __METHOD__));
+			return ( $license);
+
+		}
+
 		if ( $debug) sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
-		return ( $license);
+		return null;
 
 	}
 
