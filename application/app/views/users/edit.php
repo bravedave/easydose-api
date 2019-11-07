@@ -203,7 +203,7 @@
 		<?php	} ?>
 
 		<div class="row form-group">
-			<div class="col-8 offset-3">
+			<div class="col-sm-8 offset-sm-3">
 				<?php if ( $this->data->readonly) { ?>
 					<a href="<?php url::write('users/edit/' . $this->data->dto->id) ?>" class="btn btn-primary">edit</a>
 					<a href="<?php url::write('users/createinvoice/' . $this->data->dto->id) ?>" class="btn btn-outline-secondary">generate invoice</a>
