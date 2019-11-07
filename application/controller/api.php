@@ -80,9 +80,9 @@ class api extends Controller {
 				->add( 'authoritive', $license->authoritive ? 'yes' : 'no')
 				;
 
-			} else { json::nak( $action); }
+			} else { Json::nak( $action); }
 
-		} else { json::nak( $action); }
+		} else { Json::nak( $action); }
 
 	}
 
