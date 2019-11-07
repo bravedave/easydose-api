@@ -89,8 +89,11 @@ $(document).ready( function() {
 			$('#<?= $uid ?>_result').html('').addClass('p-4');
 
 
-			$('<table class="table table-success table-striped" />')
-			.append('<thead class="font-weight-bold"><tr><td colspan="2">Server Response</td></tr></thead>')
+			let cls = 'ack' == d.response ? 'table-success' : 'table-danger';
+
+			$('<table class="table table-striped" />')
+			.addClass(cls)
+			.append( '<thead class="font-weight-bold"><tr><td colspan="2">Server Response</td></tr></thead>')
 			.append( tb)
 			.appendTo('#<?= $uid ?>_result');
 
