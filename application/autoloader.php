@@ -13,11 +13,11 @@ spl_autoload_register(function ($class) {
 		include_once $lib;
 		dvc\sys::logloader( sprintf( 'app: %s', $lib ));
 
-		return ( TRUE);
+		return ( true);
 
 	}
 
-	return ( FALSE);
+	return ( false);
 
 });
 
