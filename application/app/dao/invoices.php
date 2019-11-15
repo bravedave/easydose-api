@@ -132,7 +132,7 @@ class invoices extends _dao {
 
 	public function getActiveLicenseForUser( $userID = 0) {
 		$debug = false;
-		// $debug = true;
+		$debug = true;
 
 		if ( $debug) sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
 
@@ -193,6 +193,7 @@ class invoices extends _dao {
 										$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
 										if ( $debug) sys::logger( sprintf( '%s: %s - extending :: %s', $dto->id, $license->expires, __METHOD__));
 
+
 									}
 
 									/**
@@ -210,6 +211,16 @@ class invoices extends _dao {
 									 * */
 									// if ($finalWorkstations < 1) $finalWorkstations = 1;
 									$finalWorkstations = 1;
+									if ( (int)$dto->workstation_override) {
+										if ( strings::DateDiff( $license->expires) < 0) {
+											$finalWorkstations = $dto->workstation_override;
+											if ( $debug) \sys::logger( sprintf('finalWorkstations (extended) : %s : %s', $finalWorkstations, __METHOD__));
+
+											$finalWorkstationExtensions = 0;
+
+										}
+
+									}
 
 								}
 								elseif ( 'WKSSTATION1' == $line->name ) {
@@ -230,15 +241,6 @@ class invoices extends _dao {
 								}
 								elseif ( 'WKSSTATION5' == $line->name ) {
 									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 5;
-
-								}
-
-								if ( (int)$dto->workstation_override) {
-									if ( strings::DateDiff( $dto->expires) < 0) {
-										$finalWorkstations = $dto->workstation_override;
-										$finalWorkstationExtensions = 0;
-
-									}
 
 								}
 
@@ -295,7 +297,13 @@ class invoices extends _dao {
 							if ($dto->workstation_override) {
 								if ( strings::DateDiff( $dto->expires) < 0) {
 									$finalWorkstations = $dto->workstation_override;
+									if ( $debug) \sys::logger( sprintf('finalWorkstations (authorative) : %s : %s', $finalWorkstations, __METHOD__));
+
 									$finalWorkstationExtensions = 0;
+
+								}
+								else {
+									if ( $debug) \sys::logger( sprintf('expired finalWorkstations overide (authorative) : %s', __METHOD__));
 
 								}
 

@@ -14,7 +14,7 @@
   }
   </style>
   <div class="row">
-    <div class="col-md-6 p-0">
+    <div class="col-md-6">
       <input type="search" name="<?= $sid = uniqid( 'ed') ?>"
       id="<?= $sid ?>" placeholder="search..." class="form-control"
       autofocus />
@@ -24,80 +24,83 @@
   </div>
 
   <div class="row">
-    <div class="col p-0">
-      <table class="table table-striped table-sm small" sites-list>
-        <thead>
-          <tr>
-            <td role="sort-header" data-key="state">State</td>
-            <td role="sort-header" data-key="site">Site</td>
-            <td class="d-none d-lg-table-cell">Tel.</td>
-            <td class="d-none d-lg-table-cell text-center"><i class="fa fa-user"></i></td>
-            <td class="d-none d-lg-table-cell text-center">@</td>
-            <td class="d-none d-lg-table-cell text-center">ABN</td>
-            <td class="d-none d-xl-table-cell">IP</td>
-            <td role="sort-header" data-key="product">Product</td>
-            <td class="d-none d-md-table-cell">Active/<br />Patients</td>
-            <td class="d-none d-xl-table-cell">OS</td>
-            <td class="d-none d-xl-table-cell" role="sort-header" data-key="workstation">Workstation</td>
-            <td class="d-none d-xl-table-cell">Deploy</td>
-            <td class="d-none d-lg-table-cell" role="sort-header" data-key="version">Version</td>
-            <td class="text-center">Act</td>
-            <td class="d-none d-md-table-cell" role="sort-header" data-key="expires">Expires</td>
-            <td class="d-none d-lg-table-cell" role="sort-header" data-key="updated">Update</td>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-          <?php
-          $isites = 0;
-          $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
-          while ( $dto = $this->data->sites->dto()) {
-            $isites++;
-            $tel = '';
-            $number = $phoneUtil->parse( $dto->tel, config::country_code);
-            if ( $phoneUtil->isValidNumber( $number)) {
-              $tel = $phoneUtil->format( $number, \libphonenumber\PhoneNumberFormat::NATIONAL);
-            }
-            ?>
-            <tr data-id="<?= $dto->id ?>"
-              data-state="<?= $dto->state ?>"
-              data-site="<?= $dto->site ?>"
-              data-product="<?= strings::ShortLicense( $dto->productid) ?>"
-              data-workstation="<?= $dto->workstation ?>"
-              data-version="<?= $dto->version ?>"
-              data-expires="<?= $dto->expires ?>"
-              data-updated="<?= $dto->updated ?>"
-              site>
-
-              <td><?= $dto->state ?></td>
-              <td>
-                <?= $dto->site ?>
-              </td>
-              <td class="d-none d-lg-table-cell text-nowrap"><?= $tel ?></td>
-              <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->guid_user_id ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
-              <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->email ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
-              <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->abn ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
-              <td class="d-none d-xl-table-cell"><?= $dto->ip ?></td>
-              <td><?= strings::ShortLicense( $dto->productid); ?></td>
-              <td class="d-none d-md-table-cell"><?= sprintf( '%s/%s', $dto->patientsActive, $dto->patients) ?></td>
-              <td class="d-none d-xl-table-cell"><?= strings::StringToOS($dto->os) ?></td>
-              <td class="d-none d-xl-table-cell"><?= $dto->workstation ?></td>
-              <td class="d-none d-xl-table-cell"><?= $dto->deployment ?></td>
-              <td class="d-none d-lg-table-cell"><?= preg_replace( '@^V2\.2\.@', '', $dto->version) ?></td>
-              <td class="text-center"><i class="fa fa-fw <?= ( $dto->activated ? 'fa-circle text-info' : 'fa-times text-danger') ?>"></i></td>
-              <td class="d-none d-md-table-cell"><?= date( \config::$DATE_FORMAT, strtotime( $dto->expires )) ?></td>
-              <td class="d-none d-lg-table-cell text-center"><?= strings::asShortDateTime( $dto->updated) ?></td>
+    <div class="col">
+      <div class="table-responsive-md">
+        <table class="table table-striped table-sm small" sites-list>
+          <thead>
+            <tr>
+              <td role="sort-header" data-key="state">State</td>
+              <td role="sort-header" data-key="site">Site</td>
+              <td class="d-none d-lg-table-cell">Tel.</td>
+              <td class="d-none d-lg-table-cell text-center"><i class="fa fa-user"></i></td>
+              <td class="d-none d-lg-table-cell text-center">@</td>
+              <td class="d-none d-lg-table-cell text-center">ABN</td>
+              <td class="d-none d-xl-table-cell">IP</td>
+              <td role="sort-header" data-key="product">Product</td>
+              <td class="d-none d-md-table-cell">Active/<br />Patients</td>
+              <td class="d-none d-xl-table-cell">OS</td>
+              <td class="d-none d-xl-table-cell" role="sort-header" data-key="workstation">Workstation</td>
+              <td class="d-none d-xl-table-cell">Deploy</td>
+              <td class="d-none d-lg-table-cell" role="sort-header" data-key="version">Version</td>
+              <td class="text-center">Act</td>
+              <td role="sort-header" data-key="expires">Expires</td>
+              <td class="d-none d-lg-table-cell" role="sort-header" data-key="updated">Update</td>
 
             </tr>
 
+          </thead>
+
+          <tbody>
             <?php
-          } // while ( $dto = $this->data->sites->dto()) ?>
+            $isites = 0;
+            $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+            while ( $dto = $this->data->sites->dto()) {
+              $isites++;
+              $tel = '';
+              $number = $phoneUtil->parse( $dto->tel, config::country_code);
+              if ( $phoneUtil->isValidNumber( $number)) {
+                $tel = $phoneUtil->format( $number, \libphonenumber\PhoneNumberFormat::NATIONAL);
+              }
+              ?>
+              <tr data-id="<?= $dto->id ?>"
+                data-state="<?= $dto->state ?>"
+                data-site="<?= $dto->site ?>"
+                data-product="<?= strings::ShortLicense( $dto->productid) ?>"
+                data-workstation="<?= $dto->workstation ?>"
+                data-version="<?= $dto->version ?>"
+                data-expires="<?= $dto->expires ?>"
+                data-updated="<?= $dto->updated ?>"
+                site>
 
-        </tbody>
+                <td><?= $dto->state ?></td>
+                <td class="text-nowrap">
+                  <?= $dto->site ?>
+                </td>
+                <td class="d-none d-lg-table-cell text-nowrap"><?= $tel ?></td>
+                <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->guid_user_id ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
+                <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->email ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
+                <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->abn ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
+                <td class="d-none d-xl-table-cell"><?= $dto->ip ?></td>
+                <td><?= strings::ShortLicense( $dto->productid); ?></td>
+                <td class="d-none d-md-table-cell"><?= sprintf( '%s/%s', $dto->patientsActive, $dto->patients) ?></td>
+                <td class="d-none d-xl-table-cell"><?= strings::StringToOS($dto->os) ?></td>
+                <td class="d-none d-xl-table-cell"><?= $dto->workstation ?></td>
+                <td class="d-none d-xl-table-cell"><?= $dto->deployment ?></td>
+                <td class="d-none d-lg-table-cell"><?= preg_replace( '@^V2\.2\.@', '', $dto->version) ?></td>
+                <td class="text-center"><i class="fa fa-fw <?= ( $dto->activated ? 'fa-circle text-info' : 'fa-times text-danger') ?>"></i></td>
+                <td><?= date( \config::$DATE_FORMAT, strtotime( $dto->expires )) ?></td>
+                <td class="d-none d-lg-table-cell text-center"><?= strings::asShortDateTime( $dto->updated) ?></td>
 
-      </table>
+              </tr>
+
+              <?php
+            } // while ( $dto = $this->data->sites->dto()) ?>
+
+          </tbody>
+
+        </table>
+
+      </div>
 
     </div>
 
