@@ -8,9 +8,9 @@
 		http://creativecommons.org/licenses/by/4.0/
 
 	*/
-NameSpace dvc;
+namespace dvc;
 
-abstract class auth extends _auth {
+abstract class auth extends core\auth {
 	static function button() {
 		if ( auth::GoogleAuthEnabled()) {
 			return parent::button();

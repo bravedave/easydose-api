@@ -7,13 +7,13 @@
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
 	*/
-NameSpace dvc;
+namespace dvc;
 
-class user extends _user {
+class user extends core\user {
 	var $id = 0;
 	var $admin = false;
 	var $programmer = false;
-	
+
 	protected $dto = false;
 
 	public function __construct() {
