@@ -290,10 +290,10 @@ class users extends _dao {
 				LEFT JOIN (
 					SELECT id, state, user_id, created
 					FROM invoices
+					WHERE 'canceled' != state
 					GROUP BY user_id
 					ORDER BY id DESC) inv
 			WHERE
-				'canceled' != inv.state AND
 				inv.user_id = u.id";
 
 		if ( $res = $this->Result( $sql)) {
@@ -371,6 +371,12 @@ class users extends _dao {
 				return ( $dto);
 
 			});
+
+			$this->Q( 'DROP TABLE IF EXISTS _lic_debug');
+			if ( $debug) {
+				$this->Q( 'CREATE TABLE _lic_debug AS SELECT * FROM _lic');
+
+			}
 
 			return( $this->Result( sprintf( "SELECT * FROM _lic WHERE due <> %d AND license <> '' ORDER BY expires ASC", self::expired)));
 			// return( $this->Result("SELECT * FROM _lic WHERE license <> '' ORDER BY expires ASC"));
