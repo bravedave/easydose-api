@@ -190,7 +190,8 @@ class invoices extends _dao {
 
 									}
 									else {
-										$license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
+										// this has adjusted the expiry date of this invoice
+										$dto->expires = $license->expires = date( 'Y-m-d', strtotime( '+1 year', strtotime( $license->expires)));
 										if ( $debug) sys::logger( sprintf( '%s: %s - extending :: %s', $dto->id, $license->expires, __METHOD__));
 
 
@@ -224,23 +225,36 @@ class invoices extends _dao {
 
 								}
 								elseif ( 'WKSSTATION1' == $line->name ) {
-									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 1;
+									if ( strings::DateDiff( $dto->expires) < 0) {
+										$finalWorkstationExtensions += 1;
+										if ( $debug) \sys::logger( sprintf('%s: WKSSTATION1 : %s (exp:%s) : %s', $dto->id, $finalWorkstationExtensions, $dto->expires, __METHOD__));
+
+									}
+									else {
+										if ( $debug) \sys::logger( sprintf('%s: WKSSTATION1 expired : %s : %s', $dto->id, $dto->expires,  __METHOD__));
+
+									}
+
 
 								}
 								elseif ( 'WKSSTATION2' == $line->name ) {
 									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 2;
+									if ( $debug) \sys::logger( sprintf('WKSSTATION2 : %s : %s', $finalWorkstationExtensions, __METHOD__));
 
 								}
 								elseif ( 'WKSSTATION3' == $line->name ) {
 									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 3;
+									if ( $debug) \sys::logger( sprintf('WKSSTATION3 : %s : %s', $finalWorkstationExtensions, __METHOD__));
 
 								}
 								elseif ( 'WKSSTATION4' == $line->name ) {
 									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 4;
+									if ( $debug) \sys::logger( sprintf('WKSSTATION4 : %s : %s', $finalWorkstationExtensions, __METHOD__));
 
 								}
 								elseif ( 'WKSSTATION5' == $line->name ) {
 									if ( strings::DateDiff( $dto->expires) < 0) $finalWorkstationExtensions += 5;
+									if ( $debug) \sys::logger( sprintf('WKSSTATION5 : %s : %s', $finalWorkstationExtensions, __METHOD__));
 
 								}
 
@@ -330,12 +344,26 @@ class invoices extends _dao {
 			}
 
 			$license->workstations = $finalWorkstations + $finalWorkstationExtensions;
+			if ( $debug) \sys::logger( sprintf( '<workstations : %s + %s = %s : %s',
+				$finalWorkstations,
+				$finalWorkstationExtensions,
+				$license->workstations,
+				__METHOD__));
+
 
 		}
 
 		// only return if license has not expired ?
 		if ( $license && $license->expires >= date('Y-m-d')) {
-			if ( $debug) sys::logger( sprintf( '--- ---[ found %s license : %s ]--- ---', $license->state, __METHOD__));
+			if ( $debug) {
+				\sys::logger( sprintf( '--- ---[ found %s license : %s(%s) : %s ]--- ---',
+					$license->state,
+					$license->description,
+					$license->workstations,
+					__METHOD__));
+
+			}
+
 			return ( $license);
 
 		}
