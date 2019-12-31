@@ -11,7 +11,7 @@
 spl_autoload_register(function ($class) {
 	if ( $lib = realpath( __DIR__ . '/app/' . str_replace('\\', '/', $class) . '.php')) {
 		include_once $lib;
-		dvc\sys::logloader( sprintf( 'app: %s', $lib ));
+		dvc\core\load::logger( sprintf( 'app: %s', $lib ));
 
 		return ( true);
 
