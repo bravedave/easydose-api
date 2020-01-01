@@ -296,6 +296,9 @@ class users extends _dao {
 			WHERE
 				inv.user_id = u.id";
 
+		if ( $debug) \sys::logSQL( $sql);
+
+
 		if ( $res = $this->Result( $sql)) {
 			$this->Q( "CREATE TEMPORARY TABLE _lic (
 				id INTEGER DEFAULT 0,
@@ -308,6 +311,7 @@ class users extends _dao {
 				workstations INTEGER DEFAULT 0,
 				expires TEXT NOT NULL DEFAULT '',
 				due INTEGER DEFAULT 0,
+				unpaid_invoice_number INTEGER DEFAULT 0,
 				unpaid_invoice INTEGER DEFAULT 0
 
 			)");
@@ -351,6 +355,7 @@ class users extends _dao {
 						}
 
 						if ( $dtoUP = $dao->getUnpaidForUser( $dto->id)) {
+							$a['unpaid_invoice_number'] = $dtoUP->id;
 							if ( $dtoUP->state == 'sent' ) {
 								$a['unpaid_invoice'] = self::sent;
 

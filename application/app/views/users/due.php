@@ -6,25 +6,23 @@
 
 	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
 		http://creativecommons.org/licenses/by/4.0/
-	*/	?>
+	*/
+
+	// sys::dump( $this->data->dto());
+	?>
 <h1 class="d-none d-print-block"><?= $this->title ?></h1>
 
 <table class="table table-sm">
 	<thead class="small">
-		<tr>
-			<td colspan="4" class="border-0">&nbsp;</td>
-			<td colspan="4" class="border-0 text-center">last invoice</td>
-
-		</tr>
-
-		<tr>
+		<tr class="align-bottom">
 			<td class="border-0">proprietor</td>
 			<td class="border-0">business</td>
 			<td class="border-0">license</td>
 			<td class="text-center border-0">wks</td>
 			<td class="text-center border-0">expires</td>
-			<td class="text-center border-0">no.</td>
+			<td class="text-center border-0">last<br />invoice<br />no.</td>
 			<td class="text-center border-0">state</td>
+			<td class="text-center border-0">unpaid<br />invoice<br />no.</td>
 			<td class="text-center border-0">&nbsp;</td>
 			<td class="text-center border-0">created</td>
 
@@ -53,6 +51,7 @@
 			<td class="text-center"><?= strings::asShortDate( $dto->expires) ?></td>
 			<td class="text-center"><?= $dto->last_invoice ?></td>
 			<td class="text-center"><?= $dto->last_invoice_state ?></td>
+			<td class="text-center"><?php if ( $dto->unpaid_invoice_number) print $dto->unpaid_invoice_number; ?></td>
 			<td class="text-center"><?php
 				if ( $dto->unpaid_invoice == dao\users::created) {
 					print '...';
