@@ -38,12 +38,12 @@
 	<div class="col">
 
 	<?php	if ( !in_array( $this->data->invoice->state, ['approved', 'canceled']) && currentUser::id() == $this->data->invoice->user_id ) {  ?>
-		<form class="form" method="POST" action="<?php url::write('account') ?>">
+		<form class="d-inline-block" method="POST" action="<?php url::write('account') ?>">
 			<input type="hidden" name="id" value="<?= $this->data->invoice->id ?>" />
-
 			<input type="submit" name="action" class="btn btn-primary" value="pay invoice" />
 
 		</form>
+
 	<?php	}
 
 			if ( currentUser::isAdmin()) {	?>
@@ -56,9 +56,9 @@
 
 	<?php
 
-				        $earlier = new DateTime($this->data->invoice->state_changed);
-				        $later = new DateTime();
-				        $diff = $later->diff($earlier)->format("%a");
+					$earlier = new DateTime($this->data->invoice->state_changed);
+					$later = new DateTime();
+					$diff = $later->diff($earlier)->format("%a");
 
 					// print $diff;
 					/*
@@ -146,7 +146,7 @@ $(document).ready( function() {
 
 	$('#override-workstations').on( 'click', function( e) {
 		e.preventDefault();
-	      $(this).blur();
+		$(this).blur();
 
 		let fld = $('<input type="number" class="form-control" value="<?php print $this->data->invoice->workstation_override ?>" />');
 

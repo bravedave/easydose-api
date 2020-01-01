@@ -151,14 +151,14 @@ class invoice {
 		$tr->td('Term',['class' => 'text-center']);
 
     foreach ( $this->invoice->lines as $dto) {
-      $validTo = $this->invoice->expires;
+		$validTo = $this->invoice->expires;
 
-      $tr = $tbody->tr();
-      $tr->td( sprintf( '%s<br />%s', $dto->name, $dto->description));
-      $tr->td( number_format( $dto->rate, 2), ['class' => 'text-right']);
-      // $tr->td( strings::asLocalDate( $validFrom), ['class' => 'text-center']);
-      // $tr->td( strings::asLocalDate( $validTo), ['class' => 'text-center']);
-      $tr->td( $dto->term, ['class' => 'text-center']);
+		$tr = $tbody->tr();
+		$tr->td( sprintf( '%s<br />%s', $dto->name, $dto->description));
+		$tr->td( number_format( $dto->rate, 2), ['class' => 'text-right']);
+		// $tr->td( strings::asLocalDate( $validFrom), ['class' => 'text-center']);
+		// $tr->td( strings::asLocalDate( $validTo), ['class' => 'text-center']);
+		$tr->td( $dto->term, ['class' => 'text-center']);
 
     }	// foreach ( $this->invoice->lines as $dto)
 

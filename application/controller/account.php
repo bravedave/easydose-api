@@ -443,9 +443,9 @@ class account extends Controller {
 
 						$inv = new invoice(
 							$this->data->sys,
-						 	$this->data->account,
+							$this->data->account,
 							$this->data->invoice,
-						 	$this->data->license);
+							$this->data->license);
 
 						$html = $inv->render();
 						print $html;
@@ -478,7 +478,7 @@ class account extends Controller {
 									'state_change' => 'manual',
 									'state_changed' => \db::dbTimeStamp(),
 									'state_changed_by' => \currentUser::id(),
-									   'updated' => \db::dbTimeStamp()
+									'updated' => \db::dbTimeStamp()
 
 								];
 
@@ -524,13 +524,6 @@ class account extends Controller {
 			'title' => $this->title = 'Create Invoice',
 			'primary' => 'invoice-create',
 			'secondary' => 'main-index']);
-
-	}
-
-	public function index() {
-		$this->isPost() ?
-			$this->postHandler() :
-			$this->_index();
 
 	}
 

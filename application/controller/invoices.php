@@ -215,11 +215,4 @@ class invoices extends Controller {
 
 	}
 
-	public function index() {
-		$this->isPost() ?
-			$this->postHandler() :
-			$this->_index();
-
-	}
-
 }
