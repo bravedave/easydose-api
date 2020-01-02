@@ -11,9 +11,11 @@
 		viewer class for user table
 
 	security:
-	 	Ordinary Authenticated user - non admin
+		Ordinary Authenticated user - non admin
 
-	*/ ?>
+	*/
+
+	if ( currentUser::isAdmin()) {  ?>
 <form class="form-group row d-print-none" id="<?= $uidFrmExclusion = strings::rand() ?>">
 	<input type="hidden" name="invoice_id" value="<?= $this->data->invoice->id ?>" />
 	<input type="hidden" name="action" value="license-exclusion" />
@@ -33,6 +35,8 @@
 	</div>
 
 </form>
+<?php
+	}	?>
 
 <div class="row d-print-none">
 	<div class="col">
@@ -370,6 +374,7 @@ $(document).ready( function() {
 
 	});
 
+<?php	if ( currentUser::isAdmin()) {  ?>
 	$('#<?= $uidFrmExclusion ?>').on( 'submit', function( e) {
 		let data = $(this).serializeFormJSON();
 		//~ console.log( data);
@@ -383,6 +388,8 @@ $(document).ready( function() {
 		return false;
 
 	});
+
+<?php	}	// if ( currentUser::isAdmin())  ?>
 
 });
 </script>
