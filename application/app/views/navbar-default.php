@@ -31,7 +31,7 @@
 			</li>
 
 				<?php
-				if ( dvc\mail\config::$ENABLED) {	?>
+				if ( dvc\mail\config::$ENABLED && dvc\mail\config::$ENABLED) {	?>
 			<li class="nav-item">
 				<a class="nav-link" href="<?= strings::url('mail/webmail'); ?>" title="inbox"><i class="fa fa-inbox"></i></a>
 
