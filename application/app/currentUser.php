@@ -10,23 +10,13 @@
 	*/
 
 abstract class currentUser extends dvc\currentUser {
-	static function id() {
-		return ( self::user()->id);
-
-	}
-
-	static function name() {
-		return ( self::user()->name);
-
-	}
-
-	static function username() {
-		return ( self::user()->username);
-
-	}
-
 	static function email() {
 		return ( self::user()->email);
+
+	}
+
+	static function id() {
+		return ( self::user()->id);
 
 	}
 
@@ -53,6 +43,24 @@ abstract class currentUser extends dvc\currentUser {
 		return ( self::isAdmin());
 
 		// return ( FALSE);
+
+	}
+
+	static function name() {
+		return ( self::user()->name);
+
+	}
+
+	static public function option( $key, $value = null) {
+		if ( self::user()->valid())
+			return ( self::user()->option( $key, $value));
+
+		return ( false);
+
+	}
+
+	static function username() {
+		return ( self::user()->username);
 
 	}
 

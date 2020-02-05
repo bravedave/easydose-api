@@ -16,16 +16,18 @@
 		{
 			"type": "git",
 			"url": "https://github.com/bravedave/dvc"
+		},
+		{
+			"type": "git",
+			"url": "https://github.com/bravedave/dvc-mail"
 		}
 	],
 	"require": {
-		"php": ">=7.0",
 		"ext-sqlite3": "*",
 		"ext-curl": "*",
 		"bravedave/dvc": "dev-master",
-		"paypal/rest-api-sdk-php": "*",
-		"giggsey/libphonenumber-for-php": "^8.9",
-		"tijsverkoyen/css-to-inline-styles": "^2.2"
+		"bravedave/dvc-mail": "dev-master",
+		"paypal/rest-api-sdk-php": "*"
 
 	}
 

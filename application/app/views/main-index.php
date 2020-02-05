@@ -9,7 +9,7 @@
 	*/ ?>
 
 <ul class="menu">
-	<li><h4>contents</h4></li>
+	<li><h4 class="m-0 mt-2">contents</h4></li>
 	<?php
 	if ( currentUser::isAdmin()) {
 		$tpl = '<li><a href="%s">%s</a></li>';
@@ -19,8 +19,14 @@
 		printf( $tpl, url::tostring('users'), 'accounts');
 		printf( '<li class="ml-3"><a href="%s">%s</a></li>', url::tostring('users/due'), 'expiring');
 
-		print '<li>&nbsp;</li>';
-		print '<li><h4>maintenance</h4></li>';
+		print '<li><h4 class="m-0 mt-2">mail</h4></li>';
+	if ( dvc\mail\config::$ENABLED) {
+		printf( '<li><a href="%s">inbox</li>', strings::url('mail/webmail'));
+
+	}	// if ( dvc\mail\config::$ENABLED)
+	printf( '<li><a href="%s">account</li>', strings::url('imap/account'));
+
+		print '<li><h4 class="m-0 mt-2">maintenance</h4></li>';
 
 		printf( $tpl, url::tostring('settings'), 'settings');
 		printf( $tpl, url::tostring('products'), 'products');

@@ -1,65 +1,77 @@
 <?php
-	/*
-		David Bray
-		BrayWorth Pty Ltd
-		e. david@brayworth.com.au
+/*
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * This work is licensed under a Creative Commons Attribution 4.0 International Public License.
+ *      http://creativecommons.org/licenses/by/4.0/
+ *
+*/	?>
+<nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top d-print-none py-0" role="navigation" >
 
-		This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-			http://creativecommons.org/licenses/by/4.0/
-		*/	?>
-	<nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top d-print-none py-0" role="navigation" >
+	<button class="navbar-toggler" type="button" data-toggle="collapse"
+		data-target="#navbarToggler"
+		aria-controls="navbarToggler"
+		aria-expanded="false"
+		aria-label="Toggle navigation">
 
-		<?php if ( \currentUser::isAdmin()) {
-			printf( '<div class="navbar-brand">%s</div>', $this->data->title);
+		<span class="navbar-toggler-icon"></span>
 
-		}	?>
+	</button>
 
-		<button class="navbar-toggler" type="button" data-toggle="collapse"
-		 	data-target="#navbarToggler"
-			aria-controls="navbarToggler"
-			aria-expanded="false"
-			aria-label="Toggle navigation">
+	<div class="collapse navbar-collapse" id="navbarToggler">
+		<ul class="navbar-nav mr-auto">
+		<?php
+		if ( \sys::lockdown()) {
+			if ( \currentUser::isAdmin()) {	?>
+			<li class="nav-item">
+				<?php printf( '<a href="%s" class="nav-link"><i class="fa fa-fw fa-home"></i></a>', \url::$URL);	?>
 
-			<span class="navbar-toggler-icon"></span>
+			</li>
 
- 		</button>
+				<?php
+				if ( dvc\mail\config::$ENABLED) {	?>
+			<li class="nav-item">
+				<a class="nav-link" href="<?= strings::url('mail/webmail'); ?>" title="inbox"><i class="fa fa-inbox"></i></a>
 
-		<div class="collapse navbar-collapse" id="navbarToggler">
-			<ul class="navbar-nav mr-auto">
-				<?php if ( \sys::lockdown()) {	?>
-					<?php if ( \currentUser::isAdmin()) {	?>
-						<li class="nav-item">
-							<?php printf( '<a href="%s" class="nav-link"><i class="fa fa-fw fa-home"></i>Home</a>', \url::$URL);	?>
+			</li>
+				<?php
+				}	// if ( dvc\mail\config::$ENABLED)	?>
 
-						</li>
+			<li class="nav-item"><a class="nav-link" href="<?= strings::url('account'); ?>">My Account</a></li>
 
-						<li class="nav-item"><a class="nav-link" href="<?php url::write('account'); ?>">My Account</a></li>
+			<?php
+			} else {	?>
+			<li class="nav-item">
+				<a class="nav-link" href="<?= strings::url('account'); ?>"><i class="fa fa-fw fa-home"></i>Home</a>
 
-					<?php } else {	?>
-						<li class="nav-item">
-							<a class="nav-link" href="<?php url::write('account'); ?>">
-								<i class="fa fa-fw fa-home"></i>Home
+			</li>
 
-							</a>
+		<?php
+			}	// if ( \currentUser::isAdmin())	?>
 
-						</li>
+			<li class="nav-item"><a class="nav-link" href="<?= strings::url('logout') ?>">Logout</a></li>
 
-					<?php	}	// if ( \currentUser::isAdmin())	?>
+		<?php
+		} else {	?>
+			<li class="nav-item">
+				<?php printf( '<a href="%s" class="nav-link"><i class="fa fa-fw fa-home"></i>Home</a>', \url::$URL);	?>
 
-						<li class="nav-item"><a class="nav-link" href="<?php url::write('logout') ?>">Logout</a></li>
+			</li>
 
-				<?php } else {	?>
-					<li class="nav-item">
-						<?php printf( '<a href="%s" class="nav-link"><i class="fa fa-fw fa-home"></i>Home</a>', \url::$URL);	?>
+			<li class="nav-item"><a class="nav-link" href="<?= strings::url('account'); ?>">My Account</a></li>
 
-					</li>
+		<?php
+		}	// if ( \sys::lockdown())	?>
 
-					<li class="nav-item"><a class="nav-link" href="<?php url::write('account'); ?>">My Account</a></li>
+		</ul>
 
-				<?php	}	// if ( \sys::lockdown())	?>
+	</div>
 
-			</ul>
+	<?php if ( \currentUser::isAdmin()) {
+		printf( '<div class="navbar-brand">%s</div>', $this->data->title);
 
-		</div>
+	}	?>
 
-	</nav>
+</nav>
