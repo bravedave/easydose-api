@@ -20,7 +20,7 @@
 		printf( '<li class="ml-3"><a href="%s">%s</a></li>', url::tostring('users/due'), 'expiring');
 
 		print '<li><h4 class="m-0 mt-2">mail</h4></li>';
-	if ( dvc\mail\config::$ENABLED && dvc\mail\config::$ENABLED) {
+	if ( dvc\mail\config::$ENABLED && dvc\imap\account::$ENABLED) {
 		printf( '<li><a href="%s">inbox</li>', strings::url('mail/webmail'));
 
 	}	// if ( dvc\mail\config::$ENABLED)
