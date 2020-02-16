@@ -6,7 +6,7 @@
 	"prefer-stable": true,
 	"homepage": "http://easydose.net.au",
 	"type": "project",
-	"license": "MIT",
+	"license": "cc-by-4.0",
 	"authors": [{
 		"name": "Brave Dave",
 		"email": "davbray@gmail.com",
