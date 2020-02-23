@@ -10,7 +10,7 @@
 */
 
 namespace dvc\imap;
-use bCrypt;
+use dvc\bCrypt;
 
 abstract class account {
 	static $SERVER = '';

@@ -11,6 +11,7 @@
 
 use dvc\imap\account;
 use dvc\mail\credentials;
+use dvc\bCrypt;
 
 class imap extends dvc\imap\controller {
 	protected function before() {
