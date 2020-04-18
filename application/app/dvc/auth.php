@@ -1,13 +1,13 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/
 
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-
-	*/
 namespace dvc;
 
 abstract class auth extends core\auth {
@@ -19,16 +19,16 @@ abstract class auth extends core\auth {
 		else {
 			if ( currentUser::valid()) {
 				return ( sprintf( '<a href="%s"><img alt="logout" src="%s" /><img alt="avatar" class="user-avatar" title="%s" src="%s" /><img alt="logout" src="%s" /></a>',
-					url::tostring( 'logout'),
-					url::tostring( 'images/logout-left9x50.png'),
+					strings::url( 'logout'),
+					strings::url( 'images/logout-left9x50.png'),
 					currentUser::user()->name,
 					currentUser::avatar(),
-					url::tostring( 'images/logout-63x50.png')
+					strings::url( 'images/logout-63x50.png')
 					));
 
 			}
 			else {
-				return ( sprintf( '<a class="btn" href="%s">logon</a>', url::tostring()));
+				return ( sprintf( '<a class="btn" href="%s">logon</a>', strings::url()));
 
 			}
 

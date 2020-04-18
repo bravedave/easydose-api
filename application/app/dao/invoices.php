@@ -132,7 +132,7 @@ class invoices extends _dao {
 
 	public function getActiveLicenseForUser( $userID = 0) {
 		$debug = false;
-		// $debug = true;
+		$debug = true;
 
 		if ( $debug) sys::logger( sprintf( '---------------[%s]-------------', __METHOD__));
 
@@ -175,6 +175,7 @@ class invoices extends _dao {
 				$_expires = $dto->expires;	// before contamination
 				$this->_check_expiry( $dto);
 				$lastExpire = $dto->expires;
+				if ( $debug) sys::logger( sprintf( '%s ~ %s :: %s', $_expires, $lastExpire, __METHOD__));
 
 				// if ( ( $dto->state == 'approved' || self::isProvisional( $dto)) && $dto->expires >= date( 'Y-m-d')) {
 				if ( ( $dto->state == 'approved' || self::isProvisional( $dto)) && strtotime( $dto->expires) > 0) {

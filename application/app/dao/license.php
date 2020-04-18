@@ -1,13 +1,12 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
-
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-
-	*/
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/
 
 namespace dao;
 
@@ -56,7 +55,7 @@ class license extends _dao {
 		$dao = new guid;
 		if ( $dtoSet = $dao->getForUser( $user)) {
 			if ( count( $dtoSet)) {
-				if ( $debug) \sys::logger( sprintf( 'dao\license->getLicense(%s) :: got Gratis license', $user));
+				if ( $debug) \sys::logger( sprintf( '%s : got Gratis license :: %s', $user, __METHOD__));
 				if ( $ret = $dao->getGratisLicenseOf( $dtoSet[0])) {
 					//~ \sys::dump( $ret);
 					return ( $ret);
