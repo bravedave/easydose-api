@@ -12,6 +12,8 @@
     <thead>
         <tr>
             <td>file</td>
+            <td class="text-center">date</td>
+            <td class="text-center">size</td>
             <td>&nbsp;</td>
 
         </tr>
@@ -23,7 +25,9 @@
         print '<tr>';
 
         printf( '<td>%s</td>', $fileInfo->getFileName());
-        printf( '<td class="py-0">
+        printf( '<td class="text-center">%s</td>', strings::asShortDate( date( 'c', $fileInfo->getMTime()), true));
+        printf( '<td class="text-center">%s Mb</td>', number_format( (int)$fileInfo->getSize()/1024/1024));
+        printf( '<td class="py-0 text-right">
                 <a class="btn btn-light" href="%s"><i class="fa fa-download"></i></a>
                 <btn class="btn btn-light" href="#" data-file=%s trash><i class="fa fa-trash"></i></btn>
             </td>',
