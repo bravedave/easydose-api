@@ -17,12 +17,12 @@ abstract class auth extends core\auth {
 
 		}
 		else {
-			if ( currentUser::valid()) {
+			if ( \currentUser::valid()) {
 				return ( sprintf( '<a href="%s"><img alt="logout" src="%s" /><img alt="avatar" class="user-avatar" title="%s" src="%s" /><img alt="logout" src="%s" /></a>',
 					strings::url( 'logout'),
 					strings::url( 'images/logout-left9x50.png'),
-					currentUser::user()->name,
-					currentUser::avatar(),
+					\currentUser::user()->name,
+					\currentUser::avatar(),
 					strings::url( 'images/logout-63x50.png')
 					));
 

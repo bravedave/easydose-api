@@ -4,19 +4,16 @@
  * BrayWorth Pty Ltd
  * e. david@brayworth.com.au
  *
- * This work is licensed under a Creative Commons Attribution 4.0 International Public License.
- *      http://creativecommons.org/licenses/by/4.0/
+ * MIT License
  *
  * description:
  *		global programmable settings
  *
  * note:
  * 		dvc defaults will be set in the parent class
- **/
+*/
 
-namespace dvc;
-
-abstract class config extends core\config {
+abstract class config extends dvc\config {
 	static protected $_EASYDOSE_VERSION = 0;
 
 	static $DB_TYPE = 'sqlite';
@@ -72,6 +69,36 @@ abstract class config extends core\config {
 
 	}
 
+	static function easydose_init() {
+		if ( file_exists( $config = self::easydose_config())) {
+			$j = json_decode( file_get_contents( $config));
+
+			if ( isset( $j->easydose_version)) {
+				self::$_EASYDOSE_VERSION = (float)$j->easydose_version;
+
+			};
+
+		}
+
+	}
+
+	static function easydose_upload_dir() {
+		$path = implode( DIRECTORY_SEPARATOR, [
+			rtrim( self::dataPath(), '/'),
+			'uploads'
+
+		]);
+
+		if ( ! is_dir( $path)) {
+			mkdir( $path);
+			chmod( $path, 0777 );
+
+		}
+
+		return $path;
+
+	}
+
 	static function easydose_version( $set = null) {
 		$ret = self::$_EASYDOSE_VERSION;
 
@@ -89,19 +116,6 @@ abstract class config extends core\config {
 		}
 
 		return $ret;
-
-	}
-
-	static function easydose_init() {
-		if ( file_exists( $config = self::easydose_config())) {
-			$j = json_decode( file_get_contents( $config));
-
-			if ( isset( $j->easydose_version)) {
-				self::$_EASYDOSE_VERSION = (float)$j->easydose_version;
-
-			};
-
-		}
 
 	}
 

@@ -33,12 +33,16 @@ class api extends Controller {
 			$this->getAccount( $action);
 
 		}
+		elseif ( $action == 'get-license') {
+			$this->getLicense( $action);
+
+		}
 		elseif ( $action == 'set-account') {
 			$this->setAccount( $action);
 
 		}
-		elseif ( $action == 'get-license') {
-			$this->getLicense( $action);
+		elseif ( $action == 'upload-file') {
+			$this->upload( $action);
 
 		}
 		elseif ( false) {
@@ -392,10 +396,100 @@ class api extends Controller {
 
 	}
 
-	public function index() {
-		$this->isPost() ?
-			$this->postHandler() :
-			print 'EasyDose API handler';
+	protected function upload( $action) {
+		$debug = true;
+		$debug = false;
+
+		if ( $guid = $this->getPost( 'guid')) {
+			$guidDAO = new dao\guid;
+			if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
+				if ( (int)$guidDTO->user_id > 0) {
+					$usersDAO = new dao\users;
+					if ( $usersDTO = $usersDAO->getByID( $guidDTO->user_id)) {
+						$targetFileBase = preg_replace( '/[^0-9a-zA-Z]/', '_', $usersDTO->username);
+						/*--- ---[upload backup]--- ---*/
+						$accept = [
+							'application/zip'
+
+						];
+
+						if ( isset( $_FILES['file'])) {
+							$file = $_FILES['file'];
+							if ( $file['error'] == UPLOAD_ERR_INI_SIZE ) {
+								if ( $debug) \sys::logger( sprintf('<%s is too large (ini)> %s : %s', $file['name'], $action, __METHOD__));
+								\Json::nak( sprintf( '%s :: %s', $action, $file['name']));
+
+							}
+							elseif ( $file['error'] == UPLOAD_ERR_FORM_SIZE ) {
+								if ( $debug) \sys::logger( sprintf('<%s is too large (form)> %s : %s', $file['name'], $action, __METHOD__));
+								\Json::nak( sprintf( '%s :: %s is too large (form)', $action, $file['name']));
+
+							}
+							elseif ( is_uploaded_file( $file['tmp_name'] )) {
+								$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+								$strType = finfo_file($finfo, $file['tmp_name']);
+								if ( $debug) sys::logger( sprintf( '%s :: %s (%s)', $action, $file['name'], $strType));
+
+								$ok = TRUE;
+								if ( in_array( $strType, $accept)) {
+									$source = $file['tmp_name'];
+									$_target = sprintf( '%s_%s.%s', $targetFileBase, date('Y-m-d_his'), preg_replace( '@^[a-z]*/@', '', $strType));
+									$target = implode( DIRECTORY_SEPARATOR, [
+										config::easydose_upload_dir(),
+										$_target
+
+									]);
+
+									if ( file_exists( $target )) {
+										unlink( $target );
+
+									}
+
+									if ( move_uploaded_file( $source, $target)) {
+										chmod( $target, 0666 );
+										\Json::ack( sprintf( '%s :: %s', $action, $_target));
+
+									}
+									else {
+										if ( $debug) sys::logger("Possible file upload attack!  Here's some debugging info:\n" . var_export($_FILES, TRUE));
+
+									}
+
+								}
+								elseif ( $strType == "" ) {
+									// \Json::nak( sprintf( '%s :: %s invalid file type : %s', $action, $file['name'], print_r( $file['type'], TRUE)));
+									// \Json::nak( sprintf( '%s :: invalid file type : %s', $action, print_r( $file, TRUE)));
+									\Json::nak( sprintf( '%s :: invalid file type : %s', $action, print_r( $_FILES, TRUE)));
+
+								}
+								else {
+									\Json::nak( sprintf( 'upload: %s file type not permitted - %s', $file['name'], $strType));
+
+								}
+
+							}
+							else {
+								\Json::nak( sprintf( '%s :: not :: is_uploaded_file( %s)', $action, print_r( $file, true)));
+
+							}
+
+						} else { \Json::nak( sprintf( '%s :: no $_FILE[]', $action)); }
+						/*--- ---[upload backup]--- ---*/
+
+					} else { Json::nak( $action); }
+
+				} else { Json::nak( $action); }
+
+			} else { Json::nak( $action); }
+
+		} else { Json::nak( $action); }
+
+		if ( $debug) \sys::logger( sprintf('<%s> %s', 'end', __METHOD__));
+
+	}
+
+	public function _index() {
+		print 'EasyDose API handler';
 
 	}
 
