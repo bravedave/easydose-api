@@ -349,12 +349,21 @@ class invoices extends _dao {
 
 			}
 
-			if ( $debug) \sys::logger( sprintf( '<workstations : %s + %s = %s : %s',
-				$finalWorkstations,
-				$finalWorkstationExtensions,
-				$license->workstations,
-				__METHOD__));
+			if ( $debug) {
+				if ( $license) {
+					\sys::logger( sprintf( '<workstations : %s + %s = %s : %s',
+						$finalWorkstations,
+						$finalWorkstationExtensions,
+						$license->workstations,
+						__METHOD__));
 
+				}
+				else {
+					\sys::logger( sprintf('<no license> %s', __METHOD__));
+
+				}
+
+			}
 
 		}
 
