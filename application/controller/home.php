@@ -110,6 +110,21 @@ class home extends Controller {
 	protected function postHandler() {
 		$action = $this->getPost('action');
 
+		if ( currentUser::isProgrammer()) {
+			if ( 'delete-upload' == $action) {
+				if ( $f = $this->getPost('file')) {
+					if ( $path = uploads::getFile( $f)) {
+						unlink( $path);
+						Json::ack( $action);
+
+					} else { Json::nak( $action); }
+
+				} else { Json::nak( $action); }
+
+			} else { parent::postHandler(); }
+
+		} else { parent::postHandler(); }
+
 	}
 
 	function __construct( $rootPath) {
@@ -354,6 +369,38 @@ class home extends Controller {
 			print $minified;
 
 			if ( $debug) \sys::logger( sprintf( 'primo :: %s', $this->timer->elapsed()));
+
+		}
+
+	}
+
+	public function uploads() {
+		if ( currentUser::isProgrammer()) {
+			if ( $f = $this->getParam('f')) {
+				if ( $path = uploads::getFile( $f)) {
+					sys::serve( $path);
+
+				}
+
+			}
+			else {
+				$this->data = (object)[
+					'files' => uploads::Iterator()
+
+				];
+
+				$this->render([
+					'title' => 'uploads',
+					'primary' => 'uploads',
+					'secondary' => 'main-index'
+
+				]);
+
+			}
+
+		}
+		else {
+			$this->_index();
 
 		}
 

@@ -39,6 +39,7 @@
 		printf( $tpl, url::tostring('invoices'), 'invoices');
 
 		if ( currentUser::isProgrammer()) {
+			printf( $tpl, url::tostring('home/uploads'), 'uploads');
 			printf( $tpl, url::tostring('home/dbinfo'), 'dbinfo');
 			if ( \config::show_db_reset) {
 				printf( $tpl, url::tostring('home/dbreset'), 'db reset');
