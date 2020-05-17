@@ -56,24 +56,24 @@ _ed_.easyLog = function() {
 
 			$('<h3>easyLog</h3>').appendTo( _me);
 
-			var t = $('<table class="table table-striped table-sm" />').appendTo( _me);
+			var t = $('<table class="table table-striped table-sm"></table>').appendTo( _me);
 			t.append('<colgroup><col style="width: 7em;" /><col /><col style="width: 6em;" /></colgroup>');
 
-			var head = $('<thead />').appendTo(t);
-			var r = $('<tr />').appendTo( head);
+			var head = $('<thead></thead>').appendTo(t);
+			var r = $('<tr></tr>').appendTo( head);
 
 			$('<td>created</td>').appendTo( r);
 			$('<td>comment</td>').appendTo( r);
 			$('<td>user</td>').appendTo( r);
 
-			var body = $('<tbody />').appendTo(t);
+			var body = $('<tbody></tbody>').appendTo(t);
 
 			$.each( d.data, function( i, el) {
-				var r = $('<tr />').appendTo( body);
+				var r = $('<tr></tr>').appendTo( body);
 
-				$('<td />').html( _ed_.moment( el.created).format( 'L')).appendTo( r);
-				$('<td />').html( el.comment.replace(/\n/g,'<br />')).appendTo( r);
-				$('<td />').html( el.user_name).appendTo( r);
+				$('<td></td>').html( _ed_.moment( el.created).format( 'L')).appendTo( r);
+				$('<td></td>').html( el.comment.replace(/\n/g,'<br />')).appendTo( r);
+				$('<td></td>').html( el.user_name).appendTo( r);
 
 			})
 

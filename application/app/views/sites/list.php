@@ -175,7 +175,7 @@
         let duration = moment.duration( _brayworth_.moment().diff( updated));
 
         if ( duration.asDays() > 3 || _tr.data('site') == 'EasyDose Unkown Business') {
-          context.append( $('<a href="#"><i class="fa fa-trash" />delete</a>').on( 'click', function(e) {
+          context.append( $('<a href="#"><i class="fa fa-trash"></i>delete</a>').on( 'click', function(e) {
             e.stopPropagation(); e.preventDefault();
 
             context.close();
@@ -228,7 +228,7 @@
     /*--[ a CSV download icon ]--*/
     var sitesTable = $('table[sites-list]');
     if ( sitesTable.length == 1) {
-      $('<i class="fa fa-fw fa-table noprint pointer pull-right" title="download as CSV" />')
+      $('<i class="fa fa-fw fa-table noprint pointer pull-right" title="download as CSV"></i>')
       .on( 'click', function( e) {
         _ed_.csv.call( sitesTable, 'sites-list.csv');
       })

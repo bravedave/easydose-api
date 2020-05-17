@@ -238,7 +238,7 @@ $(document).ready( function() {
   /*--[ a CSV download icon ]--*/
   let guidTable = $('table[guid-list]');
   if ( guidTable.length == 1) {
-    $('<i class="fa fa-fw fa-table noprint pointer pull-right" title="download as CSV" />')
+    $('<i class="fa fa-fw fa-table noprint pointer pull-right" title="download as CSV"></i>')
     .on( 'click', function( e) {
       _ed_.csv.call( guidTable, 'guid-list.csv');
     })

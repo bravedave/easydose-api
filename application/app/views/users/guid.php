@@ -77,11 +77,11 @@ $(document).ready( function() {
 		}).then( function( d) {
 			_brayworth_.growl( d);
 			console.table( d);
-			let tb = $('<tbody />');
+			let tb = $('<tbody></tbody>');
 			$.each( d, function( k, v) {
-				$('<tr />')
-				.append( $('<td />').html(k))
-				.append( $('<td />').html(v))
+				$('<tr></tr>')
+				.append( $('<td></td>').html(k))
+				.append( $('<td></td>').html(v))
 				.appendTo( tb);
 
 			})
@@ -91,7 +91,7 @@ $(document).ready( function() {
 
 			let cls = 'ack' == d.response ? 'table-success' : 'table-danger';
 
-			$('<table class="table table-striped" />')
+			$('<table class="table table-striped"></table>')
 			.addClass(cls)
 			.append( '<thead class="font-weight-bold"><tr><td colspan="2">Server Response</td></tr></thead>')
 			.append( tb)

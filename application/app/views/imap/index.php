@@ -88,7 +88,7 @@ $(document).ready( function() {
 
 			}));
 
-			_context.append( $('<a href="#"><i class="fa fa-trash" />delete profile</a>').on( 'click', function( e) {
+			_context.append( $('<a href="#"><i class="fa fa-trash"></i>delete profile</a>').on( 'click', function( e) {
 				e.stopPropagation();e.preventDefault();
 
 				_brayworth_.post({

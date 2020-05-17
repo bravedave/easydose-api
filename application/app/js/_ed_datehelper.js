@@ -1,11 +1,13 @@
-/*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
-
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-	*/
+/**
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * This work is licensed under a Creative Commons Attribution 4.0 International Public License.
+ *      http://creativecommons.org/licenses/by/4.0/
+ *
+ * */
+/*jshint esversion: 6 */
 _ed_.datehelper = function( params) {
   let options = {
     date : _brayworth_.moment().format('YYYY-MM-DD'),
@@ -24,7 +26,7 @@ _ed_.datehelper = function( params) {
 
     }
 
-  }
+  };
 
   $.extend( options, params);
 
@@ -57,19 +59,19 @@ _ed_.datehelper = function( params) {
   let dtElement = function() {
     let m = _brayworth_.moment( options.date);
 
-    let div = $('<div class="card date-helper" />');
+    let div = $('<div class="card date-helper"></div>');
     let box = {
-      head : $('<div class="card-header bg-primary text-light py-1" />').appendTo(div),
-      body : $('<div class="card-body py-1" />').appendTo(div),
-      foot : $('<div class="card-footer py-1" />').appendTo(div),
+      head : $('<div class="card-header bg-primary text-light py-1"></div>').appendTo(div),
+      body : $('<div class="card-body py-1"></div>').appendTo(div),
+      foot : $('<div class="card-footer py-1"></div>').appendTo(div),
 
-    }
+    };
 
     let navMonth = function( i) {
       m.add( i, 'month');
       display( m.format('YYYY-MM-DD'), box);
 
-    }
+    };
 
     let lastMonth = $('<a href="#">&lt;</a>').on( 'click', function( e) {
       e.stopPropagation(); e.preventDefault();
@@ -84,16 +86,16 @@ _ed_.datehelper = function( params) {
     });
 
     let dow = ['S','M','T','W','T','F','S'];
-    let r = $('<div class="row" />').appendTo( box.head)
+    let r = $('<div class="row"></div>').appendTo( box.head);
     for ( let iD = 0; iD < 7; iD++) {
-      $('<div class="col p-0 text-center" />').html(dow[iD]).appendTo(r);
+      $('<div class="col p-0 text-center"></div>').html(dow[iD]).appendTo(r);
 
     }
 
-    r = $('<div class="row" />').appendTo( box.foot)
-    $('<div class="col-1 p-0 text-center" />').append( lastMonth).appendTo(r);
+    r = $('<div class="row"></div>').appendTo( box.foot);
+    $('<div class="col-1 p-0 text-center"></div>').append( lastMonth).appendTo(r);
     box.foot = $('<div class="col-10 p-0 text-center">---</div>').appendTo(r);
-    $('<div class="col-1 p-0 text-center" />').append( nextMonth).appendTo(r);
+    $('<div class="col-1 p-0 text-center"></div>').append( nextMonth).appendTo(r);
 
     let display = function( seed, box ) {
       let m = _brayworth_.moment( seed);
@@ -113,9 +115,9 @@ _ed_.datehelper = function( params) {
 
         }
 
-        r = $('<div class="row" />').appendTo( box.body);
+        r = $('<div class="row"></div>').appendTo( box.body);
         for ( let iD = 0; iD < 7; iD++) {
-          let cell = $('<div class="col p-0 text-center pointer" />').appendTo(r);
+          let cell = $('<div class="col p-0 text-center pointer"></div>').appendTo(r);
           if ( startMonth == start.month() && (start.date() > 1 || start.day() == iD)) {
             cell.data('date', start.format('YYYY-MM-DD')).html( start.date()).on( 'click', function( e) {
               e.stopPropagation(); e.preventDefault();
@@ -130,17 +132,17 @@ _ed_.datehelper = function( params) {
 
       }
 
-    }
+    };
 
-    display( m.format('YYYY-MM-DD'), box)
+    display( m.format('YYYY-MM-DD'), box);
 
     return (div);
 
-  }
+  };
 
   let dt = dtElement();
 
-  let c = $('<div style="position: relative; z-index: 1;" />').appendTo( options.parent);
+  let c = $('<div style="position: relative; z-index: 1;"></div>').appendTo( options.parent);
   dt.css({
     'position' : 'absolute',
     'width' : '100%',
@@ -150,27 +152,27 @@ _ed_.datehelper = function( params) {
   if ( 'text' == options.element.prop('type')) {
     options.element
     .on( 'focus.date-helper', function() {
-      options.parent.addClass( 'date-helper-focused')
+      options.parent.addClass( 'date-helper-focused');
 
     })
     .on( 'blur.date-helper', function() {
-      options.parent.removeClass( 'date-helper-focused')
+      options.parent.removeClass( 'date-helper-focused');
 
-    })
+    });
 
     // console.log( $('.date-helper', options.element));
 
     $('.date-helper', options.parent)
     .on( 'mouseover.date-helper', function() {
       // console.log( 'mouseover');
-      options.parent.addClass( 'date-helper-mouseover')
+      options.parent.addClass( 'date-helper-mouseover');
 
     })
     .on( 'mouseout.date-helper', function() {
       // console.log( 'mouseout');
-      options.parent.removeClass( 'date-helper-mouseover')
+      options.parent.removeClass( 'date-helper-mouseover');
 
-    })
+    });
 
     // console.log( 'text dude');
 
@@ -178,7 +180,7 @@ _ed_.datehelper = function( params) {
 
   return dt;
 
-}
+};
 
 $('[data-provide="date-helper"]').each( function( i, el) {
   // console.log( el);
@@ -186,4 +188,3 @@ $('[data-provide="date-helper"]').each( function( i, el) {
 
 });
 
-;

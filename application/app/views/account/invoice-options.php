@@ -194,13 +194,13 @@ $(document).ready( function() {
 		e.preventDefault();
 		$(this).blur();
 
-		let fld = $('<select class="form-control" />');
+		let fld = $('<select class="form-control"></select>');
 		$('<option />').appendTo( fld);
 		$('<option value="approved">approved</option>').appendTo( fld);
 		$('<option value="provisional">provisional</option>').appendTo( fld);
 		$('<option value="canceled">canceled</option>').appendTo( fld);
 
-		let fg = $('<div class="form-group" />').append( fld);
+		let fg = $('<div class="form-group"></div>').append( fld);
 
 		_brayworth_.modal({
 			title : 'change invoice state',
@@ -245,9 +245,9 @@ $(document).ready( function() {
 
 		let reason = $('<input type="text" class="form-control" placeholder="reason" value="<?php print $this->data->invoice->discount_reason ?>" />');
 		let discount = $('<input type="number" class="form-control text-right" value="<?php print $this->data->invoice->discount ?>" />');
-		let wrap = $('<div class="row" />');
-		let col = $('<div class="col-7" />').append(reason).appendTo(wrap);
-		$('<div class="col-5" />').append(discount).appendTo(wrap);
+		let wrap = $('<div class="row"></div>');
+		let col = $('<div class="col-7"></div>').append(reason).appendTo(wrap);
+		$('<div class="col-5"></div>').append(discount).appendTo(wrap);
 
 		$('<a href="#" class="small">pro rata</a>').on( 'click', function( e) {
 			e.preventDefault();

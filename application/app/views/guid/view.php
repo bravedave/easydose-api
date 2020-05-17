@@ -322,7 +322,7 @@ $(document).ready( function() {
 
 		var fld = $('<input type="text" class="form-control" autocomplete="email" placeholder="@" />');
 
-		var d = $('<div />');
+		var d = $('<div></div>');
 		d.append( fld);
 
 		var modal = _brayworth_.modal({

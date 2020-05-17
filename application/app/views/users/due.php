@@ -103,7 +103,7 @@ $(document).ready( function() {
 			let _tr = $(this);
 			let id = _tr.data('id');
 
-			_context.append( $('<a><i class="fa fa-user" /><strong>Goto Account</strong></a>').attr('href',_ed_.url('users/view/' + id)));
+			_context.append( $('<a><i class="fa fa-user"></i><strong>Goto Account</strong></a>').attr('href',_ed_.url('users/view/' + id)));
 
 			_brayworth_.post({
 				url : _ed_.url('users'),
@@ -119,7 +119,7 @@ $(document).ready( function() {
 					$.each( d.data, function( i, el) {
 						let invDate = _ed_.moment( el.created);
 						let inv = el.id + '. ' + invDate.format( 'll') + ' - ' + el.state;
-						_context.append( $('<a></a>').html( inv).prepend('<i class="fa fa-file-text-o" />').attr('href',_ed_.url('account/invoice/' + el.id)));
+						_context.append( $('<a></a>').html( inv).prepend('<i class="fa fa-file-text-o"></i>').attr('href',_ed_.url('account/invoice/' + el.id)));
 
 					});
 

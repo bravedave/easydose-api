@@ -158,8 +158,8 @@ $(document).ready( function() {
 
     chks.push( fc);
 
-    let fcL = $('<label class="form-check-label" />').attr('for',uid).html( state);
-    $('<div class="form-check-inline" />').append( fc).append( fcL).appendTo(divFilter);
+    let fcL = $('<label class="form-check-label"></label>').attr('for',uid).html( state);
+    $('<div class="form-check-inline"></div>').append( fc).append( fcL).appendTo(divFilter);
 
     fc.on('change', filterRun);
 
@@ -170,7 +170,7 @@ $(document).ready( function() {
   /*--[ a CSV download icon ]--*/
   let invTable = $('#<?php print $tid ?>');
   if ( invTable.length == 1) {
-    $('<i class="fa fa-fw fa-table noprint pointer pull-right" title="download as CSV" />')
+    $('<i class="fa fa-fw fa-table noprint pointer pull-right" title="download as CSV"></i>')
     .on( 'click', function( e) {
       _ed_.csv.call( invTable, 'inv-list.csv');
     })
