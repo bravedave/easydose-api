@@ -25,7 +25,7 @@
 
   <div class="row">
     <div class="col">
-      <div class="table-responsive-md">
+      <div class="table-responsive">
         <table class="table table-striped table-sm small" sites-list>
           <thead>
             <tr>
@@ -149,7 +149,7 @@
     });
 
     $('tr[site]').each( function( i, tr) {
-      var _tr = $(tr);
+      let _tr = $(tr);
 
       _tr.addClass('pointer').on( 'click', function( e) {
         if ( e.shiftKey) {
@@ -160,6 +160,33 @@
         window.location.href = _brayworth_.url('sites/view/' + _tr.data('id'));
 
       })
+      .on( 'delete', function(e) {
+        let _tr = $(this);
+        let _data = _tr.data();
+
+        hourglass.on();
+
+        _brayworth_.post({
+          url : _brayworth_.url('sites'),
+          data : {
+            action : 'delete',
+            id : _tr.data('id'),
+
+          }
+
+        })
+        .then( function(d) {
+          _brayworth_.growl(d);
+          if ( 'ack' == d.response) {
+            _tr.remove();
+
+          }
+
+          hourglass.off()
+
+        });
+
+      })
       .on( 'contextmenu', function(e) {
         if ( e.shiftKey) {
           return;
@@ -168,13 +195,15 @@
 
         e.stopPropagation(); e.preventDefault();
 
+        let _tr = $(this);
+        let _data = _tr.data();
         _brayworth_.hideContexts();
 
         let context = _brayworth_.context();
-        let updated = _brayworth_.moment( _tr.data('updated'));
+        let updated = _brayworth_.moment( _data.updated);
         let duration = moment.duration( _brayworth_.moment().diff( updated));
 
-        if ( duration.asDays() > 3 || _tr.data('site') == 'EasyDose Unkown Business') {
+        if ( duration.asDays() > 3 || 'EasyDose Unkown Business' == _data.site || 'MOON' == _data.workstation) {
           context.append( $('<a href="#"><i class="fa fa-trash"></i>delete</a>').on( 'click', function(e) {
             e.stopPropagation(); e.preventDefault();
 
@@ -187,27 +216,7 @@
               buttons : {
                 'Yes - Delete' : function() {
                   this.close();
-                  hourglass.on();
-
-                  _brayworth_.post({
-                    url : _brayworth_.url('sites'),
-                    data : {
-                      action : 'delete',
-                      id : _tr.data('id'),
-
-                    }
-
-                  })
-                  .then( function(d) {
-                    _brayworth_.growl(d);
-                    if ( 'ack' == d.response) {
-                      _tr.remove();
-
-                    }
-
-                    hourglass.off()
-
-                  });
+                  _tr.trigger( 'delete');
 
                 }
 
