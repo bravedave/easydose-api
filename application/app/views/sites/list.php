@@ -31,12 +31,12 @@
             <tr>
               <td role="sort-header" data-key="state">State</td>
               <td role="sort-header" data-key="site">Site</td>
-              <td class="d-none d-lg-table-cell">Tel.</td>
+              <td class="d-none d-xl-table-cell">Tel.</td>
               <td class="d-none d-lg-table-cell text-center"><i class="fa fa-user"></i></td>
               <td class="d-none d-lg-table-cell text-center">@</td>
               <td class="d-none d-lg-table-cell text-center">ABN</td>
               <td class="d-none d-xl-table-cell">IP</td>
-              <td role="sort-header" data-key="product">Product</td>
+              <td role="sort-header" data-key="product" title="License">Lic.</td>
               <td class="d-none d-md-table-cell">Active/<br />Patients</td>
               <td class="d-none d-xl-table-cell">OS</td>
               <td class="d-none d-xl-table-cell" role="sort-header" data-key="workstation">Workstation</td>
@@ -76,10 +76,10 @@
                 <td class="text-nowrap">
                   <?= $dto->site ?>
                 </td>
-                <td class="d-none d-lg-table-cell text-nowrap"><?= $tel ?></td>
-                <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->guid_user_id ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
-                <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->email ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
-                <td class="d-none d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->abn ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
+                <td class="d-none d-xl-table-cell text-nowrap"><?= $tel ?></td>
+                <td class="d-none text-center d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->guid_user_id ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
+                <td class="d-none text-center d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->email ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
+                <td class="d-none text-center d-lg-table-cell"><i class="fa fa-fw <?= ( $dto->abn ? 'fa-check text-info' : 'fa-times text-danger') ?>"></i></td>
                 <td class="d-none d-xl-table-cell"><?= $dto->ip ?></td>
                 <td><?= strings::ShortLicense( $dto->productid); ?></td>
                 <td class="d-none d-md-table-cell"><?= sprintf( '%s/%s', $dto->patientsActive, $dto->patients) ?></td>
