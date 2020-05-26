@@ -476,13 +476,33 @@ class api extends Controller {
 						} else { \Json::nak( sprintf( '%s :: no $_FILE[]', $action)); }
 						/*--- ---[upload backup]--- ---*/
 
-					} else { Json::nak( $action); }
+					}
+					else {
+						Json::nak( $action);
+						if ( $debug) \sys::logger( sprintf('<%s> %s', 'user not found', __METHOD__));
 
-				} else { Json::nak( $action); }
+					}
 
-			} else { Json::nak( $action); }
+				}
+				else {
+					Json::nak( $action);
+					if ( $debug) \sys::logger( sprintf('<%s> guid not found (lookup) %s', $guid, __METHOD__));
 
-		} else { Json::nak( $action); }
+				}
+
+			}
+			else {
+				Json::nak( $action);
+				if ( $debug) \sys::logger( sprintf('<%s> guid not found %s', $guid, __METHOD__));
+
+			}
+
+		}
+		else {
+			Json::nak( $action);
+			if ( $debug) \sys::logger( sprintf('<%s> %s', 'no guid', __METHOD__));
+
+		}
 
 		if ( $debug) \sys::logger( sprintf('<%s> %s', 'end', __METHOD__));
 
