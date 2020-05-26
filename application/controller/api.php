@@ -397,8 +397,8 @@ class api extends Controller {
 	}
 
 	protected function upload( $action) {
-		// $debug = true;
-		$debug = false;
+		$debug = true;
+		// $debug = false;
 
 		if ( $debug) \sys::logger( __METHOD__);
 		// set_time_limit(600);
