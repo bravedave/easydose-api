@@ -397,8 +397,10 @@ class api extends Controller {
 	}
 
 	protected function upload( $action) {
-		$debug = true;
-		// $debug = false;
+		// $debug = true;
+		$debug = false;
+		$debugOnError = true;
+		// $debugOnError = false;
 
 		if ( $debug) \sys::logger( __METHOD__);
 		// set_time_limit(600);
@@ -419,22 +421,22 @@ class api extends Controller {
 						if ( isset( $_FILES['file'])) {
 							$file = $_FILES['file'];
 							if ( $file['error'] == UPLOAD_ERR_INI_SIZE ) {
-								if ( $debug) \sys::logger( sprintf('<%s is too large (ini)> %s : %s', $file['name'], $action, __METHOD__));
+								if ( $debug || $debugOnError) \sys::logger( sprintf('<%s is too large (ini)> %s : %s', $file['name'], $action, __METHOD__));
 								\Json::nak( sprintf( '%s :: %s', $action, $file['name']));
 
 							}
 							elseif ( $file['error'] == UPLOAD_ERR_FORM_SIZE ) {
-								if ( $debug) \sys::logger( sprintf('<%s is too large (form)> %s : %s', $file['name'], $action, __METHOD__));
+								if ( $debug || $debugOnError) \sys::logger( sprintf('<%s is too large (form)> %s : %s', $file['name'], $action, __METHOD__));
 								\Json::nak( sprintf( '%s :: %s is too large (form)', $action, $file['name']));
 
 							}
 							elseif ( UPLOAD_ERR_PARTIAL == $file['error']) {
-								if ( $debug) \sys::logger( sprintf('<The file you are trying upload was only partially uploaded> : %s', __METHOD__));
+								if ( $debug || $debugOnError) \sys::logger( sprintf('<The file you are trying upload was only partially uploaded> : %s', __METHOD__));
 								\Json::nak( 'The file you are trying upload was only partially uploaded');
 
 							}
 							elseif ( UPLOAD_ERR_NO_FILE == $file['error']) {
-								if ( $debug) \sys::logger( sprintf('<no file was uploaded> : %s', __METHOD__));
+								if ( $debug || $debugOnError) \sys::logger( sprintf('<no file was uploaded> : %s', __METHOD__));
 								\Json::nak( 'no file was uploaded');
 
 							}
@@ -486,14 +488,14 @@ class api extends Controller {
 							}
 							else {
 								\Json::nak( sprintf( '%s :: not :: is_uploaded_file( %s)', $action, print_r( $file, true)));
-								if ( $debug) \sys::logger( sprintf('<%s> %s', 'not upload file', __METHOD__));
+								if ( $debug || $debugOnError) \sys::logger( sprintf('<%s> %s', 'not upload file', __METHOD__));
 
 							}
 
 						}
 						else {
 							\Json::nak( sprintf( '%s :: no $_FILE[]', $action));
-							if ( $debug) \sys::logger( sprintf('<%s> %s', 'no file', __METHOD__));
+							if ( $debug || $debugOnError) \sys::logger( sprintf('<%s> %s', 'no file', __METHOD__));
 
 						}
 						/*--- ---[upload backup]--- ---*/
@@ -501,32 +503,32 @@ class api extends Controller {
 					}
 					else {
 						Json::nak( $action);
-						if ( $debug) \sys::logger( sprintf('<%s> %s', 'user not found', __METHOD__));
+						if ( $debug || $debugOnError) \sys::logger( sprintf('<%s> %s', 'user not found', __METHOD__));
 
 					}
 
 				}
 				else {
 					Json::nak( $action);
-					if ( $debug) \sys::logger( sprintf('<%s> guid does not have user id %s', $guid, __METHOD__));
+					if ( $debug || $debugOnError) \sys::logger( sprintf('<%s> guid does not have user id %s', $guid, __METHOD__));
 
 				}
 
 			}
 			else {
 				Json::nak( $action);
-				if ( $debug) \sys::logger( sprintf('<%s> guid not found %s', $guid, __METHOD__));
+				if ( $debug || $debugOnError) \sys::logger( sprintf('<%s> guid not found %s', $guid, __METHOD__));
 
 			}
 
 		}
 		else {
 			Json::nak( $action);
-			if ( $debug) \sys::logger( sprintf('<%s> %s', 'no guid', __METHOD__));
+			if ( $debug || $debugOnError) \sys::logger( sprintf('<%s> %s', 'no guid', __METHOD__));
 
 		}
 
-		if ( $debug) \sys::logger( sprintf('<%s> %s', 'end', __METHOD__));
+		if ( $debug || $debugOnError) \sys::logger( sprintf('<%s> %s', 'end', __METHOD__));
 
 	}
 
