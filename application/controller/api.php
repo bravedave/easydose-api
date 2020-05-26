@@ -425,6 +425,16 @@ class api extends Controller {
 								\Json::nak( sprintf( '%s :: %s is too large (form)', $action, $file['name']));
 
 							}
+							elseif ( UPLOAD_ERR_PARTIAL == $file['error']) {
+								if ( $debug) \sys::logger( sprintf('<The file you are trying upload was only partially uploaded> : %s', __METHOD__));
+								\Json::nak( 'The file you are trying upload was only partially uploaded');
+
+							}
+							elseif ( UPLOAD_ERR_NO_FILE == $file['error']) {
+								if ( $debug) \sys::logger( sprintf('<no file was uploaded> : %s', __METHOD__));
+								\Json::nak( 'no file was uploaded');
+
+							}
 							elseif ( is_uploaded_file( $file['tmp_name'] )) {
 								$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
 								$strType = finfo_file($finfo, $file['tmp_name']);
