@@ -448,6 +448,7 @@ class api extends Controller {
 									if ( move_uploaded_file( $source, $target)) {
 										chmod( $target, 0666 );
 										\Json::ack( sprintf( '%s :: %s', $action, $_target));
+										if ( $debug) sys::logger("ack");
 
 									}
 									else {
@@ -460,20 +461,28 @@ class api extends Controller {
 									// \Json::nak( sprintf( '%s :: %s invalid file type : %s', $action, $file['name'], print_r( $file['type'], TRUE)));
 									// \Json::nak( sprintf( '%s :: invalid file type : %s', $action, print_r( $file, TRUE)));
 									\Json::nak( sprintf( '%s :: invalid file type : %s', $action, print_r( $_FILES, TRUE)));
+									if ( $debug) \sys::logger( sprintf('<%s> %s', 'invalid file type', __METHOD__));
 
 								}
 								else {
 									\Json::nak( sprintf( 'upload: %s file type not permitted - %s', $file['name'], $strType));
+									if ( $debug) \sys::logger( sprintf('<%s> %s', 'type not permitted', __METHOD__));
 
 								}
 
 							}
 							else {
 								\Json::nak( sprintf( '%s :: not :: is_uploaded_file( %s)', $action, print_r( $file, true)));
+								if ( $debug) \sys::logger( sprintf('<%s> %s', 'not upload file', __METHOD__));
 
 							}
 
-						} else { \Json::nak( sprintf( '%s :: no $_FILE[]', $action)); }
+						}
+						else {
+							\Json::nak( sprintf( '%s :: no $_FILE[]', $action));
+							if ( $debug) \sys::logger( sprintf('<%s> %s', 'no file', __METHOD__));
+
+						}
 						/*--- ---[upload backup]--- ---*/
 
 					}
@@ -486,7 +495,7 @@ class api extends Controller {
 				}
 				else {
 					Json::nak( $action);
-					if ( $debug) \sys::logger( sprintf('<%s> guid not found (lookup) %s', $guid, __METHOD__));
+					if ( $debug) \sys::logger( sprintf('<%s> guid does not have user id %s', $guid, __METHOD__));
 
 				}
 
