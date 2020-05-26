@@ -400,6 +400,9 @@ class api extends Controller {
 		$debug = true;
 		// $debug = false;
 
+		if ( $debug) \sys::logger( __METHOD__);
+		set_time_limit(600);
+
 		if ( $guid = $this->getPost( 'guid')) {
 			$guidDAO = new dao\guid;
 			if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
