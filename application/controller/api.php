@@ -398,7 +398,7 @@ class api extends Controller {
 
 	protected function upload( $action) {
 		$debug = true;
-		$debug = false;
+		// $debug = false;
 
 		if ( $guid = $this->getPost( 'guid')) {
 			$guidDAO = new dao\guid;
