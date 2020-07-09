@@ -27,7 +27,8 @@
 		"ext-curl": "*",
 		"bravedave/dvc": "dev-master",
 		"bravedave/dvc-mail": "dev-master",
-		"paypal/rest-api-sdk-php": "*"
+		"paypal/rest-api-sdk-php": "*",
+		"matthiasmullie/scrapbook": "^1.4"
 
 	}
 
