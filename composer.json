@@ -23,6 +23,7 @@
 		}
 	],
 	"require": {
+		"ext-apcu": "*",
 		"ext-sqlite3": "*",
 		"ext-curl": "*",
 		"bravedave/dvc": "dev-master",

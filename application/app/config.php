@@ -61,8 +61,8 @@ abstract class config extends dvc\config {
 	 *		* APC => dnf install php-pecl-apcu
 	 *		* matthiasmullie/scrapbook => composer require matthiasmullie/scrapbook
 	 */
- 	// static $DB_CACHE = 'APC';	// values = 'APC'
-	// static $DB_CACHE_DEBUG = TRUE;
+ 	static $DB_CACHE = 'APC';	// values = 'APC'
+	static $DB_CACHE_DEBUG = false;
 
 	static protected function easydose_config() {
 		return sprintf( '%s%seasydose-api.json', self::dataPath(), DIRECTORY_SEPARATOR);
@@ -70,21 +70,6 @@ abstract class config extends dvc\config {
 	}
 
 	static function easydose_init() {
-
-		if ( class_exists('MatthiasMullie\Scrapbook\Adapters\Apc')) {
-			if ( !sys::isWindows()) {
-				static $DB_CACHE = 'APC';	// values = 'APC'
-				static $DB_CACHE_DEBUG = TRUE;
-				\sys::logger( sprintf('<%s> %s', PHP_OS, __METHOD__));
-
-			}
-
-		}
-		else {
-			\sys::logger( sprintf('<missing : %s> %s', 'MatthiasMullie\Scrapbook\Adapters\Apc', __METHOD__));
-
-		}
-
 		if ( file_exists( $config = self::easydose_config())) {
 			$j = json_decode( file_get_contents( $config));
 
