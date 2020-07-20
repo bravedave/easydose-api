@@ -276,8 +276,10 @@ class users extends _dao {
 
 	public function getUserByEmail( $email) {
 		if ( \strings::IsEmailAddress( $email)) {
-			if ( $res = $this->Result( sprintf( "SELECT * FROM users WHERE `email` = '%s'", $this->escape( $email))))
-			return $res->dto();
+			if ( $res = $this->Result( sprintf( "SELECT * FROM users WHERE `email` = '%s'", $this->escape( $email)))) {
+				return $res->dto( $this->template);
+
+			}
 
 		}
 
@@ -287,8 +289,10 @@ class users extends _dao {
 
 	public function getUserByUserName( $username ) {
 		if ( (string)$username) {
-			if ( $res = $this->Result( sprintf( "SELECT * FROM users WHERE username = '%s'", $this->escape( $username))))
-				return $res->dto();
+			if ( $res = $this->Result( sprintf( "SELECT * FROM users WHERE username = '%s'", $this->escape( $username)))) {
+				return $res->dto( $this->template);
+
+			}
 
 		}
 
