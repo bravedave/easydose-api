@@ -13,14 +13,9 @@
 		"homepage": "http://brayworth.com"
 	}],
 	"repositories": [
-		{
-			"type": "git",
-			"url": "https://github.com/bravedave/dvc"
-		},
-		{
-			"type": "git",
-			"url": "https://github.com/bravedave/dvc-mail"
-		}
+		{ "type": "git", "url": "https://github.com/bravedave/dvc" },
+		{ "type": "git", "url": "https://github.com/bravedave/dvc-mail" },
+		{ "type": "git", "url": "https://github.com/bravedave/jwt" }
 	],
 	"require": {
 		"ext-apcu": "*",
@@ -29,7 +24,8 @@
 		"bravedave/dvc": "dev-master",
 		"bravedave/dvc-mail": "dev-master",
 		"paypal/rest-api-sdk-php": "*",
-		"matthiasmullie/scrapbook": "^1.4"
+		"matthiasmullie/scrapbook": "^1.4",
+		"bravedave/jwt": "dev-master"
 
 	}
 

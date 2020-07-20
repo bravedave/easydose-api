@@ -87,7 +87,7 @@
 		<div class="col-sm-2 d-none d-sm-block">ABN</div>
 		<div class="col-12 col-sm-8">
 			<input type="text" name="abn" class="form-control"
-			 	placeholder="ABN" value="<?php print $this->data->account->abn ?>" />
+				placeholder="ABN" value="<?php print $this->data->account->abn ?>" />
 
 		</div>
 
@@ -104,7 +104,7 @@
 
 	<div class="row py-1">
 		<div class="offset-sm-2 col col-sm-10">
-			<input type="submit" name="action" class="btn btn-primary" value="update" />
+			<input type="submit" name="action" class="btn btn-outline-primary" value="update" />
 
 		</div>
 

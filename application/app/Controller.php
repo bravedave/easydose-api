@@ -9,7 +9,7 @@
 */
 
 class Controller extends dvc\Controller {
-	const easydose_version = 0.01;
+	const easydose_version = 0.02;
 
 	protected function before() {
 		if ( config::easydose_version() < self::easydose_version) {

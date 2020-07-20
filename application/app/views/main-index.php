@@ -1,15 +1,15 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
-
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-	*/ ?>
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/	?>
 
 <ul class="menu">
-	<li><h4 class="m-0 mt-2">contents</h4></li>
+	<li><h4 class="m-0 mt-2">contents..</h4></li>
 	<?php
 	if ( currentUser::isAdmin()) {
 		$tpl = '<li><a href="%s">%s</a></li>';

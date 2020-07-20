@@ -1,18 +1,18 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
-
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-
-	you will want to make user 1 a programmer (probably)
-		update users set programmer = 1 where id = 1;
-
-	*/
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+ * you will want to make user 1 a programmer (probably)
+ *  update users set programmer = 1 where id = 1;
+*/
 
 namespace dao;
+
+use dvc\session;
 
 class users extends _dao {
 	protected $_db_name = 'users';
@@ -25,7 +25,7 @@ class users extends _dao {
 	const sent = 4;
 
 	public function check() {
-		$dbc = new \dvc\sqlite\dbCheck( $this->db, 'users' );
+		$dbc = \sys::dbCheck( 'users');
 		$dbc->defineField( 'username', 'text');
 		$dbc->defineField( 'name', 'text');
 		$dbc->defineField( 'email', 'text');
@@ -40,6 +40,8 @@ class users extends _dao {
 		$dbc->defineField( 'programmer', 'int');
 		$dbc->defineField( 'reset_guid', 'text');
 		$dbc->defineField( 'reset_guid_date', 'text');
+		$dbc->defineField( 'auth_token', 'varchar');
+		$dbc->defineField( 'auth_token_expires', 'datetime');
 		$dbc->defineField( 'created', 'text');
 		$dbc->defineField( 'updated', 'text');
 		$dbc->check();
@@ -227,6 +229,25 @@ class users extends _dao {
 		// \sys::logger('-------------------------------------------------');
 
 	}
+
+    public function getByAuthToken($key) {
+        if ( $key) {
+            if ($res = $this->Result(sprintf("SELECT * FROM users WHERE `auth_token` = '%s'", $this->escape($key)))) {
+                if ($dto = $res->dto( $this->template)) {
+                    if (time() < strtotime($dto->auth_token_expires)) {
+                        return ($dto);
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return (false);
+
+    }
 
 	public function getByResetKey( $key) {
 		if ( substr( $key, 0, 1) == '{' && substr( $key, -1) == '}') {
@@ -440,6 +461,15 @@ class users extends _dao {
 
 	}
 
+    public function setLoggedOn( dto\users $dto) : bool {
+        session::edit();
+        session::set('uid', $dto->id);
+        session::close();
+
+        return true;
+
+    }
+
 	public function validate( $u, $p ) {
 
 		if ( $u && $p) {
@@ -455,11 +485,7 @@ class users extends _dao {
 
 			if ( $dto) {
 				if ( password_verify( $p, $dto->pass)) {
-					\dvc\session::edit();
-					\dvc\session::set('uid', $dto->id);
-					\dvc\session::close();
-
-					return ( true);
+					return $this->setLoggedOn( $dto);
 
 				}
 

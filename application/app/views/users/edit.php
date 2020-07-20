@@ -171,7 +171,7 @@
 						<div class="form-check">
 							<input type="checkbox" name="admin" class="form-check-input" id="<?= $uid = uniqid('ed'); ?>"
 								<?php if ( $this->data->dto->admin) print "checked" ?> value="1"
-								<?php if ( $this->data->readonly) print 'disabled'; ?> />
+								<?php if ( $this->data->readonly || !currentUser::isProgrammer()) print 'disabled'; ?> />
 								<label class="form-check-label" for="<?= $uid ?>">
 									Administrator
 								</label>

@@ -255,6 +255,8 @@ class invoice {
 		// return ( $ret);
 
 		$html = $ret->render( true);
+		// return $html;
+
 		// create instance
 		$cssToInlineStyles = new TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 		$parts = [

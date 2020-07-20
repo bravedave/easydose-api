@@ -1,12 +1,15 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/
 
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-	*/
+use dvc\jwt\jwt;
+
 class api extends Controller {
 	public $RequireValidation = false;
 
@@ -25,23 +28,134 @@ class api extends Controller {
 				->add('data', strings::getGUID());
 
 		}
-		elseif ( $action == 'checkin') {
+		elseif ( 'checkin' == $action) {
 			$this->checkin( $action);
 
 		}
-		elseif ( $action == 'get-account') {
+		elseif ( 'get-account' == $action) {
 			$this->getAccount( $action);
 
 		}
-		elseif ( $action == 'get-license') {
+		elseif ( 'get-license' == $action) {
 			$this->getLicense( $action);
 
 		}
-		elseif ( $action == 'set-account') {
+		elseif ( 'set-account' == $action) {
 			$this->setAccount( $action);
 
 		}
-		elseif ( $action == 'upload-file') {
+        elseif ( 'token' == $action || isset( $_SERVER['HTTP_AUTHORIZATION'])) {
+			if ( 'token' == $action) {
+				//  curl -X POST -H "Accept: application/json" -d action="token" -d guid="{a guid}" "http://localhost/api/"
+				if ($guid = $this->getPost( 'guid')) {
+					$guidDAO = new dao\guid;
+					if ( $guidDTO = $guidDAO->getByGUID( $guid)) {
+						if ( (int)$guidDTO->user_id > 0) {
+							$usersDAO = new dao\users;
+							if ( $usersDTO = $usersDAO->getByID( $guidDTO->user_id)) {
+
+								if ( strings::isEmail( $usersDTO->email)) {
+									$jwt = jwt::token([
+										'audience_claim' => $this->getPost('grant_type') || 'client_credentials',
+										'data' => [
+											'id' => $usersDTO->id,
+											'name' => $usersDTO->name,
+											'email' => $usersDTO->email
+
+										]
+
+									]);
+
+									$expires = jwt::expires( $jwt);
+									Json::ack( $action)
+										->add( 'jwt', $jwt);
+
+								}
+
+							} else { Json::nak( $action); }
+
+						} else { Json::nak( $action); }
+						// } else { Json::nak( sprintf( '%s : no associated user', $action)); }
+
+					} else { Json::nak( $action); }
+					// } else { Json::nak( sprintf( '%s : guid not found', $action)); }
+
+				} else { Json::nak( $action); }
+				// } else { Json::nak( sprintf( '%s : missing guid', $action)); }
+
+			}
+			elseif ( isset( $_SERVER['HTTP_AUTHORIZATION'])) {
+				\sys::logger( sprintf('<%s> %s', 'HTTP_AUTHORIZATION', __METHOD__));
+
+				/*
+				* in javascript it would be
+
+				( _ => {
+					_.post({
+						url : _.url('api'),
+						data : { action : 'token', guid : '<a guid>' },
+
+					}).then( d => {
+						if ( 'ack' == d.response) {
+							_.post({
+								url : _.url('api'),
+								data : { action : '-get-direct-logon-' },
+								headers : { 'authorization' : 'Bearer ' + d.jwt }
+
+							}).then( d => {
+								if ( 'ack' == d.response) {
+									window.location.href = d.url;
+
+								}
+								else {
+									console.log( d);
+
+								}
+
+							});
+
+						} else { console.log( d); }
+
+					});
+				}) (_brayworth_);
+
+				 */
+
+				$authheader = $_SERVER['HTTP_AUTHORIZATION'];
+				$token = trim( preg_replace('@^Bearer@i', '', $authheader));
+
+				if ( $token) {
+					if ( $decoded = jwt::decode( $token)) {
+						// Access is granted. Add code of the operation here
+
+						if ( '-get-direct-logon-' == $action) {
+							if ( (int)$decoded->data->id) {
+								$dao = new dao\users;
+								if ( $dto = $dao->getByID( $decoded->data->id)) {
+									$auth_token = bin2hex( random_bytes( 6));
+									$dao->UpdateByID([
+										'auth_token' => $auth_token,
+										'auth_token_expires' => date( 'Y-m-d H:i:s', time() + 60)
+
+									], $dto->id);
+
+									Json::ack( $action)
+										->add( 'url', strings::url('?jwt=' . \urlencode( $auth_token), $protocol = true));
+
+								} else { Json::nak( $action);   }
+
+							} else { Json::nak( $action); }
+
+						} else { Json::nak( $action); }
+
+					} else { Json::nak( $action); }
+
+				} else { Json::nak( $action); }
+
+			} else { Json::nak( $action); }
+
+		}
+		elseif ( 'upload-file' == $action) {
 			$this->upload( $action);
 
 		}

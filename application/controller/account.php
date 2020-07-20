@@ -439,7 +439,10 @@ class account extends Controller {
 							->header()
 							->title();
 
-						$p->primary();
+						if ( currentUser::isAdmin()) {
+							$p->primary();
+						}
+						else { $p->content(); }
 
 						$inv = new invoice(
 							$this->data->sys,
@@ -452,7 +455,10 @@ class account extends Controller {
 
 						$this->load('invoice-options');
 
-						$p->secondary();$this->load('main-index');
+						if ( currentUser::isAdmin()) {
+							$p->secondary();$this->load('main-index');
+
+						}
 
 						if ( 'yes' == $send) {
 							$mail = \sys::mailer();

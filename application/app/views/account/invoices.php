@@ -1,13 +1,12 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
-
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-
-	*/
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/
 
 	if ( $this->data->invoices) {
 
@@ -24,9 +23,10 @@
 			<thead class="small">
 				<tr>
 					<td>date</td>
-					<td>id</td>
-					<td>state</td>
-					<td>expires</td>
+					<td class="text-center">id</td>
+					<td class="text-center">state</td>
+					<td class="text-center">expires</td>
+					<td></td>
 
 				</tr>
 
@@ -36,13 +36,21 @@
 			foreach ( $this->data->invoices as $dto) { ?>
 				<tr invoice data-id="<?= $dto->id ?>">
 					<td><?= strings::asShortDate( $dto->created) ?></td>
-					<td><?= $dto->id ?></td>
-					<td><?= $dto->state ? $dto->state : 'created' ?></td>
-					<td><?= strings::asShortDate( $dto->expires) ?></td>
+					<td class="text-center"><?= $dto->id ?></td>
+					<td class="text-center"><?= $dto->state ? $dto->state : 'created' ?></td>
+					<td class="text-center"><?= strings::asShortDate( $dto->expires) ?></td>
+
+			<?php if ( !in_array( $dto->state, ['approved', 'canceled']) && currentUser::id() == $dto->user_id ) {  ?>
+					<td class="text-right">
+						<a class="btn btn-primary" href="<?= strings::url( 'account/invoice/' . $dto->id) ?>">View &amp; Pay</a>
+
+					</td>
+			<?php } else { print '<td>&nbsp;</td>'; }	?>
 
 				</tr>
 
-			<?php } // while ( $dto = $this->data->invoices->dto())
+			<?php
+			} // while ( $dto = $this->data->invoices->dto())
 			?></tbody>
 
 		</table>

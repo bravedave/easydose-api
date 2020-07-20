@@ -73,35 +73,46 @@ class home extends Controller {
 			$this->_authorize();
 		}
 		else {
-			$guid = $this->getParam( 'guid');
-			$action = $this->getParam( 'action');
-			if ( $guid && $action == 'logon') {
-				$dao = new dao\guid;
-				if ( $dto = $dao->getByGUID( $guid)) {
-					if ( $u = $dao->getUserOf( $dto)) {
-						\dvc\session::edit();
-						\dvc\session::set('uid', $u->id);
-						\dvc\session::close();
+            if ( $token = $this->getParam('jwt')) {
 
-						Response::redirect();
+                \sys::logger( sprintf('<%s> %s', 'try to log on with jwt', __METHOD__));
+                $dao = new dao\users;
+                if ( $dto = $dao->getByAuthToken( $token)) {
+                    $dao->setLoggedOn( $dto);
+                    Response::redirect();
 
-					}
-					else {
-						parent::authorize();
+                } else { parent::authorize(); }
 
-					}
+			}
+			// else {
+			// 	$guid = $this->getParam( 'guid');
+			// 	$action = $this->getParam( 'action');
+			// 	if ( $guid && $action == 'logon') {
+			// 		$dao = new dao\guid;
+			// 		if ( $dto = $dao->getByGUID( $guid)) {
+			// 			if ( $u = $dao->getUserOf( $dto)) {
+			// 				$dao->setLoggedOn( $dto);
+			// 				Response::redirect();
 
-				}
+			// 			}
+			// 			else {
+			// 				parent::authorize();
+
+			// 			}
+
+			// 		}
+			// 		else {
+			// 			parent::authorize();
+
+			// 		}
+
+			// 	}
 				else {
 					parent::authorize();
 
 				}
 
-			}
-			else {
-				parent::authorize();
-
-			}
+			// }
 
 		}
 
