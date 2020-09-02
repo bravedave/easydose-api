@@ -1,6 +1,6 @@
 {
 	"name": "bravedave/easydose-api",
-	"description": "DVC-AUTH - Framework for EasyDOSE subscription access",
+	"description": "Framework for EasyDOSE subscription access",
 	"version": "0.0.1",
 	"minimum-stability": "dev",
 	"prefer-stable": true,
@@ -21,11 +21,11 @@
 		"ext-apcu": "*",
 		"ext-sqlite3": "*",
 		"ext-curl": "*",
-		"bravedave/dvc": "dev-master",
-		"bravedave/dvc-mail": "dev-master",
+		"bravedave/dvc": "^2.1",
+		"bravedave/dvc-mail": "*",
 		"paypal/rest-api-sdk-php": "*",
 		"matthiasmullie/scrapbook": "^1.4",
-		"bravedave/jwt": "dev-master"
+		"bravedave/jwt": "*"
 
 	}
 
