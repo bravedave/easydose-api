@@ -235,16 +235,26 @@ class api extends Controller {
 				'guid' => $this->getPost('guid'),
 				'abn' => $this->getPost('abn'),
 				'email' => $this->getPost('email'),
-				'updated' => \db::dbTimeStamp()];
+        'updated' => \db::dbTimeStamp()
+
+      ];
 
 			if ( $a['deployment'] == 'Build' ) {
-				sys::logger('api/getAccount - development checkin');
+
+        sys::logger('api/getAccount - development checkin');
+        $email = '';
+        if ( $usersDTO = $guidDAO->getUser( $a['guid'])) {
+          $email = $usersDTO->email;
+
+        }
+
 				\Json::ack( sprintf( '%s - developer', $action))
 					->add( 'License', config::developer_license)
 					->add( 'workstations', config::developer_workstations)
 					->add('NextPaymentDue', date( 'Y-m-d', strtotime('+1 month')))
 					->add('Subscription_Status', 'active')
 					->add('authoritive', 'yes')
+          ->add('email', $email)
 					;
 
 				return;
