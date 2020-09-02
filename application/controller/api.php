@@ -267,6 +267,7 @@ class api extends Controller {
 					$workstations = 0;
 					$NextPaymentDue = date('Y-m-d', 0);
 					$authoritive = false;
+          $email = '';
 
 					if ( $licenseDTO = $guidDAO->getLicense( $a['guid'])) { // will add guid if it doesn't exist
 						$a['productid'] = $licenseDTO->product;
@@ -343,14 +344,20 @@ class api extends Controller {
 						if ( $debug) \sys::logger( sprintf( 'site: inserted => %s, %s', $a['site'], $a['workstation'] ));
 						$j = \Json::ack( $action);
 
-					}
+          }
+
+          if ( $usersDTO = $guidDAO->getUser( $a['guid'])) {
+						$email = $usersDTO->email;
+
+          }
 
 					$j
 						->add('License', $license)
 						->add('Workstations', $workstations)
 						->add('NextPaymentDue', $NextPaymentDue)
 						->add('Subscription_Status', $status)
-						->add('authoritive', $authoritive ? 'yes' : 'no')
+            ->add('authoritive', $authoritive ? 'yes' : 'no')
+            ->add('email', $email)
 						;
 
 				} else { \Json::nak( $action); }
