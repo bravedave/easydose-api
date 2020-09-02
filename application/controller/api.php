@@ -243,6 +243,7 @@ class api extends Controller {
 
         sys::logger('api/getAccount - development checkin');
         $email = '';
+        $guidDAO = new dao\guid;
         if ( $usersDTO = $guidDAO->getUser( $a['guid'])) {
           $email = $usersDTO->email;
 
