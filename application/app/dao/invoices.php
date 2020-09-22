@@ -74,25 +74,62 @@ class invoices extends _dao {
 
 	}
 
-	public function getAll( $fields = 'i.*, u.name user_name, s.site', $order = '') {
+	public function getAll( $fields = 'i.*, d.rate, u.name user_name, s.site', $order = '') {
+    $debug = false;
+    // $debug = true;
 
 		$this->Q('DROP TABLE IF EXISTS _tmpsites');
 		$this->Q('DROP TABLE IF EXISTS _tmpsitess');
-		$this->Q('CREATE TEMPORARY TABLE _tmpsites AS SELECT guid, site, updated FROM sites GROUP BY guid ORDER BY updated DESC');
-		$this->Q('CREATE TEMPORARY TABLE _tmpsitess AS SELECT s.*, g.user_id FROM _tmpsites s LEFT JOIN guid g on g.guid = s.guid');
+    $this->Q('DROP TABLE IF EXISTS _tmpdetails');
+
+		$this->Q(
+      'CREATE TEMPORARY TABLE _tmpsites AS
+      SELECT
+        guid, site, updated
+      FROM
+        sites
+      GROUP BY
+        guid
+      ORDER BY
+        updated DESC');
+
+    $this->Q(
+      'CREATE TEMPORARY TABLE _tmpsitess AS
+      SELECT
+        s.*,
+        g.user_id
+      FROM
+        _tmpsites s
+        LEFT JOIN
+          guid g on g.guid = s.guid');
+
+		$this->Q(
+      'CREATE TEMPORARY TABLE _tmpdetails AS
+      SELECT
+        invoices_id,
+        sum( `rate`) rate
+      FROM
+        invoices_detail
+      GROUP BY
+        invoices_id');
 		// $_sql = sprintf( 'SELECT %s
 		// 	FROM invoices i
 		// 		LEFT JOIN
 		// 	 		users u ON u.id = i.user_id %s', $fields, $order);
-		$_sql = sprintf( 'SELECT %s
-			FROM invoices i
-			LEFT JOIN
-					users u ON u.id = i.user_id
+		$_sql = sprintf(
+      'SELECT
+        %s
+			FROM
+        invoices i
+        LEFT JOIN
+          _tmpdetails d ON d.invoices_id = i.id
+        LEFT JOIN
+            users u ON u.id = i.user_id
 				LEFT JOIN
 					_tmpsitess s ON s.user_id = i.user_id %s
 			ORDER BY i.id DESC', $fields, $order);
 
-		// sys::logSQL( $_sql);
+		if ( $debug) sys::logSQL( $_sql);
 
 		return ( $this->Result( $_sql));
 

@@ -1,15 +1,15 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
-
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-
-  security: admin only
-
-	*/
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+ * styleguide : https://codeguide.co/
+ *
+ * security: admin only
+*/
 
 class invoices extends Controller {
 
