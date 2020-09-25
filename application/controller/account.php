@@ -1,19 +1,21 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+ * styleguide : https://codeguide.co/
+ *
+ * description:
+ *  Controller for accessing the user account
+ *
+ * security:
+ *  Ordinary Authenticated user - non admin
+ *
+*/
 
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-
-	description:
-		Controller for accessing the user account
-
-	security:
-	 	Ordinary Authenticated user - non admin
-
-	*/
 class account extends Controller {
 	public function postHandler() {
 		if ( currentUser::id()) {
@@ -372,7 +374,7 @@ class account extends Controller {
 		$daoInvoices = new dao\invoices;
 		$daoGuid = new dao\guid;
 		$daoLicense = new dao\license;
-	 	$users = new dao\users;
+    $users = new dao\users;
 
 		// 'products' => $daoProducts->getDtoSet(),
 		// 'productsWKS' => $daoProducts->getDtoSet( $type = "WKS"),

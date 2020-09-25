@@ -1,12 +1,13 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
-
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
-	*/
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+ * styleguide : https://codeguide.co/
+*/
 
 use dvc\html;
 
@@ -243,8 +244,13 @@ class invoice {
 			$tr = $tfoot->tr();
 			$td = $tr->td( sprintf('<p>Warning : Provisional status will expire on %s</p>', strings::asLocalDate( dao\invoices::ProvisionalExpiry( $this->invoice))));
 
-		}
+    }
 
+    if ( !( 'approved' == $this->invoice->state || 'canceled' == $this->invoice->state)) {
+      $tr = $tfoot->tr();
+      $td = $tr->td( sprintf('<p>Terms : <strong>Payment strictly 14 days</strong></p>', strings::asLocalDate( dao\invoices::ProvisionalExpiry( $this->invoice))));
+
+		}
 
 		$ret = new html\table('table borderless table-invoice');
 		$ret->tr()->td( $thead);
