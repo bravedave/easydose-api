@@ -14,13 +14,17 @@ class api extends Controller {
 	public $RequireValidation = false;
 
 	protected function postHandler() {
-		$this->debug = true;
+		// $this->debug = true;
 		$debug = $this->debug;
 
 		$action = $this->getPost('action');
 		if ( $debug) \sys::logger( "api $action");
 
-		if ( $action == 'guid') {
+		if ( 'upload-file' == $action) {
+			$this->upload( $action);
+
+		}
+		elseif ( $action == 'guid') {
 			/*
 			*  curl -X POST -H "Accept: application/json" -d action=guid "https://my.easydose.net.au/api/"
 			*/
@@ -155,10 +159,6 @@ class api extends Controller {
 			} else { Json::nak( $action); }
 
 		}
-		elseif ( 'upload-file' == $action) {
-			$this->upload( $action);
-
-		}
 		elseif ( false) {
 		//~ elseif ( $action == 'send-invoice') {
 			/*
@@ -174,7 +174,11 @@ class api extends Controller {
 
 			} else { \Json::nak( $action); }
 
-		}
+    }
+    else {
+      parent::postHandler();
+
+    }
 
 	}
 
