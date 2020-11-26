@@ -14,7 +14,7 @@ class api extends Controller {
 	public $RequireValidation = false;
 
 	protected function postHandler() {
-		// $this->debug = TRUE;
+		$this->debug = true;
 		$debug = $this->debug;
 
 		$action = $this->getPost('action');
@@ -44,7 +44,7 @@ class api extends Controller {
 			$this->setAccount( $action);
 
 		}
-        elseif ( 'token' == $action || isset( $_SERVER['HTTP_AUTHORIZATION'])) {
+    elseif ( 'token' == $action || isset( $_SERVER['HTTP_AUTHORIZATION'])) {
 			if ( 'token' == $action) {
 				//  curl -X POST -H "Accept: application/json" -d action="token" -d guid="{a guid}" "http://localhost/api/"
 				if ($guid = $this->getPost( 'guid')) {
