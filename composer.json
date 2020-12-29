@@ -1,12 +1,10 @@
 {
 	"name": "bravedave/easydose-api",
 	"description": "Framework for EasyDOSE subscription access",
-	"version": "0.0.1",
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"homepage": "http://easydose.net.au",
 	"type": "project",
-	"license": "cc-by-4.0",
 	"authors": [{
 		"name": "Brave Dave",
 		"email": "davbray@gmail.com",
@@ -21,7 +19,7 @@
 		"ext-apcu": "*",
 		"ext-sqlite3": "*",
 		"ext-curl": "*",
-		"bravedave/dvc": "^2.1",
+		"bravedave/dvc": "*",
 		"bravedave/dvc-mail": "*",
 		"paypal/rest-api-sdk-php": "*",
 		"matthiasmullie/scrapbook": "^1.4",
