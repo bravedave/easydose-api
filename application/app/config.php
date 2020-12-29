@@ -20,6 +20,7 @@ abstract class config extends dvc\config {
 	static $DATE_FORMAT = 'd/m/Y';
 
 	static $EMAIL_ERRORS_TO_SUPPORT = true;	// when a trappable error occurs, email it to support email
+  static $FONTAWESOME = true;
 
 	static $PAGE_TEMPLATE = '\page';
 	//~ static $paypalSandbox = TRUE;
