@@ -1,19 +1,21 @@
 <?php
 /*
-	David Bray
-	BrayWorth Pty Ltd
-	e. david@brayworth.com.au
+ * David Bray
+ * BrayWorth Pty Ltd
+ * e. david@brayworth.com.au
+ *
+ * MIT License
+ *
+*/
 
-	This work is licensed under a Creative Commons Attribution 4.0 International Public License.
-		http://creativecommons.org/licenses/by/4.0/
+use dvc\session;
 
-	*/
 class logoff extends Controller {
-	public $RequireValidation = FALSE;
-	public $CheckOffline = FALSE;
+	public $RequireValidation = false;
+	public $CheckOffline = false;
 
 	function index() {
-		\session::destroy();
+		session::destroy();
 		Response::redirect();
 
 	}
