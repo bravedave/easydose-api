@@ -10,7 +10,7 @@
 */
 
 class user extends dvc\user {
-    protected $_options = false;
+    protected $_options = null;
 
     protected function _optionsConfig() {
         return \config::dataPath() . '/options.json';
