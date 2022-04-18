@@ -19,7 +19,7 @@
 		"ext-apcu": "*",
 		"ext-sqlite3": "*",
 		"ext-curl": "*",
-		"bravedave/dvc": "^22.03",
+		"bravedave/dvc": "*",
 		"bravedave/dvc-mail": "*",
 		"paypal/rest-api-sdk-php": "*",
 		"matthiasmullie/scrapbook": "^1.4",
