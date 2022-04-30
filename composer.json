@@ -1,30 +1,45 @@
 {
-	"name": "bravedave/easydose-api",
-	"description": "Framework for EasyDOSE subscription access",
-	"minimum-stability": "dev",
-	"prefer-stable": true,
-	"homepage": "http://easydose.net.au",
-	"type": "project",
-	"authors": [{
-		"name": "Brave Dave",
-		"email": "davbray@gmail.com",
-		"homepage": "http://brayworth.com"
-	}],
-	"repositories": [
-		{ "type": "git", "url": "https://github.com/bravedave/dvc" },
-		{ "type": "git", "url": "https://github.com/bravedave/dvc-mail" },
-		{ "type": "git", "url": "https://github.com/bravedave/jwt" }
-	],
-	"require": {
-		"ext-apcu": "*",
-		"ext-sqlite3": "*",
-		"ext-curl": "*",
-		"bravedave/dvc": "*",
-		"bravedave/dvc-mail": "*",
-		"paypal/rest-api-sdk-php": "*",
-		"matthiasmullie/scrapbook": "^1.4",
-		"bravedave/jwt": "*"
-
-	}
-
+  "name": "bravedave/easydose-api",
+  "description": "Framework for EasyDOSE subscription access",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "homepage": "http://easydose.net.au",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Brave Dave",
+      "email": "davbray@gmail.com",
+      "homepage": "http://brayworth.com"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/bravedave/dvc"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/bravedave/dvc-mail"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/bravedave/jwt"
+    }
+  ],
+  "require": {
+    "ext-apcu": "*",
+    "ext-sqlite3": "*",
+    "ext-curl": "*",
+    "bravedave/dvc": "*",
+    "bravedave/dvc-mail": "*",
+    "paypal/rest-api-sdk-php": "*",
+    "matthiasmullie/scrapbook": "^1.4",
+    "bravedave/jwt": "*"
+  },
+  "scripts": {
+    "start": [
+      "Composer\\Config::disableProcessTimeout",
+      "bash ./run.sh"
+    ]
+  }
 }

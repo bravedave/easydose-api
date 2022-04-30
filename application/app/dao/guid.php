@@ -10,6 +10,9 @@
 
 namespace dao;
 
+use dvc\dao\_dao;
+use dvc\Exceptions\DBNameIsNull;
+
 class guid extends _dao {
   protected $_db_name = 'guid';
   protected $template = '\dao\dto\guid';
@@ -47,7 +50,7 @@ class guid extends _dao {
 
   public function getForUser($userID = 0) {
     if (is_null($this->_db_name)) {
-      throw new Exceptions\DBNameIsNull;
+      throw new DBNameIsNull;
     }
 
     if (!(int)$userID) $userID = \currentUser::id();
@@ -64,7 +67,7 @@ class guid extends _dao {
 
   public function getAll($fields = 'guid.*, u.name, s.site, s.expires', $order = '') {
     if (is_null($this->_db_name))
-      throw new Exceptions\DBNameIsNull;
+      throw new DBNameIsNull;
 
     $this->db->log = $this->log;
     $this->Q('DROP TABLE IF EXISTS _tmpsites');

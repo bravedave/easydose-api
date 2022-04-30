@@ -10,8 +10,9 @@
 
 namespace dao;
 
-use strings;
-use sys;
+use dvc\dao\_dao;
+
+use strings, sys;
 
 class invoices extends _dao {
   protected $_db_name = 'invoices';

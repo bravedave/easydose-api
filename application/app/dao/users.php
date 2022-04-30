@@ -12,6 +12,8 @@
 
 namespace dao;
 
+use dvc\dao\_dao;
+use dvc\Exceptions\DBNameIsNull;
 use dvc\session;
 
 class users extends _dao {
@@ -196,7 +198,7 @@ class users extends _dao {
 
   public function getAll($fields = '*', $order = '') {
     if (is_null($this->_db_name)) {
-      throw new Exceptions\DBNameIsNull;
+      throw new DBNameIsNull;
     }
 
     $this->db->log = $this->log;
