@@ -72,6 +72,7 @@ class users extends Controller {
         'name' => (string)$this->getPost('name'),
         'email' => (string)$this->getPost('email'),
         'admin' => (int)$this->getPost('admin'),
+        'suppress_invoice' => (int)$this->getPost('suppress_invoice'),
         'business_name' => (string)$this->getPost('business_name'),
         'street' => (string)$this->getPost('street'),
         'town' => (string)$this->getPost('town'),

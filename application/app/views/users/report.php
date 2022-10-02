@@ -30,6 +30,7 @@ i[title="download as CSV"] {margin-top: -18px;}
 					<td role="sort-header" data-key="username" class="d-none d-sm-table-cell">UserName</td>
 					<td role="sort-header" data-key="email" class="d-none d-md-table-cell">Email</td>
 					<td class="text-center" role="sort-header" data-key="admin" data-sorttype="numeric">Admin</td>
+					<td class="text-center" role="sort-header" data-key="supress" data-sorttype="numeric">Suppress</td>
 				</tr>
 			</thead>
 
@@ -42,6 +43,7 @@ i[title="download as CSV"] {margin-top: -18px;}
 							data-username="<?= $dto->username ?>"
 							data-email="<?= $dto->email ?>"
 							data-admin="<?= (int)$dto->admin ?>"
+							data-supress="<?= (int)$dto->suppress_invoice ?>"
 							>
 							<td><?= sprintf( '%s<div class="text-muted small">%s</div>', $dto->name, $dto->site ) ?></td>
 							<td class="d-none d-sm-table-cell">
@@ -50,6 +52,7 @@ i[title="download as CSV"] {margin-top: -18px;}
 							</td>
 							<td class="d-none d-md-table-cell"><?= $dto->email ?></td>
 							<td class="text-center"><?= ( $dto->admin ? strings::html_tick : '&nbsp;' ) ?></td>
+							<td class="text-center"><?= ( $dto->suppress_invoice ? strings::html_tick : '&nbsp;' ) ?></td>
 
 						</tr>
 

@@ -40,6 +40,7 @@ class users extends _dao {
     $dbc->defineField('pass', 'text');
     $dbc->defineField('admin', 'int');
     $dbc->defineField('programmer', 'int');
+    $dbc->defineField('suppress_invoice', 'int');
     $dbc->defineField('reset_guid', 'text');
     $dbc->defineField('reset_guid_date', 'text');
     $dbc->defineField('auth_token', 'varchar');
